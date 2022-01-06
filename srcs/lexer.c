@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 20:51:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/06 22:42:27 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/06 22:57:19 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	*lexer(t_list **list, char *cmd)
 			flag = 1;
 			i++;
 		}
-		else if (ft_isspace(cmd[i]))
+		else
 		{
 			if (flag == 1)
 			{
@@ -69,25 +69,17 @@ void	*lexer(t_list **list, char *cmd)
 				ft_lstadd_back(list, ft_lstnew(tmp));
 				flag = 0;
 			}
-			i++;
-			start = i;
-		}
-		else if (is_delimiter(cmd[i]))
-		{
-			if (flag == 1)
+			if (is_delimiter(cmd[i]))
 			{
-				tmp = ft_substr(cmd, start, i - start);
-				ft_lstadd_back(list, ft_lstnew(tmp));
-				flag = 0;
+				if ((cmd[i] == '<' && cmd[i + 1] == '<')
+					|| (cmd[i] == '>' && cmd[i + 1] == '>'))
+				{
+					ft_lstadd_back(list, ft_lstnew(ft_strndup(&cmd[i], 2)));
+					i++;
+				}
+				else
+					ft_lstadd_back(list, ft_lstnew(ft_strndup(&cmd[i], 1)));
 			}
-			if ((cmd[i] == '<' && cmd[i + 1] == '<')
-				|| (cmd[i] == '>' && cmd[i + 1] == '>'))
-			{
-				ft_lstadd_back(list, ft_lstnew(ft_strndup(&cmd[i], 2)));
-				i++;
-			}
-			else
-				ft_lstadd_back(list, ft_lstnew(ft_strndup(&cmd[i], 1)));
 			i++;
 			start = i;
 		}
