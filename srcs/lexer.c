@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 20:51:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/06 22:37:32 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/06 22:42:27 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,24 +72,14 @@ void	*lexer(t_list **list, char *cmd)
 			i++;
 			start = i;
 		}
-		else if (is_delimiter(cmd[i]) && flag == 1)
+		else if (is_delimiter(cmd[i]))
 		{
-			tmp = ft_substr(cmd, start, i - start);
-			ft_lstadd_back(list, ft_lstnew(tmp));
-			if ((cmd[i] == '<' && cmd[i + 1] == '<')
-				|| (cmd[i] == '>' && cmd[i + 1] == '>'))
+			if (flag == 1)
 			{
-				ft_lstadd_back(list, ft_lstnew(ft_strndup(&cmd[i], 2)));
-				i++;
+				tmp = ft_substr(cmd, start, i - start);
+				ft_lstadd_back(list, ft_lstnew(tmp));
+				flag = 0;
 			}
-			else
-				ft_lstadd_back(list, ft_lstnew(ft_strndup(&cmd[i], 1)));
-			flag = 0;
-			i++;
-			start = i;
-		}
-		else if (is_delimiter(cmd[i]) && flag == 0)
-		{
 			if ((cmd[i] == '<' && cmd[i + 1] == '<')
 				|| (cmd[i] == '>' && cmd[i + 1] == '>'))
 			{
