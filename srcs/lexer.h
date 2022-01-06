@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/06 14:18:44 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/06 16:28:54 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/06 23:43:28 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef	enum e_quote_io
 {
 	IN,
 	OUT,
+	NONE,
 }			t_quote_io;
 
 void	*lexer(t_list **list, char *cmd);
