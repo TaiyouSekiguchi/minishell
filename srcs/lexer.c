@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 20:51:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/07 23:21:16 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/08 00:01:12 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,30 +21,25 @@ int	is_delimiter(char c)
 	return (FALSE);
 }
 
-int	quote_set(char c, int *s, int *d)
+void	quote_set(char c, int *quote)
 {
-	if (*s == OUT && *d == OUT)
+	if (*quote == NONE)
 	{
 		if (c == '\'')
-			*s = IN;
+			*quote = SINGLE;
 		else if (c == '\"')
-			*d = IN;
-		return (IN);
+			*quote = DOUBLE;
 	}
-	else if (*s == IN && *d == OUT)
+	else if (*quote == SINGLE)
 	{
 		if (c == '\'')
-			*s = OUT;
-		return (OUT);
+			*quote = NONE;
 	}
-	else if (*s == OUT && *d == IN)
+	else if (*quote == DOUBLE)
 	{
 		if (c == '\"')
-			*d = OUT;
-		return (OUT);
+			*quote = NONE;
 	}
-	else
-		return (NONE);
 }
 
 void	*lexer(t_list **list, char *cmd)
@@ -52,39 +47,27 @@ void	*lexer(t_list **list, char *cmd)
 	size_t	start;
 	size_t	i;
 	char	*tmp;
-	int		flag;
-	int		s;
-	int		d;
-	int		ret;
+	int		quote;
 
 	start = 0;
 	i = 0;
-	flag = 0;
-	s = OUT;
-	d = OUT;
+	quote = NONE;
 	while (cmd[i] != '\0' )
 	{
 		if (cmd[i] == '\'' || cmd[i] == '\"')
 		{
-			ret = quote_set(cmd[i], &s, &d);
-			if (ret == IN)
-				flag = 1;
+			quote_set(cmd[i], &quote);
 			i++;
 		}
-		else if (s == IN || d == IN)
+		else if ((quote == SINGLE || quote == DOUBLE)
+				|| (!ft_isspace(cmd[i]) && !is_delimiter(cmd[i])))
 			i++;
-		else if (!ft_isspace(cmd[i]) && !is_delimiter(cmd[i]))
-		{
-			flag = 1;
-			i++;
-		}
 		else
 		{
-			if (flag == 1)
+			if (i != start)
 			{
 				tmp = ft_substr(cmd, start, i - start);
 				ft_lstadd_back(list, ft_lstnew(tmp));
-				flag = 0;
 			}
 			if (is_delimiter(cmd[i]))
 			{
@@ -102,7 +85,7 @@ void	*lexer(t_list **list, char *cmd)
 		}
 	}
 
-	if (s == IN || d == IN)
+	if (quote == SINGLE || quote == DOUBLE)
 	{
 		printf("quote is not close\n");
 		exit(1);
@@ -114,12 +97,6 @@ void	*lexer(t_list **list, char *cmd)
 	}
 	return (list);
 }
-
-
-
-
-
-
 
 
 
@@ -167,6 +144,6 @@ int main(void)
 	test("echo \"sekiguchi taiyou\"");
 	test("echo \"hello w\"'orld'; cat<file|wc");
 	test("");
-	system("leaks minishell");
+//	system("leaks minishell");
 	return (0);
 }

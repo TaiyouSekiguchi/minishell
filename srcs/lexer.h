@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/06 14:18:44 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/06 23:43:28 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/07 23:25:48 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ typedef	enum e_boolean
 	FALSE = 0,
 }			t_boolean;
 
-typedef	enum e_quote_io
+typedef	enum e_quote
 {
-	IN,
-	OUT,
+	SINGLE,
+	DOUBLE,
 	NONE,
-}			t_quote_io;
+}			t_quote;
 
 void	*lexer(t_list **list, char *cmd);
 
