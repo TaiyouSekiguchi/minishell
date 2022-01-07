@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 20:51:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/06 23:55:02 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/07 23:21:16 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	is_delimiter(char c)
 {
 	if (c == '|'
-		|| c == ';'
 		|| c == '<'
 		|| c == '>')
 		return (TRUE);
@@ -69,13 +68,8 @@ void	*lexer(t_list **list, char *cmd)
 		{
 			ret = quote_set(cmd[i], &s, &d);
 			if (ret == IN)
-				i++;
-			else if (ret == OUT)
-			{
-				tmp = ft_substr(cmd, start, ++i - start);
-				ft_lstadd_back(list, ft_lstnew(tmp));
-				start = i;
-			}
+				flag = 1;
+			i++;
 		}
 		else if (s == IN || d == IN)
 			i++;
@@ -107,6 +101,7 @@ void	*lexer(t_list **list, char *cmd)
 			start = i;
 		}
 	}
+
 	if (s == IN || d == IN)
 	{
 		printf("quote is not close\n");
@@ -120,6 +115,14 @@ void	*lexer(t_list **list, char *cmd)
 	return (list);
 }
 
+
+
+
+
+
+
+
+
 void	test(char *str)
 {
 	t_list	*list;
@@ -127,7 +130,7 @@ void	test(char *str)
 	size_t	i;
 
 	printf("***********test************\n");
-	printf("test str is %s\n", str);
+	printf("test str is %s!!\n", str);
 	list = NULL;
 	lexer(&list, str);
 	
@@ -149,6 +152,14 @@ int main(void)
 	test("aaa");
 	test("aaa   ");
 	test("aaa bbb ccc      ");
+	test("    aaa bbb ccc    ");
+	test("echo taiyou");
+	test("echo \"taiyou\"sekiguchi");
+	test("echo \"taiyou\" sekiguchi");
+	test("echo \"ta\"i\"you\"sekiguchi");
+	test("echo taiyou>file");
+	test("echo \"taiyou>file\"");
+	test("echo \"taiy\'ou>file\"");
 	test("aaa ; bbb|<");
 	test("echo >> taiyou");
 	test("echo > > taiyou");
