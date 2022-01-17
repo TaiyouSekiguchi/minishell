@@ -6,12 +6,12 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/29 17:03:08 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/06 16:02:49 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/01/08 10:53:24 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 MINISHELL		=	minishell
-SRCS			=	lexer.c
+SRCS			=	main.c
 OBJS_DIR		=	./objs
 OBJS			=	$(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 
