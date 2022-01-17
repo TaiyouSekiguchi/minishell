@@ -1,34 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   my_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/06 14:18:44 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/07 23:25:48 by tsekiguc         ###   ########.fr       */
+/*   Created: 2022/01/13 17:44:53 by tsekiguc          #+#    #+#             */
+/*   Updated: 2022/01/13 17:47:26 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#include "parser.h"
 
-#include <stdio.h>
-#include "../libft/libft.h"
-
-typedef	enum e_boolean
+void	my_error(char *msg)
 {
-	TRUE = 1,
-	FALSE = 0,
-}			t_boolean;
-
-typedef	enum e_quote
-{
-	SINGLE,
-	DOUBLE,
-	NONE,
-}			t_quote;
-
-void	*lexer(t_list **list, char *cmd);
-
-#endif
+	ft_putendl_fd(msg, STDERR_FILENO);
+	exit(1);
+}

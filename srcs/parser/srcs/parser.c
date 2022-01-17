@@ -1,45 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/29 17:08:47 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/08 10:58:02 by tsekiguc         ###   ########.fr       */
+/*   Created: 2022/01/13 10:41:38 by tsekiguc          #+#    #+#             */
+/*   Updated: 2022/01/14 11:14:38 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "parser.h"
 
-void	is_nl(char *cmd)
+void	parser(t_cmd **cmds, int *cmds_cnt, t_list *tokens)
 {
-	int	i;
 
-	i = 0;
-	while (cmd[i] != '\0')
-	{
-		if (cmd[i] == '\n')
-			printf("nl exist!!\n");
-		i++;
-	}
-}
+#ifdef DEBUG
+	printf("**************parser*****************\n");
+#endif
 
-int	main(void)
-{
-	char	*command;
+	cmds_alloc(cmds, cmds_cnt, tokens);
+	do_parse(cmds, tokens);
 
-	using_history();
-	read_history(".my_history");
-	while (1)
-	{
-		command = readline(">> ");
-		add_history(command);
-		printf("%s\n", command);
-		is_nl(command);
-		free(command);
-	}
-	write_history(".my_history");
-	
-	return (0);
+
+#ifdef DEBUG
+	printf("**************parser*****************\n");
+#endif
+
 }

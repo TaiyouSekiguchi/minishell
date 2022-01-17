@@ -1,45 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/29 17:08:47 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/08 10:58:02 by tsekiguc         ###   ########.fr       */
+/*   Created: 2022/01/06 14:18:44 by tsekiguc          #+#    #+#             */
+/*   Updated: 2022/01/08 11:32:23 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef LEXER_H
+# define LEXER_H
 
-void	is_nl(char *cmd)
+#include <stdio.h>
+#include "../../../libft/libft.h"
+
+typedef	enum e_boolean
 {
-	int	i;
+	TRUE = 1,
+	FALSE = 0,
+}			t_boolean;
 
-	i = 0;
-	while (cmd[i] != '\0')
-	{
-		if (cmd[i] == '\n')
-			printf("nl exist!!\n");
-		i++;
-	}
-}
-
-int	main(void)
+typedef	enum e_quote
 {
-	char	*command;
+	SINGLE,
+	DOUBLE,
+	NONE,
+}			t_quote;
 
-	using_history();
-	read_history(".my_history");
-	while (1)
-	{
-		command = readline(">> ");
-		add_history(command);
-		printf("%s\n", command);
-		is_nl(command);
-		free(command);
-	}
-	write_history(".my_history");
-	
-	return (0);
-}
+void	lexer(t_list **list, char *cmd);
+int		is_blank(char c);
+int		is_delimiter(char c);
+int		is_metachar(char c);
+int		is_redirect(char c1, char c2);
+
+
+
+#endif
