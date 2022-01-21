@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:05:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/06 15:25:56 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/21 17:06:19 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,58 @@
 # define MINISHELL_H
 
 #include <stdio.h>
+#include <stdlib.h>
+
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include <stdlib.h>
+#include "../libms/libms.h"
+
+typedef	enum e_boolean
+{
+	TRUE = 1,
+	FALSE = 0,
+}			t_boolean;
+
+typedef	enum e_quote
+{
+	SINGLE,
+	DOUBLE,
+	NONE,
+}			t_quote;
+
+typedef enum e_kind
+{
+	CMD = 0,
+	PIPE,
+	INFILE,
+	OUTFILE,
+	HEREDOC,
+	APPEND,
+}			t_kind;
+
+typedef	struct s_cmd
+{
+	t_list	*cmd;
+	t_list	*infile;
+	t_list	*outfile;
+}				t_cmd;
 
 
 
-#include "../libft/libft.h"
+void	lexer(t_list **list, char *cmd);
+int		is_quote(char c);
+int		is_blank(char c);
+int		is_delimiter(char c);
+int		is_metachar(char c);
+int		is_redirect(char c1, char c2);
 
 
+void	parser(t_list **cmds, t_list *tokens);
+int		syntax_check(t_list *tokens);
+int		token_kind(char *token);
 
-
+char	*expand(char *token);
 
 
 
