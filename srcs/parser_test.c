@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 17:54:50 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/21 18:36:38 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,10 @@ void	print_list(t_list *list, char *kind)
 
 void	print_cmd(t_cmd *cmd)
 {
-	printf("**************\n");
+	printf("\n");
 	print_list(cmd->cmd, "cmd");
 	print_list(cmd->infile, "infile");
 	print_list(cmd->outfile, "outfile");
-	printf("**************\n");
 }
 
 void	print_cmds(t_list *cmds)
@@ -47,19 +46,19 @@ void	print_cmds(t_list *cmds)
 	}
 }
 
-void	test(char *str)
+void	test(char *command)
 {
 	t_list	*tokens;
 	t_list	*cmds;
 
-	printf("***********test************\n");
-	printf("test str is %s!!\n", str);
+	printf("***********test start************\n");
+	printf("[command] : %s\n", command);
 	tokens = NULL;
-	lexer(&tokens, str);
+	lexer(&tokens, command);
 	cmds = NULL;
 	parser(&cmds, tokens);
 	print_cmds(cmds);
-	printf("***********test************\n");
+	printf("***********test finish***********\n\n\n");
 }
 
 int main(void)

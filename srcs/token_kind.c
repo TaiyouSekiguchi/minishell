@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 17:30:00 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 18:04:14 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/21 18:12:36 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int		token_kind(char *token)
 {
-	if (ft_strcmp(token, "|") == 0)
+	if (ms_strcmp(token, "|") == 0)
 		return (PIPE);
-	else if (ft_strcmp(token, "<") == 0)
+	else if (ms_strcmp(token, "<") == 0)
 		return (INFILE);
-	else if (ft_strcmp(token, ">") == 0)
+	else if (ms_strcmp(token, ">") == 0)
 		return (OUTFILE);
-	else if (ft_strcmp(token, "<<") == 0)
+	else if (ms_strcmp(token, "<<") == 0)
 		return (HEREDOC);
-	else if (ft_strcmp(token, ">>") == 0)
+	else if (ms_strcmp(token, ">>") == 0)
 		return (APPEND);
 	else
 		return (CMD);

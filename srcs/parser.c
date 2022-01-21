@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:41:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 18:04:01 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/21 18:24:10 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	cmd_init(t_cmd **cmd)
 {
-	*cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	*cmd = (t_cmd *)ms_xmalloc(sizeof(t_cmd));
 	(*cmd)->cmd = NULL;
 	(*cmd)->infile = NULL;
 	(*cmd)->outfile = NULL;
@@ -26,7 +26,7 @@ static void	redirect_parse(t_list **current, int kind, t_cmd *cmd)
 	char	*prefix;
 	char	*tmp;
 
-	(*current) = (*current)->next;
+	*current = (*current)->next;
 	token = (char *)((*current)->content);
 	if (kind == INFILE || kind == HEREDOC)
 	{
@@ -34,8 +34,8 @@ static void	redirect_parse(t_list **current, int kind, t_cmd *cmd)
 			prefix = "< ";
 		else
 			prefix = "<< ";
-		tmp = ft_strjoin(prefix, token);
-		ft_lstadd_back(&cmd->infile, ft_lstnew(tmp));
+		tmp = ms_strjoin(prefix, token);
+		ms_lstadd_back(&cmd->infile, ms_lstnew(tmp));
 	}
 	else if (kind == OUTFILE || kind == APPEND)
 	{
@@ -43,8 +43,8 @@ static void	redirect_parse(t_list **current, int kind, t_cmd *cmd)
 			prefix = "> ";
 		else
 			prefix = ">> ";
-		tmp = ft_strjoin(prefix, token);
-		ft_lstadd_back(&cmd->outfile, ft_lstnew(tmp));
+		tmp = ms_strjoin(prefix, token);
+		ms_lstadd_back(&cmd->outfile, ms_lstnew(tmp));
 	}
 }
 
@@ -62,19 +62,19 @@ static void	parse_loop(t_list **cmds, t_list *tokens)
 		kind = token_kind(current->content);
 		if (kind == CMD)
 		{
-			tmp = ft_strdup(current->content);
-			ft_lstadd_back(&cmd->cmd, ft_lstnew(tmp));
+			tmp = ms_strdup(current->content);
+			ms_lstadd_back(&cmd->cmd, ms_lstnew(tmp));
 		}
 		else if (kind == PIPE)
 		{
-			ft_lstadd_back(cmds, ft_lstnew(cmd));
+			ms_lstadd_back(cmds, ms_lstnew(cmd));
 			cmd_init(&cmd);
 		}
 		else
 			redirect_parse(&current, kind, cmd);
 		current = current->next;
 	}
-	ft_lstadd_back(cmds, ft_lstnew(cmd));
+	ms_lstadd_back(cmds, ms_lstnew(cmd));
 }
 
 void	parser(t_list **cmds, t_list *tokens)

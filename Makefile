@@ -6,7 +6,7 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/21 17:59:20 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/01/21 18:20:26 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,10 +49,6 @@ PARSER_TEST_SRCS		=	lexer.c\
 PARSER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(PARSER_TEST_SRCS:.c=.o))
 #####################################
 
-
-
-
-
 .PHONY			:	all clean fclean re tclean tfclean
 
 vpath %.h srcs
@@ -66,7 +62,7 @@ $(MINISHELL)	:	$(OBJS)
 $(LEXER_TEST)	:	$(LEXER_TEST_OBJS)
 					$(CC) $(LEXER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
 
-$(PARSR_TEST)	:	$(PARSER_TEST_OBJS)
+$(PARSER_TEST)	:	$(PARSER_TEST_OBJS)
 					$(CC) $(PARSER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
 
 
@@ -83,11 +79,11 @@ fclean			:
 re				:	fclean all
 
 tclean			:
-					$(RM) $(LEXER_TEST_OBJS) $(PARSER_TEST_OBJS)
+					$(RM)\
+					$(LEXER_TEST_OBJS)\
+					$(PARSER_TEST_OBJS)
 
 tfclean			:
-					$(RM) $(LEXER_TEST_OBJS) $(PARSER_TEST_OBJS) $(LEXER_TEST) $(PARSR_TEST)
-
-
+					$(RM) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST)
 
 
