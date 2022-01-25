@@ -6,7 +6,7 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/25 14:43:36 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/01/25 15:29:47 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,7 @@ EXPANDER_TEST_SRCS		=	lexer.c\
 							token_kind.c\
 							expander.c\
 							expand.c\
+							remove_quotation.c\
 							expander_test.c
 
 EXPANDER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXPANDER_TEST_SRCS:.c=.o))

@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/25 14:11:37 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/25 15:31:39 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,8 @@ int main(void)
 	test("cat $TEST < $TEST | grep test | wc -l >> outfile > outfile");
 	test("cat \"-e $TEST\"");
 	test("cat \'-e $TEST\'");
+	test("cat \'-e $TEST\"taiyou\"\'");
+	test("cat \"-e $TEST\'taiyou\'\"");
+	test("cat \'taiyou\'$TEST\'sekiguchi\'");
 	return (0);
 }
