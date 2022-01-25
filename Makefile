@@ -6,7 +6,7 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/25 15:29:47 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/01/25 16:17:23 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,6 +69,26 @@ EXPANDER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXPANDER_TEST_SRCS:.c=.o))
 ########################################
 
 
+############ executer test #############
+EXECUTER_TEST			=	executer_test
+EXECUTER_TEST_SRCS		=	lexer.c\
+							is_func.c\
+							quote_set.c\
+							parser.c\
+							syntax_check.c\
+							token_kind.c\
+							expander.c\
+							expand.c\
+							remove_quotation.c\
+							executer_test.c
+
+EXECUTER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_TEST_SRCS:.c=.o))
+########################################
+
+
+
+
+
 
 .PHONY			:	all clean fclean re tclean tfclean
 
@@ -89,6 +109,8 @@ $(PARSER_TEST)		:	$(PARSER_TEST_OBJS)
 $(EXPANDER_TEST)	:	$(EXPANDER_TEST_OBJS)
 						$(CC) $(EXPANDER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
 
+$(EXECUTER_TEST)	:	$(EXECUTER_TEST_OBJS)
+						$(CC) $(EXECUTER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
 
 
 $(OBJS_DIR)/%.o		:	%.c
@@ -107,8 +129,9 @@ tclean				:
 						$(RM)\
 						$(LEXER_TEST_OBJS)\
 						$(PARSER_TEST_OBJS)\
-						$(EXPANDER_TEST_OBJS)
+						$(EXPANDER_TEST_OBJS)\
+						$(EXECUTER_TEST_OBJS)
 
 tfclean				:
-						$(RM) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST) $(EXPANDER_TEST) $(EXPANDER_TEST_OBJS)
+						$(RM) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST) $(EXPANDER_TEST) $(EXPANDER_TEST_OBJS) $(EXECUTER_TEST) $(EXECUTER_TEST_OBJS)
 
