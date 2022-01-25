@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 15:17:56 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 15:49:12 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/24 16:34:58 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,9 @@ void	ms_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ms_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 void	ms_error(char *msg);
 void	*ms_xmalloc(size_t size);
+void	ms_strcpy(char **dst, const char *src);
+void	ms_strcat(char **dst, const char *src);
+void	ms_strappend(char **body, char *add);
+void	ms_split_free(char **split);
 
 #endif

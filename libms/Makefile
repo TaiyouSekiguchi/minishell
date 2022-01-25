@@ -6,7 +6,7 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 15:18:12 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/21 15:36:18 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/01/24 16:35:13 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,11 @@ SRCS	=	ms_atoi.c\
 			ms_tolower.c\
 			ms_toupper.c\
 			ms_error.c\
-			ms_xmalloc.c
+			ms_xmalloc.c\
+			ms_strcpy.c\
+			ms_strcat.c\
+			ms_strappend.c\
+			ms_split_free.c
 
 OBJS	=	$(SRCS:.c=.o)
 

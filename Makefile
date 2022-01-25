@@ -6,7 +6,7 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/21 18:20:26 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/01/25 14:43:36 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ OBJS					=	$(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 LEXER_TEST				=	lexer_test
 LEXER_TEST_SRCS			=	lexer.c\
 							is_func.c\
+							quote_set.c\
 							lexer_test.c
 
 LEXER_TEST_OBJS			=	$(addprefix $(OBJS_DIR)/, $(LEXER_TEST_SRCS:.c=.o))
@@ -41,6 +42,7 @@ LEXER_TEST_OBJS			=	$(addprefix $(OBJS_DIR)/, $(LEXER_TEST_SRCS:.c=.o))
 PARSER_TEST				=	parser_test
 PARSER_TEST_SRCS		=	lexer.c\
 							is_func.c\
+							quote_set.c\
 							parser.c\
 							syntax_check.c\
 							token_kind.c\
@@ -49,41 +51,63 @@ PARSER_TEST_SRCS		=	lexer.c\
 PARSER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(PARSER_TEST_SRCS:.c=.o))
 #####################################
 
+
+############ expander test #############
+EXPANDER_TEST			=	expander_test
+EXPANDER_TEST_SRCS		=	lexer.c\
+							is_func.c\
+							quote_set.c\
+							parser.c\
+							syntax_check.c\
+							token_kind.c\
+							expander.c\
+							expand.c\
+							expander_test.c
+
+EXPANDER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXPANDER_TEST_SRCS:.c=.o))
+########################################
+
+
+
 .PHONY			:	all clean fclean re tclean tfclean
 
 vpath %.h srcs
 vpath %.c srcs
 
-all				:	$(MINISHELL)
+all					:	$(MINISHELL)
 
-$(MINISHELL)	:	$(OBJS)
-					$(CC) $(OBJS) $(CFLAGS) $(LIB) -o $@
+$(MINISHELL)		:	$(OBJS)
+						$(CC) $(OBJS) $(CFLAGS) $(LIB) -o $@
 
-$(LEXER_TEST)	:	$(LEXER_TEST_OBJS)
-					$(CC) $(LEXER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
+$(LEXER_TEST)		:	$(LEXER_TEST_OBJS)
+						$(CC) $(LEXER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
 
-$(PARSER_TEST)	:	$(PARSER_TEST_OBJS)
-					$(CC) $(PARSER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
+$(PARSER_TEST)		:	$(PARSER_TEST_OBJS)
+						$(CC) $(PARSER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
+
+$(EXPANDER_TEST)	:	$(EXPANDER_TEST_OBJS)
+						$(CC) $(EXPANDER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
 
 
-$(OBJS_DIR)/%.o	:	%.c
-					@[ -d $(OBJS_DIR) ]
-					$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-clean			:
-					$(RM) $(OBJS)
+$(OBJS_DIR)/%.o		:	%.c
+						@[ -d $(OBJS_DIR) ]
+						$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-fclean			:
-					$(RM) $(OBJS) $(MINISHELL)
+clean				:
+						$(RM) $(OBJS)
 
-re				:	fclean all
+fclean				:
+						$(RM) $(OBJS) $(MINISHELL)
 
-tclean			:
-					$(RM)\
-					$(LEXER_TEST_OBJS)\
-					$(PARSER_TEST_OBJS)
+re					:	fclean all
 
-tfclean			:
-					$(RM) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST)
+tclean				:
+						$(RM)\
+						$(LEXER_TEST_OBJS)\
+						$(PARSER_TEST_OBJS)\
+						$(EXPANDER_TEST_OBJS)
 
+tfclean				:
+						$(RM) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST) $(EXPANDER_TEST) $(EXPANDER_TEST_OBJS)
 

@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:05:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 17:06:19 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/25 14:43:05 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,15 @@ int		is_blank(char c);
 int		is_delimiter(char c);
 int		is_metachar(char c);
 int		is_redirect(char c1, char c2);
+void	quote_set(char c, t_quote *quote);
 
 
 void	parser(t_list **cmds, t_list *tokens);
 int		syntax_check(t_list *tokens);
 int		token_kind(char *token);
 
-char	*expand(char *token);
-
+void	expander(t_list *cmds);
+void	expand(char **token);
 
 
 #endif

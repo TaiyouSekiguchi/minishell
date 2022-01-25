@@ -6,32 +6,11 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 20:51:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 17:05:21 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/25 14:42:42 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	quote_set(char c, t_quote *quote)
-{
-	if (*quote == NONE)
-	{
-		if (c == '\'')
-			*quote = SINGLE;
-		else if (c == '\"')
-			*quote = DOUBLE;
-	}
-	else if (*quote == SINGLE)
-	{
-		if (c == '\'')
-			*quote = NONE;
-	}
-	else if (*quote == DOUBLE)
-	{
-		if (c == '\"')
-			*quote = NONE;
-	}
-}
 
 static void	add_tokens(t_list **tokens, char *cmd, size_t start, size_t *i)
 {

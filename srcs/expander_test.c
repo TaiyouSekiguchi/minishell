@@ -1,18 +1,16 @@
-/* ************************************************************************** */
+/************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_main.c                                        :+:      :+:    :+:   */
+/*   expander_test.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/20 16:06:11 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/25 14:11:37 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "expander.h"
-#include "lexer.h"
-#include "parser.h"
+#include "minishell.h"
 
 void	print_list(t_list *list, char *kind)
 {
@@ -34,7 +32,7 @@ void	print_cmd(t_cmd *cmd)
 	print_list(cmd->cmd, "cmd");
 	print_list(cmd->infile, "infile");
 	print_list(cmd->outfile, "outfile");
-	printf("**************\n");
+	printf("**************\n\n");
 }
 
 void	print_cmds(t_list *cmds)
@@ -55,15 +53,15 @@ void	test(char *str)
 	t_list	*cmds;
 
 	printf("***********test************\n");
-	printf("test str is %s!!\n", str);
+	printf("[command] : %s\n", str);
 	tokens = NULL;
 	lexer(&tokens, str);
 	cmds = NULL;
 	parser(&cmds, tokens);
-	print_cmds(cmds);
+	//print_cmds(cmds);
 	expander(cmds);
 	print_cmds(cmds);
-	printf("***********test************\n");
+	printf("***********test************\n\n");
 }
 
 int main(void)
@@ -78,5 +76,7 @@ int main(void)
 	test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
 	test("> outfile");
 	test("cat $TEST < $TEST | grep test | wc -l >> outfile > outfile");
+	test("cat \"-e $TEST\"");
+	test("cat \'-e $TEST\'");
 	return (0);
 }
