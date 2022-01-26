@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/26 16:02:42 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/26 16:10:44 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,6 @@ void	test(char *str)
 
 int main(void)
 {
-	test("/bin/ls -a -l | /usr/bin/wc");
+	test("/bin/ls -a -l | /usr/bin/grep git | /usr/bin/wc ");
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:19:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/26 16:02:11 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/26 16:09:25 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@ void	func(t_cmd *cmd)
 		current = current->next;
 	}
 	argv[i] = NULL;
-	
-	printf("argv[0]    : %p\n", argv[0]);
-	printf("argv       : %p\n", argv);
-	printf("environ    : %p\n", environ);
 
 	if (execve(argv[0], argv, environ) < 0)
 	{
