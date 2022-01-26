@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:05:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/25 15:29:19 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/26 14:48:47 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,7 @@ int		token_kind(char *token);
 void	expander(t_list *cmds);
 void	expand(char **token);
 char	*remove_quotation(char *token);
+
+void	executer(t_list *cmds);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/25 16:18:19 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/26 14:55:11 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ void	test(char *str)
 	expander(cmds);
 	print_cmds(cmds);
 	printf("***********test************\n\n");
-	//executer(cmds);
+	executer(cmds);
 }
 
 int main(void)
 {
-	test("cat -e < infile");
+	test("/bin/ls -a -l");
 	return (0);
 }
