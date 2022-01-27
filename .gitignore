@@ -1,4 +1,6 @@
 minishell
+*test
+a.out
 *.a
 *.o
 tags
