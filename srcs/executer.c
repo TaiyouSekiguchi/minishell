@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:19:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/26 16:09:25 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/27 16:06:21 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,12 @@ void	func(t_cmd *cmd)
 	}
 	argv[i] = NULL;
 
-	if (execve(argv[0], argv, environ) < 0)
+	if (ms_strcmp(argv[0], "echo") == 0)
+	{
+		echo(len, argv);
+		exit(1);
+	}
+	else if (execve(argv[0], argv, environ) < 0)
 	{
 		ms_putendl_fd(argv[0], STDERR_FILENO);
 		perror("execve");
