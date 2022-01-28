@@ -6,7 +6,7 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/27 16:04:37 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/01/28 14:21:20 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,9 +79,13 @@ EXECUTER_TEST_SRCS		=	lexer.c\
 							token_kind.c\
 							expander.c\
 							expand.c\
+							search_environ.c\
 							remove_quotation.c\
 							executer.c\
 							echo.c\
+							cd.c\
+							pwd.c\
+							env.c\
 							executer_test.c
 
 EXECUTER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_TEST_SRCS:.c=.o))

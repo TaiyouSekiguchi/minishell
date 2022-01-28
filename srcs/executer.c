@@ -6,11 +6,52 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:19:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/27 16:06:21 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/28 14:20:57 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_builtin(char	*cmd_name)
+{
+	int	ret;
+
+	if (ms_strcmp(cmd_name, "echo") == 0)
+		ret = ECHO;
+	else if (ms_strcmp(cmd_name, "cd") == 0)
+		ret = CD;
+	else if (ms_strcmp(cmd_name, "pwd") == 0)
+		ret = PWD;
+	else if (ms_strcmp(cmd_name, "export") == 0)
+		ret = EXPORT;
+	else if (ms_strcmp(cmd_name, "unset") == 0)
+		ret = UNSET;
+	else if (ms_strcmp(cmd_name, "env") == 0)
+		ret = ENV;
+	else if (ms_strcmp(cmd_name, "exit") == 0)
+		ret = EXIT;
+	else
+		ret = NO_BUILTIN;
+	return (ret);
+}
+
+void	do_builtin(int name, int argc, char *argv[])
+{
+	if (name == ECHO)
+		echo(argc, argv);
+	else if (name == CD)
+		cd(argc, argv);
+	else if (name == PWD)
+		pwd();
+	else if (name == EXPORT)
+		;
+	else if (name == UNSET)
+		;
+	else if (name == ENV)
+		env();
+	else if (name == EXIT)
+		;
+}
 
 void	func(t_cmd *cmd)
 {
@@ -19,6 +60,7 @@ void	func(t_cmd *cmd)
 	t_list			*current;
 	size_t			len;
 	size_t			i;
+	int				ret;
 
 	len = ms_lstsize(cmd->cmd);
 	argv = (char **)ms_xmalloc(sizeof(char *) * (len + 1));
@@ -33,9 +75,10 @@ void	func(t_cmd *cmd)
 	}
 	argv[i] = NULL;
 
-	if (ms_strcmp(argv[0], "echo") == 0)
+	ret = is_builtin(argv[0]);
+	if (ret != NO_BUILTIN)
 	{
-		echo(len, argv);
+		do_builtin(ret, len, argv);
 		exit(1);
 	}
 	else if (execve(argv[0], argv, environ) < 0)

@@ -6,34 +6,11 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 14:19:34 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/25 14:39:35 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/28 14:13:00 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static char	*search_environ(char *val_name)
-{
-	extern char		**environ;
-	char			*ret;
-	int				row;
-	char			**split;
-
-	row = 0;
-	while (environ[row] != NULL)
-	{
-		split = ms_split(environ[row], '=');
-		if (ms_strcmp(split[0], &val_name[1]) == 0)
-		{
-			ret = ms_strdup(split[1]);
-			ms_split_free(split);
-			return (ret);
-		}
-		ms_split_free(split);
-		row++;
-	}
-	return (ms_strdup(""));
-}
 
 static int	is_name(char c)
 {

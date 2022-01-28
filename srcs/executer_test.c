@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/27 16:05:55 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/28 14:38:44 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,11 @@ void	test(char *str)
 
 int main(void)
 {
-	test("/bin/cat");
-	test("/bin/ls -a -l | /usr/bin/grep git | /usr/bin/wc ");
-	test("echo This is echo test");
+//	test("/bin/cat");
+//	test("/bin/ls -a -l | /usr/bin/grep git | /usr/bin/wc ");
+//	test("echo This is echo test");
+//	test("pwd");
+//	test("env");
+	test("cd ..");
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:05:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/27 15:49:09 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/28 14:21:46 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@ typedef enum e_io
 	STDERR,
 }			t_io;
 
+typedef enum e_builtin
+{
+	ECHO,
+	CD,
+	PWD,
+	EXPORT,
+	UNSET,
+	ENV,
+	EXIT,
+	NO_BUILTIN,
+}			t_builtin;
 
 typedef	enum e_quote
 {
@@ -77,6 +88,7 @@ int		token_kind(char *token);
 //expander
 void	expander(t_list *cmds);
 void	expand(char **token);
+char	*search_environ(char *key);
 char	*remove_quotation(char *token);
 
 //executer
@@ -84,5 +96,8 @@ void	executer(t_list *cmds);
 
 //builtin
 void	echo(int argc, char *argv[]);
+void	cd(int argc, char *argv[]);
+void	pwd(void);
+void	env(void);
 
 #endif
