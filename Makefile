@@ -6,24 +6,31 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/28 14:21:20 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/01/29 18:06:34 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC						=	gcc
 CFLAGS					=	-Wall -Wextra -Werror
-INCLUDE					=	-Ilibms
-LIB						=	-lreadline -Llibms -lms
+INCLUDE					=	-Ilibms -I/usr/local/opt/readline/include
+LIB						=	-lreadline -Llibms -lms -L/usr/local/opt/readline/lib
 RM						=	rm -f
 
 ############ minishell #############
 MINISHELL				=	minishell
-SRCS					=	lexer.c\
-							is_func.c\
-							lexer_test.c
+SRCS					=
 
 OBJS_DIR				=	./objs
 OBJS					=	$(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
+#####################################
+
+
+############ readline  #############
+READLINE_TEST			=	readline_test
+READLINE_TEST_SRCS		=	readline_test.c
+
+OBJS_DIR				=	./objs
+READLINE_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(READLINE_TEST_SRCS:.c=.o))
 #####################################
 
 
@@ -84,6 +91,8 @@ EXECUTER_TEST_SRCS		=	lexer.c\
 							executer.c\
 							echo.c\
 							cd.c\
+							export.c\
+							unset.c\
 							pwd.c\
 							env.c\
 							executer_test.c
@@ -105,6 +114,9 @@ all					:	$(MINISHELL)
 
 $(MINISHELL)		:	$(OBJS)
 						$(CC) $(OBJS) $(CFLAGS) $(LIB) -o $@
+
+$(READLINE_TEST)	:	$(READLINE_TEST_OBJS)
+						$(CC) $(READLINE_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
 
 $(LEXER_TEST)		:	$(LEXER_TEST_OBJS)
 						$(CC) $(LEXER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
@@ -133,11 +145,12 @@ re					:	fclean all
 
 tclean				:
 						$(RM)\
+						$(READLINE_TEST_OBJS)\
 						$(LEXER_TEST_OBJS)\
 						$(PARSER_TEST_OBJS)\
 						$(EXPANDER_TEST_OBJS)\
 						$(EXECUTER_TEST_OBJS)
 
 tfclean				:
-						$(RM) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST) $(EXPANDER_TEST) $(EXPANDER_TEST_OBJS) $(EXECUTER_TEST) $(EXECUTER_TEST_OBJS)
+						$(RM) $(READLINE_TEST_OBJS) $(READLINE_TEST) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST) $(EXPANDER_TEST) $(EXPANDER_TEST_OBJS) $(EXECUTER_TEST) $(EXECUTER_TEST_OBJS)
 

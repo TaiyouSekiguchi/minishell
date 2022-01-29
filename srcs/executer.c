@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:19:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/28 14:20:57 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/29 18:07:46 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ void	do_builtin(int name, int argc, char *argv[])
 	else if (name == PWD)
 		pwd();
 	else if (name == EXPORT)
-		;
+		export(argc, argv);
 	else if (name == UNSET)
-		;
+		unset(argc, argv);
 	else if (name == ENV)
 		env();
 	else if (name == EXIT)

@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:08:47 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/08 10:58:02 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/28 16:02:57 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,5 @@ int	main(void)
 		free(command);
 	}
 	write_history(".my_history");
-	
 	return (0);
 }
