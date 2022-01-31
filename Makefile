@@ -6,7 +6,7 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/31 17:05:09 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/01/31 21:43:06 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,6 +89,8 @@ EXECUTER_TEST_SRCS		=	lexer.c\
 							search_environ.c\
 							remove_quotation.c\
 							executer.c\
+							get_next_line.c\
+							get_next_line_utils.c\
 							echo.c\
 							cd.c\
 							pwd.c\

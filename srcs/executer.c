@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:19:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/31 17:04:35 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/31 22:08:23 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,73 @@ void	do_builtin(int name, int argc, char *argv[])
 		builtin_exit(argc, argv);
 }
 
+t_kind	infile_check(char	*str)
+{
+	if (str[0] == '<' && str[1] == '<')
+		return (HEREDOC);
+	else
+		return (INFILE);
+}
+
+
+void	do_redirection(char *tmp, t_kind kind)
+{
+	int		fd;
+	int		fd_1;
+	int		fd_2;
+	int		result;
+	char	*file;
+	char	*line;
+	char	*deli;
+
+	if (kind == INFILE)
+	{
+		file = ms_strdup(&tmp[2]);
+		fd = open(file, O_RDONLY);
+		if (fd < 0)
+			ms_error("open");
+		close(0);
+		dup2(fd, 0);
+		close(fd);
+	}
+	else if (kind == HEREDOC)
+	{
+		deli = ms_strdup(&tmp[3]);
+		fd_1 = open("./tmp", O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
+		if (fd_1 < 0)
+			ms_error("open");
+		
+		while(1)
+		{
+			write(1, "heredoc > ", 10);
+			result = get_next_line(0, &line);
+			if (result == ERROR)
+				ms_error("gnl failed");
+			else if (result == END)
+				break ;
+			else
+			{
+				if (ms_strcmp(line, deli) == 0)
+					break ;
+				write(fd_1, line, ms_strlen(line));
+				write(fd_1, "\n", 1);
+			}
+		}
+		close(fd_1);
+
+		fd_2 = open("./tmp", O_RDONLY);
+		if (fd_2 < 0)
+			ms_error("open failed");
+
+		unlink("./tmp");
+
+		close(0);
+		if (dup2(fd_2, 0) < 0)
+			ms_error("dup2 failed");
+		close(fd_2);
+	}
+}
+
 void	func(t_cmd *cmd)
 {
 	extern char		**environ;
@@ -61,6 +128,16 @@ void	func(t_cmd *cmd)
 	size_t			len;
 	size_t			i;
 	int				ret;
+	char			*tmp;
+	t_kind			kind;
+
+	current = cmd->infile;
+	if (current != NULL)
+	{
+		tmp = ms_strdup(current->content);
+		kind = infile_check(tmp);
+		do_redirection(tmp, kind);
+	}
 
 	len = ms_lstsize(cmd->cmd);
 	argv = (char **)ms_xmalloc(sizeof(char *) * (len + 1));

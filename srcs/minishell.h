@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:05:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/31 17:03:37 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/31 21:42:20 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <fcntl.h>
+
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#include "get_next_line.h"
 #include "../libms/libms.h"
 
 typedef	enum e_boolean
