@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:05:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/29 18:06:14 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/31 17:03:37 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,11 @@ void	executer(t_list *cmds);
 //builtin
 void	echo(int argc, char *argv[]);
 void	cd(int argc, char *argv[]);
-void	export(int argc, char *argv[]);
-void	unset(int argc, char *argv[]);
+void	builtin_export(int argc, char *argv[]);
+void	builtin_unset(int argc, char *argv[]);
 
 void	pwd(void);
 void	env(void);
+void	builtin_exit(int argc, char *argv[]);
 
 #endif

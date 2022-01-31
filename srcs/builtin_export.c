@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/29 17:59:07 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/29 18:05:50 by tsekiguc         ###   ########.fr       */
+/*   Created: 2022/01/29 16:45:53 by tsekiguc          #+#    #+#             */
+/*   Updated: 2022/01/31 17:03:09 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int
+static int
 get_index_of_name_in_environ(char *name)
 {
 	extern char		**environ;
@@ -42,7 +42,7 @@ get_index_of_name_in_environ(char *name)
 	return (index);
 }
 
-char
+static char
 *get_variable_name(char *argv)
 {
 	char	**split;
@@ -54,8 +54,21 @@ char
 	return (name);
 }
 
+
+static int
+count_environ_variable(void)
+{
+	extern char	**environ;
+	int			i;
+
+	i = 0;
+	while (environ[i] != NULL)
+		i++;
+	return (i);
+}
+
 void
-unset(int argc, char *argv[])
+builtin_export(int argc, char *argv[])
 {
 	extern char	**environ;
 	char	*name;
@@ -70,14 +83,25 @@ unset(int argc, char *argv[])
 
 	name = get_variable_name(argv[1]);
 	index = get_index_of_name_in_environ(name);
-	if (index >= 0)
+	if (index == -1)
 	{
-		free(environ[index]);
-		i = index;
+		len = count_environ_variable();
+		new_env = (char **)ms_xmalloc(sizeof(char *) * (len + 1 + 1));
+		i = 0;
 		while (environ[i] != NULL)
 		{
-			environ[i] = environ[i + 1];
+			new_env[i] = environ[i];
 			i++;
 		}
+		new_env[i] = ms_strdup(argv[1]);
+		i++;
+		new_env[i] = NULL;
+		//free(environ)???
+		environ = new_env;
+	}
+	else
+	{
+		free(environ[index]);
+		environ[index] = ms_strdup(argv[1]);
 	}
 }

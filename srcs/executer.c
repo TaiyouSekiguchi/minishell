@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:19:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/29 18:07:46 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/01/31 17:04:35 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ void	do_builtin(int name, int argc, char *argv[])
 	else if (name == PWD)
 		pwd();
 	else if (name == EXPORT)
-		export(argc, argv);
+		builtin_export(argc, argv);
 	else if (name == UNSET)
-		unset(argc, argv);
+		builtin_unset(argc, argv);
 	else if (name == ENV)
 		env();
 	else if (name == EXIT)
-		;
+		builtin_exit(argc, argv);
 }
 
 void	func(t_cmd *cmd)
@@ -79,7 +79,7 @@ void	func(t_cmd *cmd)
 	if (ret != NO_BUILTIN)
 	{
 		do_builtin(ret, len, argv);
-		exit(1);
+		exit(0);
 	}
 	else if (execve(argv[0], argv, environ) < 0)
 	{
