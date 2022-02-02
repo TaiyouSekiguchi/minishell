@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/31 22:01:29 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/02 13:11:17 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ void	test(char *str)
 
 int main(void)
 {
-	test("/bin/cat << LOVE");
+//	test("/bin/cat << LOVE");
 //	test("/bin/ls -a -l | /usr/bin/grep git | /usr/bin/wc ");
 //	test("echo This is echo test");
 //	test("pwd");
-//	test("env");
+	test("env");
 	//test("export TEST=taiyou");
 //	test("env");
 //	test("cd ..");

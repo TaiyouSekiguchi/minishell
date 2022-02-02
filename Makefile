@@ -6,7 +6,7 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/31 21:43:06 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/02/02 13:53:52 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,10 +91,10 @@ EXECUTER_TEST_SRCS		=	lexer.c\
 							executer.c\
 							get_next_line.c\
 							get_next_line_utils.c\
-							echo.c\
-							cd.c\
-							pwd.c\
-							env.c\
+							builtin_echo.c\
+							builtin_cd.c\
+							builtin_pwd.c\
+							builtin_env.c\
 							builtin_export.c\
 							builtin_unset.c\
 							builtin_exit.c\
