@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:19:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 16:04:14 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/02 16:46:07 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	do_exec(t_cmd *cmd)
 	t_list			*current;
 	size_t			len;
 	size_t			i;
-	int				ret;
+	t_builtin		result;
 	char			*tmp;
 	t_kind			kind;
 
@@ -52,10 +52,10 @@ void	do_exec(t_cmd *cmd)
 	}
 	argv[i] = NULL;
 
-	ret = is_builtin(argv[0]);
-	if (ret != NO_BUILTIN)
+	result = builtin_check(argv[0]);
+	if (result != NOT_BUILTIN)
 	{
-		do_builtin(ret, len, argv);
+		do_builtin(result, len, argv);
 	}
 	else if (execve(argv[0], argv, environ) < 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 14:05:09 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 14:32:56 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/02 16:44:10 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	test(char *str)
 
 	printf("***********test************\n");
 	printf("[command] : %s\n", str);
+	if (str[0] == '\0')
+		return ;
 	tokens = NULL;
 	lexer(&tokens, str);
 	cmds = NULL;

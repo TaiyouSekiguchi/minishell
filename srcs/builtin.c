@@ -6,33 +6,33 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 15:38:18 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 15:38:39 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/02 16:33:29 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_builtin(char	*cmd_name)
+t_builtin	builtin_check(char	*cmd_name)
 {
-	int	ret;
+	t_builtin	result;
 
 	if (ms_strcmp(cmd_name, "echo") == 0)
-		ret = ECHO;
+		result = ECHO;
 	else if (ms_strcmp(cmd_name, "cd") == 0)
-		ret = CD;
+		result = CD;
 	else if (ms_strcmp(cmd_name, "pwd") == 0)
-		ret = PWD;
+		result = PWD;
 	else if (ms_strcmp(cmd_name, "export") == 0)
-		ret = EXPORT;
+		result = EXPORT;
 	else if (ms_strcmp(cmd_name, "unset") == 0)
-		ret = UNSET;
+		result = UNSET;
 	else if (ms_strcmp(cmd_name, "env") == 0)
-		ret = ENV;
+		result = ENV;
 	else if (ms_strcmp(cmd_name, "exit") == 0)
-		ret = EXIT;
+		result = EXIT;
 	else
-		ret = NO_BUILTIN;
-	return (ret);
+		result = NOT_BUILTIN;
+	return (result);
 }
 
 void	do_builtin(int name, int argc, char *argv[])
