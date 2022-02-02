@@ -6,7 +6,7 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/02/02 14:09:06 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/02/02 16:01:12 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -117,8 +117,12 @@ ALL_IN_TEST_SRCS		=	lexer.c\
 							search_environ.c\
 							remove_quotation.c\
 							executer.c\
+							do_exec.c\
+							do_redirect.c\
+							do_pipe.c\
 							get_next_line.c\
 							get_next_line_utils.c\
+							builtin.c\
 							builtin_echo.c\
 							builtin_cd.c\
 							builtin_pwd.c\

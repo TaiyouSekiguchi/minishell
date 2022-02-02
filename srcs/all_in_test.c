@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 14:05:09 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 14:08:34 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/02 14:32:56 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	main(void)
 {
 	char	*command;
 
+	builtin_pwd(1);
 	//signal(SIGINT, sig_handler);
 	while (1)
 	{
