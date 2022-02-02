@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   readline_test.c                                    :+:      :+:    :+:   */
+/*   all_in_test.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/29 17:08:47 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 13:59:33 by tsekiguc         ###   ########.fr       */
+/*   Created: 2022/02/02 14:05:09 by tsekiguc          #+#    #+#             */
+/*   Updated: 2022/02/02 14:08:34 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,58 @@ char	*rl_gets(void)
 	}
 }*/
 
+void	print_list(t_list *list, char *kind)
+{
+	t_list	*current;
+
+	printf("%-10s: ", kind);
+	current = list;
+	while (current != NULL)
+	{
+		printf("[%s] ", (char *)current->content);
+		current = current->next;
+	}
+	printf("\n");
+}
+
+void	print_cmd(t_cmd *cmd)
+{
+	printf("\n");
+	print_list(cmd->cmd, "cmd");
+	print_list(cmd->infile, "infile");
+	print_list(cmd->outfile, "outfile");
+	printf("\n\n");
+}
+
+void	print_cmds(t_list *cmds)
+{
+	t_list	*current;
+
+	current = cmds;
+	while (current != NULL)
+	{
+		print_cmd(current->content);
+		current = current->next;
+	}
+}
+
+void	test(char *str)
+{
+	t_list	*tokens;
+	t_list	*cmds;
+
+	printf("***********test************\n");
+	printf("[command] : %s\n", str);
+	tokens = NULL;
+	lexer(&tokens, str);
+	cmds = NULL;
+	parser(&cmds, tokens);
+	expander(cmds);
+	print_cmds(cmds);
+	printf("***********test************\n\n");
+	executer(cmds);
+}
+
 int	main(void)
 {
 	char	*command;
@@ -50,6 +102,7 @@ int	main(void)
 	{
 		command = rl_gets();
 		printf("%s\n", command);
+		test(command);
 		if (ms_strcmp(command, "clear_history") == 0)
 			rl_clear_history();
 	}

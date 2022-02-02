@@ -6,13 +6,13 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 16:24:24 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 13:56:58 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/02 14:11:15 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pwd(int	act)
+void	builtin_pwd(int	act)
 {
 	static char		*pwd;
 

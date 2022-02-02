@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:19:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/31 22:08:23 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/02 14:09:45 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,17 @@ int	is_builtin(char	*cmd_name)
 void	do_builtin(int name, int argc, char *argv[])
 {
 	if (name == ECHO)
-		echo(argc, argv);
+		builtin_echo(argc, argv);
 	else if (name == CD)
-		cd(argc, argv);
+		builtin_cd(argc, argv);
 	else if (name == PWD)
-		pwd();
+		builtin_pwd();
 	else if (name == EXPORT)
 		builtin_export(argc, argv);
 	else if (name == UNSET)
 		builtin_unset(argc, argv);
 	else if (name == ENV)
-		env();
+		builtin_env();
 	else if (name == EXIT)
 		builtin_exit(argc, argv);
 }

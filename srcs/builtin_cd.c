@@ -6,13 +6,13 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 16:36:36 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 13:55:33 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/02 14:10:32 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	cd(int argc, char *argv[])
+void	builtin_cd(int argc, char *argv[])
 {
 	char	*home_path;
 	int		ret;

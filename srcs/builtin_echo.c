@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 15:00:02 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/27 15:46:37 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/02 14:10:45 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	echo(int argc, char *argv[])
+void	builtin_echo(int argc, char *argv[])
 {
 	int		flag;
 	size_t	i;

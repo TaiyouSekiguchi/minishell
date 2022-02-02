@@ -6,7 +6,7 @@
 #    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/02/02 13:53:52 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/02/02 14:09:06 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -104,6 +104,32 @@ EXECUTER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_TEST_SRCS:.c=.o))
 ########################################
 
 
+############ all-in test #############
+ALL_IN_TEST				=	all_in_test
+ALL_IN_TEST_SRCS		=	lexer.c\
+							is_func.c\
+							quote_set.c\
+							parser.c\
+							syntax_check.c\
+							token_kind.c\
+							expander.c\
+							expand.c\
+							search_environ.c\
+							remove_quotation.c\
+							executer.c\
+							get_next_line.c\
+							get_next_line_utils.c\
+							builtin_echo.c\
+							builtin_cd.c\
+							builtin_pwd.c\
+							builtin_env.c\
+							builtin_export.c\
+							builtin_unset.c\
+							builtin_exit.c\
+							all_in_test.c
+
+ALL_IN_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(ALL_IN_TEST_SRCS:.c=.o))
+########################################
 
 
 
@@ -133,6 +159,9 @@ $(EXPANDER_TEST)	:	$(EXPANDER_TEST_OBJS)
 $(EXECUTER_TEST)	:	$(EXECUTER_TEST_OBJS)
 						$(CC) $(EXECUTER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
 
+$(ALL_IN_TEST)		:	$(ALL_IN_TEST_OBJS)
+						$(CC) $(ALL_IN_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
+
 
 $(OBJS_DIR)/%.o		:	%.c
 						@[ -d $(OBJS_DIR) ]
@@ -152,8 +181,9 @@ tclean				:
 						$(LEXER_TEST_OBJS)\
 						$(PARSER_TEST_OBJS)\
 						$(EXPANDER_TEST_OBJS)\
-						$(EXECUTER_TEST_OBJS)
+						$(EXECUTER_TEST_OBJS)\
+						$(ALL_IN_TEST_OBJS)
 
 tfclean				:
-						$(RM) $(READLINE_TEST_OBJS) $(READLINE_TEST) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST) $(EXPANDER_TEST) $(EXPANDER_TEST_OBJS) $(EXECUTER_TEST) $(EXECUTER_TEST_OBJS)
+						$(RM) $(READLINE_TEST_OBJS) $(READLINE_TEST) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST) $(EXPANDER_TEST) $(EXPANDER_TEST_OBJS) $(EXECUTER_TEST) $(EXECUTER_TEST_OBJS) $(ALL_IN_TEST) $(ALL_IN_TEST_OBJS)
 

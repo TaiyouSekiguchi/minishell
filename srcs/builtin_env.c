@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 13:43:55 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/28 13:48:16 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/02 14:11:56 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	env(void)
+void	builtin_env(void)
 {
 	extern char **environ;
 	size_t		i;
