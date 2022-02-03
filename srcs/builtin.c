@@ -6,13 +6,28 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 15:38:18 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 16:33:29 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/03 14:52:07 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_builtin	builtin_check(char	*cmd_name)
+int
+is_builtin(char *cmd_name)
+{
+	if (ms_strcmp(cmd_name, "echo") == 0
+		|| ms_strcmp(cmd_name, "cd") == 0
+		|| ms_strcmp(cmd_name, "pwd") == 0
+		|| ms_strcmp(cmd_name, "export") == 0
+		|| ms_strcmp(cmd_name, "unset") == 0
+		|| ms_strcmp(cmd_name, "env") == 0
+		|| ms_strcmp(cmd_name, "exit") == 0)
+		return (TRUE);
+	return (FALSE);
+}
+
+t_builtin
+builtin_check(char	*cmd_name)
 {
 	t_builtin	result;
 
@@ -35,7 +50,8 @@ t_builtin	builtin_check(char	*cmd_name)
 	return (result);
 }
 
-void	do_builtin(int name, int argc, char *argv[])
+void
+do_builtin(t_builtin name, int argc, char *argv[])
 {
 	if (name == ECHO)
 		builtin_echo(argc, argv);

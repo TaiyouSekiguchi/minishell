@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:05:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 16:45:04 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/03 14:46:55 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,9 @@ void		do_redirect(char *tmp, t_kind kind);
 void		do_pipe(t_list *cmds);
 
 //builtin
+int			is_builtin(char *cmd_name);
 t_builtin	builtin_check(char	*cmd_name);
-void		do_builtin(int name, int argc, char *argv[]);
+void		do_builtin(t_builtin name, int argc, char *argv[]);
 void		builtin_echo(int argc, char *argv[]);
 void		builtin_cd(int argc, char *argv[]);
 void		builtin_export(int argc, char *argv[]);
