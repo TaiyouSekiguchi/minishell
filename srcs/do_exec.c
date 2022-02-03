@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 15:10:22 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/03 15:31:21 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/03 16:28:27 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ distinguish_redirect_kind(char	*str)
 void	infile_redirect_part(t_list *infile)
 {
 	t_list	*current;
-	t_kind	redirect;
+	t_kind	kind;
 
 	current = infile;
 	if (current != NULL)
 	{
-		redirect = distinguish_redirect_kind(current->content);
-		do_redirect(current->content, redirect);
+		kind = distinguish_redirect_kind(current->content);
+		do_redirect(current->content, kind);
 	}
 }
 
