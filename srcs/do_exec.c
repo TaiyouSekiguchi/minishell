@@ -6,13 +6,14 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 15:10:22 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/03 15:23:19 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/03 15:31:21 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_kind	distinguish_redirect_kind(char	*str)
+t_kind
+distinguish_redirect_kind(char	*str)
 {
 	if (str[0] == '<' && str[1] == '<')
 		return (HEREDOC);
