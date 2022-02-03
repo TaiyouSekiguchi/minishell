@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 15:38:18 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/03 14:52:07 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/03 15:24:08 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,45 +26,21 @@ is_builtin(char *cmd_name)
 	return (FALSE);
 }
 
-t_builtin
-builtin_check(char	*cmd_name)
-{
-	t_builtin	result;
-
-	if (ms_strcmp(cmd_name, "echo") == 0)
-		result = ECHO;
-	else if (ms_strcmp(cmd_name, "cd") == 0)
-		result = CD;
-	else if (ms_strcmp(cmd_name, "pwd") == 0)
-		result = PWD;
-	else if (ms_strcmp(cmd_name, "export") == 0)
-		result = EXPORT;
-	else if (ms_strcmp(cmd_name, "unset") == 0)
-		result = UNSET;
-	else if (ms_strcmp(cmd_name, "env") == 0)
-		result = ENV;
-	else if (ms_strcmp(cmd_name, "exit") == 0)
-		result = EXIT;
-	else
-		result = NOT_BUILTIN;
-	return (result);
-}
-
 void
-do_builtin(t_builtin name, int argc, char *argv[])
+do_builtin(char *cmd, int argc, char *argv[])
 {
-	if (name == ECHO)
+	if (ms_strcmp(cmd, "echo") == 0)
 		builtin_echo(argc, argv);
-	else if (name == CD)
+	else if (ms_strcmp(cmd, "cd") == 0)
 		builtin_cd(argc, argv);
-	else if (name == PWD)
+	else if (ms_strcmp(cmd, "pwd") == 0)
 		builtin_pwd(2);
-	else if (name == EXPORT)
+	else if (ms_strcmp(cmd, "export") == 0)
 		builtin_export(argc, argv);
-	else if (name == UNSET)
+	else if (ms_strcmp(cmd, "unset") == 0)
 		builtin_unset(argc, argv);
-	else if (name == ENV)
+	else if (ms_strcmp(cmd, "env") == 0)
 		builtin_env();
-	else if (name == EXIT)
+	else if (ms_strcmp(cmd, "exit") == 0)
 		builtin_exit(argc, argv);
 }

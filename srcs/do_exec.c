@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/25 16:19:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/03 14:51:56 by tsekiguc         ###   ########.fr       */
+/*   Created: 2022/02/03 15:10:22 by tsekiguc          #+#    #+#             */
+/*   Updated: 2022/02/03 15:23:19 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,48 +33,44 @@ void	infile_redirect_part(t_list *infile)
 	}
 }
 
-
-void	do_exec(t_cmd *cmd)
+char
+**make_argv_for_execve(t_list *cmd, size_t cmd_token_count)
 {
-	extern char		**environ;
-	char			**argv;
-	t_list			*current;
-	size_t			len;
-	size_t			i;
-	t_builtin		result;
+	char	**argv;
+	t_list	*current;
+	size_t	i;
 
-
-	//redirect part
-	infile_redirect_part(cmd->infile);
-	/*current = cmd->infile;
-	if (current != NULL)
-	{
-		tmp = ms_strdup(current->content);
-		kind = infile_check(tmp);
-		do_redirect(tmp, kind);
-	}*/
-
-	//parse from list to array for execve
-	len = ms_lstsize(cmd->cmd);
-	argv = (char **)ms_xmalloc(sizeof(char *) * (len + 1));
-
+	argv = (char **)ms_xmalloc(sizeof(char *) * (cmd_token_count + 1));
+	current = cmd;
 	i = 0;
-	current = cmd->cmd;
 	while (current != NULL)
 	{
 		argv[i] = current->content;
-		i++;
 		current = current->next;
+		i++;
 	}
 	argv[i] = NULL;
+	return (argv);
+}
 
+void
+do_exec(t_cmd *cmd_group)
+{
+	extern char		**environ;
+	char			**argv;
+	size_t			cmd_token_count;
 
+	//redirect part
+	infile_redirect_part(cmd_group->infile);
+
+	//parse from list to array for execve
+	cmd_token_count = ms_lstsize(cmd_group->cmd);
+	argv = make_argv_for_execve(cmd_group->cmd, cmd_token_count);
 
 	//exec part
-	result = builtin_check(argv[0]);
-	if (result != NOT_BUILTIN)
+	if (is_builtin(argv[0]))
 	{
-		do_builtin(result, len, argv);
+		do_builtin(argv[0], cmd_token_count, argv);
 	}
 	else if (execve(argv[0], argv, environ) < 0)
 	{
