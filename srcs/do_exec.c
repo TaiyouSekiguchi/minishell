@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 15:10:22 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/03 16:28:27 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/04 18:19:06 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,41 @@ char
 	return (argv);
 }
 
+char
+*add_path(char *cmd_name)
+{
+	char	*env_path;
+	char	**split_path;
+	char	*full_path;
+	size_t	i;
+	struct stat	buf;
+
+	env_path = getenv("PATH");
+	if (env_path == NULL)
+		ms_error("PATH is nothing");
+
+	split_path = ms_split(env_path, ':');
+	full_path = NULL;
+	i = 0;
+	while (split_path[i] != NULL)
+	{
+		full_path = ms_strjoin(split_path[i], "/");
+		full_path = ms_strappend(full_path, cmd_name);
+		if (stat(full_path, &buf) == 0)
+		{
+			free(cmd_name);
+			ms_split_free(split_path);
+			return (full_path);
+		}
+		else
+			i++;
+	}
+	ms_split_free(split_path);
+	if (stat(cmd_name, &buf) == 0)
+		return (cmd_name);
+	return (NULL);
+}
+
 void
 do_exec(t_cmd *cmd_group)
 {
@@ -68,15 +103,24 @@ do_exec(t_cmd *cmd_group)
 	cmd_token_count = ms_lstsize(cmd_group->cmd);
 	argv = make_argv_for_execve(cmd_group->cmd, cmd_token_count);
 
+	//command search
+
 	//exec part
 	if (is_builtin(argv[0]))
 	{
 		do_builtin(argv[0], cmd_token_count, argv);
 	}
-	else if (execve(argv[0], argv, environ) < 0)
+	else
 	{
-		ms_putendl_fd(argv[0], STDERR_FILENO);
-		perror("execve");
-		ms_error("execve failed");
+		argv[0] = add_path(argv[0]);
+		if (argv[0] == NULL)
+			ms_error("minishell command not found");
+
+		if (execve(argv[0], argv, environ) < 0)
+		{
+			ms_putendl_fd(argv[0], STDERR_FILENO);
+			perror("execve");
+			ms_error("execve failed");
+		}
 	}
 }

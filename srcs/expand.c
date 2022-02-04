@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 14:19:34 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/28 14:13:00 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/04 17:06:54 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	expand(char **token)
 			//printf("tmp is %s\n", tmp);
 
 			//上で作ったtmpを, retにくっつける。
-			ms_strappend(&ret, tmp);
+			ret = ms_strappend(ret, tmp);
 			//printf("ret is %s\n", ret);
 
 			//tokenにある$後の変数名を取得
@@ -70,7 +70,7 @@ void	expand(char **token)
 			//printf("new_word is %s\n", new_word);
 
 			//取得した右辺の値をretにくっつける（展開）
-			ms_strappend(&ret, new_word);
+			ret = ms_strappend(ret, new_word);
 			//printf("ret is %s\n", ret);
 
 			//tokenのインデックスを変数名の大きさだけ進める
@@ -84,7 +84,7 @@ void	expand(char **token)
 	tmp = ms_substr(*token, start, i);
 	//printf("tmp is %s\n", tmp);
 
-	ms_strappend(&ret, tmp);
+	ret = ms_strappend(ret, tmp);
 	//printf("ret is %s\n", ret);
 
 	free(*token);

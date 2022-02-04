@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 15:51:03 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/03 17:40:55 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/03 21:53:52 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,32 @@ infile_part(char *token)
 	close(fd);
 }
 
+char
+*rl_gets_heredoc(void)
+{
+	char	*line_read;
+
+	line_read = readline("heredoc > ");
+	return (line_read);
+}
+
 void
 heredoc_loop(int fd, char *token)
 {
 	char	*line;
-	int		result;
+	//int		result;
 
 	while(1)
 	{
-		write(STDOUT, "heredoc > ", 10);
-		result = get_next_line(STDIN, &line);
-		if (result == ERROR)
+		//write(STDOUT, "heredoc > ", 10);
+		//result = get_next_line(STDIN, &line);
+		line = rl_gets_heredoc();
+		if (ms_strcmp(line, &token[3]) == 0)
+			break ;
+		write(fd, line, ms_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+		/*if (result == ERROR)
 		{
 			close(fd);
 			ms_error("gnl failed");
@@ -48,7 +63,7 @@ heredoc_loop(int fd, char *token)
 				break ;
 			write(fd, line, ms_strlen(line));
 			write(fd, "\n", 1);
-		}
+		}*/
 	}
 }
 
