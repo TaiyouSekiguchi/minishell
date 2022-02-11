@@ -1,21 +1,7 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/01/21 17:33:29 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/02/02 16:01:12 by tsekiguc         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 CC						=	gcc
 CFLAGS					=	-Wall -Wextra -Werror
-INCLUDE					=	-Ilibms -I/usr/local/opt/readline/include
-LIB						=	-lreadline -Llibms -lms -L/usr/local/opt/readline/lib
-RM						=	rm -f
-
+INCLUDE					=	-I libms  -I ${shell brew --prefix readline}/include
+LIB						=	-l readline -L ${shell brew --prefix readline}/lib -L libms libms/libms.a
 ############ minishell #############
 MINISHELL				=	minishell
 SRCS					=
@@ -149,7 +135,7 @@ $(MINISHELL)		:	$(OBJS)
 						$(CC) $(OBJS) $(CFLAGS) $(LIB) -o $@
 
 $(READLINE_TEST)	:	$(READLINE_TEST_OBJS)
-						$(CC) $(READLINE_TEST_OBJS) $(CFLAGS) $(LIB) -o $@
+						$(CC) $(READLINE_TEST_OBJS) ${INCLUDE} $(CFLAGS) $(LIB) -o $@
 
 $(LEXER_TEST)		:	$(LEXER_TEST_OBJS)
 						$(CC) $(LEXER_TEST_OBJS) $(CFLAGS) $(LIB) -o $@

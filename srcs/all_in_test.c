@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   all_in_test.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 14:05:09 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 16:44:10 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/11 14:50:11 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ int	main(void)
 		printf("%s\n", command);
 		test(command);
 		if (ms_strcmp(command, "clear_history") == 0)
-			rl_clear_history();
+			clear_history();
+			//rl_clear_history();
 	}
 	free(command);
 	return (0);
