@@ -6,12 +6,13 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 14:05:09 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/11 14:50:11 by yjimpei          ###   ########.fr       */
+/*   Updated: 2022/02/11 18:09:55 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 char	*rl_gets(void)
 {
 	static char *line_read = (char *)NULL;
@@ -29,6 +30,7 @@ char	*rl_gets(void)
 
 	return (line_read);
 }
+*/
 
 /*void	sig_handler(int signum)
 {

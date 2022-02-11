@@ -3,43 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   readline_test.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:08:47 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 13:59:33 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/11 17:46:15 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*rl_gets(void)
-{
-	static char *line_read = (char *)NULL;
-
-	if (line_read)
-	{
-		free(line_read);
-		line_read = (char *)NULL;
-	}
-
-	line_read = readline(">> ");
-
-	if (line_read && *line_read)
-		add_history(line_read);
-
-	return (line_read);
-}
-
-/*void	sig_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}*/
 
 int	main(void)
 {
