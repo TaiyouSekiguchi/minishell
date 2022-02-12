@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:05:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/04 16:41:22 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/11 17:46:55 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include <readline/history.h>
 
 #include "get_next_line.h"
-#include "../libms/libms.h"
+#include "libms.h"
 
 typedef	enum e_boolean
 {
@@ -74,6 +74,8 @@ typedef	struct s_cmd
 	t_list	*outfile;
 }				t_cmd;
 
+//readline
+char	*rl_gets(void);
 
 //lexer
 void		lexer(t_list **list, char *cmd);
