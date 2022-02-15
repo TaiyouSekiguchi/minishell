@@ -6,11 +6,13 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 14:19:34 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/04 17:06:54 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/15 15:45:16 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int g_status;
 
 static int	is_name(char c)
 {
@@ -61,23 +63,34 @@ void	expand(char **token)
 			ret = ms_strappend(ret, tmp);
 			//printf("ret is %s\n", ret);
 
-			//tokenにある$後の変数名を取得
-			val_name = get_val_name(&(*token)[i]);
-			//printf("val_name is %s\n", val_name);
+			// $? のとき終了ステータスをいれる
+			if ((*token)[i + 1] == '?')
+			{
+				new_word = ms_itoa(g_status);
+				ret = ms_strappend(ret, new_word);
+				i += 2;
+				start = i;
+			}
+			else
+			{
+				//tokenにある$後の変数名を取得
+				val_name = get_val_name(&(*token)[i]);
+				//printf("val_name is %s\n", val_name);
 
-			//変数名から環境変数にある右辺を取得する
-			new_word = search_environ(val_name);
-			//printf("new_word is %s\n", new_word);
+				//変数名から環境変数にある右辺を取得する
+				new_word = search_environ(val_name);
+				//printf("new_word is %s\n", new_word);
 
-			//取得した右辺の値をretにくっつける（展開）
-			ret = ms_strappend(ret, new_word);
-			//printf("ret is %s\n", ret);
+				//取得した右辺の値をretにくっつける（展開）
+				ret = ms_strappend(ret, new_word);
+				//printf("ret is %s\n", ret);
 
-			//tokenのインデックスを変数名の大きさだけ進める
-			i++;
-			while ((*token)[i] != '\0' && is_name((*token)[i]))
+				//tokenのインデックスを変数名の大きさだけ進める
 				i++;
-			start = i;
+				while ((*token)[i] != '\0' && is_name((*token)[i]))
+					i++;
+				start = i;
+			}
 		}
 	}
 
