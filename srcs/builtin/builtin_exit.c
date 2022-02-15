@@ -6,11 +6,13 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 16:00:09 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/31 16:56:37 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/15 15:22:30 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int g_status;
 
 void	builtin_exit(int argc, char *argv[])
 {
@@ -25,6 +27,6 @@ void	builtin_exit(int argc, char *argv[])
 	}
 	else
 	{
-		exit(0);
+		exit(g_status);
 	}
 }
