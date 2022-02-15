@@ -6,11 +6,13 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 14:05:09 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/11 18:09:55 by yjimpei          ###   ########.fr       */
+/*   Updated: 2022/02/15 15:21:12 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_status;
 
 /*
 char	*rl_gets(void)
@@ -113,5 +115,5 @@ int	main(void)
 			//rl_clear_history();
 	}
 	free(command);
-	return (0);
+	return (g_status);
 }
