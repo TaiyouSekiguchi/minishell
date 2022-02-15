@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   do_exec.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/03 15:10:22 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/04 18:19:06 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 t_kind
@@ -55,37 +43,32 @@ char
 }
 
 char
-*add_path(char *cmd_name)
+*cmd_path_search(char *cmd_name)
 {
-	char	*env_path;
-	char	**split_path;
-	char	*full_path;
-	size_t	i;
-	struct stat	buf;
+	char	**env_path_lst;
+	int		i;
+	char	*tmp;
+	char	*tmp2;
 
-	env_path = getenv("PATH");
-	if (env_path == NULL)
-		ms_error("PATH is nothing");
-
-	split_path = ms_split(env_path, ':');
-	full_path = NULL;
+	env_path_lst = ms_split(getenv("PATH"), ':');
+	if (env_path_lst == NULL)
+		return (NULL);
 	i = 0;
-	while (split_path[i] != NULL)
+	while (env_path_lst[i] != NULL)
 	{
-		full_path = ms_strjoin(split_path[i], "/");
-		full_path = ms_strappend(full_path, cmd_name);
-		if (stat(full_path, &buf) == 0)
+		tmp = ms_strjoin(env_path_lst[i], "/");
+		tmp2 = ms_strjoin(tmp, cmd_name);
+		if (access(tmp2, X_OK) == 0)
 		{
-			free(cmd_name);
-			ms_split_free(split_path);
-			return (full_path);
+			free(tmp);
+			ms_split_free(env_path_lst);
+			return (tmp2);
 		}
-		else
-			i++;
+		i++;
 	}
-	ms_split_free(split_path);
-	if (stat(cmd_name, &buf) == 0)
-		return (cmd_name);
+	ms_split_free(env_path_lst);
+	free(tmp);
+	free(tmp2);
 	return (NULL);
 }
 
@@ -98,29 +81,32 @@ do_exec(t_cmd *cmd_group)
 
 	//redirect part
 	infile_redirect_part(cmd_group->infile);
-
 	//parse from list to array for execve
 	cmd_token_count = ms_lstsize(cmd_group->cmd);
 	argv = make_argv_for_execve(cmd_group->cmd, cmd_token_count);
-
-	//command search
-
 	//exec part
 	if (is_builtin(argv[0]))
 	{
 		do_builtin(argv[0], cmd_token_count, argv);
+		return ;
+	}
+	else if (ms_strchr(argv[0], '/') == NULL)
+	{
+		//$PATHから探す
+		argv[0] = cmd_path_search(argv[0]);
 	}
 	else
 	{
-		argv[0] = add_path(argv[0]);
-		if (argv[0] == NULL)
-			ms_error("minishell command not found");
-
-		if (execve(argv[0], argv, environ) < 0)
-		{
-			ms_putendl_fd(argv[0], STDERR_FILENO);
-			perror("execve");
-			ms_error("execve failed");
-		}
+		//absolute_PATHから探す　
+		if (access(argv[0], X_OK) != 0)
+			argv[0] = NULL;
+	}
+	if (argv[0] == NULL)
+		ms_error("minishell command not found");
+	if (execve(argv[0], argv, environ) < 0)
+	{
+		ms_putendl_fd(argv[0], STDERR_FILENO);
+		perror("execve");
+		ms_error("execve failed");
 	}
 }

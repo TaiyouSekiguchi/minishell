@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+int	g_status;
+
 void	print_list(t_list *list, char *kind)
 {
 	t_list	*current;
@@ -69,8 +71,9 @@ int main(void)
 //	test("/bin/cat << LOVE");
 //	test("/bin/ls -a -l | /usr/bin/grep git | /usr/bin/wc ");
 //	test("echo This is echo test");
-//	test("pwd");
-	test("env");
+	test("cat Makefile | wc -l");
+	test("/bin/cat Makefile | /usr/bin/wc -l");
+	//test("env");
 	//test("export TEST=taiyou");
 //	test("env");
 //	test("cd ..");
