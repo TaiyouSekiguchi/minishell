@@ -6,11 +6,13 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/25 15:31:39 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/15 16:26:13 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_status;
 
 void	print_list(t_list *list, char *kind)
 {
@@ -81,5 +83,7 @@ int main(void)
 	test("cat \'-e $TEST\"taiyou\"\'");
 	test("cat \"-e $TEST\'taiyou\'\"");
 	test("cat \'taiyou\'$TEST\'sekiguchi\'");
+	test("cat $EDITOR");
+
 	return (0);
 }
