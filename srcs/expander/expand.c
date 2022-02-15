@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 14:19:34 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/15 15:45:16 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/15 16:44:18 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static char	*get_val_name(char *token)
 	char	*val_name;
 	int		i;
 
-	i = 1;
+	i = 0;
 	while (token[i] != '\0' && is_name(token[i]))
 		i++;
 	val_name = ms_strndup(token, i);
@@ -63,12 +63,15 @@ void	expand(char **token)
 			ret = ms_strappend(ret, tmp);
 			//printf("ret is %s\n", ret);
 
+			//$の次へいく
+			i++;
+
 			// $? のとき終了ステータスをいれる
-			if ((*token)[i + 1] == '?')
+			if ((*token)[i] == '?')
 			{
 				new_word = ms_itoa(g_status);
 				ret = ms_strappend(ret, new_word);
-				i += 2;
+				i++;
 				start = i;
 			}
 			else
@@ -86,7 +89,6 @@ void	expand(char **token)
 				//printf("ret is %s\n", ret);
 
 				//tokenのインデックスを変数名の大きさだけ進める
-				i++;
 				while ((*token)[i] != '\0' && is_name((*token)[i]))
 					i++;
 				start = i;
