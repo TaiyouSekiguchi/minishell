@@ -6,13 +6,13 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 15:51:03 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/03 21:53:52 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/15 21:26:49 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void
+/*void
 infile_part(char *token)
 {
 	int	fd;
@@ -50,7 +50,7 @@ heredoc_loop(int fd, char *token)
 		write(fd, line, ms_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
-		/*if (result == ERROR)
+		if (result == ERROR)
 		{
 			close(fd);
 			ms_error("gnl failed");
@@ -63,7 +63,7 @@ heredoc_loop(int fd, char *token)
 				break ;
 			write(fd, line, ms_strlen(line));
 			write(fd, "\n", 1);
-		}*/
+		}
 	}
 }
 
@@ -97,4 +97,4 @@ void	do_redirect(char *token, t_kind kind)
 		infile_part(token);
 	else if (kind == HEREDOC)
 		heredoc_part(token);
-}
+}*/
