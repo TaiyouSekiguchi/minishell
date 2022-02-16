@@ -1,47 +1,50 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executer.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/25 16:19:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/16 13:39:20 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 
 extern int g_status;
 
-void	executer(t_list *cmds)
+void	do_cmd(t_cmd *cmd_group, t_boolean is_last)
 {
-	int			cmd_count;
-	t_cmd		*first_cmd_group;
-	char		*first_cmd;
-	t_list		*last_cmds;
-	pid_t		ret;
-	int			status;
+	int	pipe_fd[2];
+	int	pid;
 
-	first_cmd_group = cmds->content;
-	first_cmd = first_cmd_group->cmd->content;
-	cmd_count = ms_lstsize(cmds);
-	if (is_builtin(first_cmd) && cmd_count == 1)
+	if (pipe(pipe_fd) == -1)
+		perror("minishell");
+	pid = fork();
+	if (pid == 0)
 	{
-		do_exec(first_cmd_group, -1);
+		close(pipe_fd[0]);
+		if (is_last != TRUE)
+			dup2(pipe_fd[1], STDOUT_FILENO);
+		do_exec(cmd_group);
 	}
 	else
 	{
-		last_cmds= ms_lstlast(cmds);
-		ret = fork();
-		if (ret == 0)
-		{
-			do_pipe(last_cmds, -1);
-		}
+		close(pipe_fd[1]);
+		dup2(pipe_fd[0], STDIN_FILENO);
+		close(pipe_fd[0]);
+	}
+}
+
+void	executer(t_list *cmds)
+{
+	size_t	cmd_len;
+	size_t	i;
+
+	cmd_len = ms_lstsize(cmds);
+	i = cmd_len;
+	while (cmd_len)
+	{
+		if (cmd_len == 1)
+			do_cmd(cmds->content, TRUE);
 		else
-		{
-			wait(&status);
-			g_status = WEXITSTATUS(status);
-		}
+			do_cmd(cmds->content, FALSE);
+		cmds = cmds->next;
+		cmd_len--;
+	}
+	while (i)
+	{
+		wait(&g_status);
+		i--;
 	}
 }

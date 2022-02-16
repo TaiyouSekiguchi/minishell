@@ -71,8 +71,15 @@ int main(void)
 //	test("/bin/cat << LOVE");
 //	test("/bin/ls -a -l | /usr/bin/grep git | /usr/bin/wc ");
 //	test("echo This is echo test");
-	test("cat Makefile | wc -l");
-	test("/bin/cat Makefile | /usr/bin/wc -l");
+	test("cat -e .gitignore");
+	test("cat -e .gitignore | wc -l");
+	test("cat -e .gitignore | grep vs | wc -l");
+	test("cat -e .gitignore | grep vs | wc -l | cat -e");
+	//test("/bin/cat Makefile | /usr/bin/wc -l");
+	//test("/bin/cat < .gitmodules < Makefile < .gitignore");
+	//test("/bin/cat << END < Makefile < .gitignore");
+	//test("/bin/cat << END < Makefile < .gitignore | /usr/bin/wc -l | wc -l");
+	//test("/bin/cat < Makefile < .gitignore | /usr/bin/wc -l");
 	//test("env");
 	//test("export TEST=taiyou");
 //	test("env");

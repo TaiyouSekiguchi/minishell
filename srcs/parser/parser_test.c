@@ -73,6 +73,7 @@ int main(void)
 	test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
 	test("> outfile");
 	test("cat < $TEST | grep test | wc -l >> outfile > outfile");
+	test("cat Makefile | wc -l");
 	//test("> outfile |");
 	return (0);
 }
