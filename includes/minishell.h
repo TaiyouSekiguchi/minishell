@@ -22,8 +22,11 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include "get_next_line.h"
 #include "libms.h"
+
+# define NONE_FD (-1)
+# define READ (0)
+# define WRITE (1)
 
 typedef	enum e_boolean
 {
@@ -102,7 +105,14 @@ void		executer(t_list *cmds);
 void		do_exec(t_cmd *cmd);
 void		do_redirect(int infile_fd, int outfile_fd);
 void		do_pipe(t_list *cmds, int fd);
-
+int			infile_open(char *token);
+void		heredoc_loop(int fd, char *token);
+int			heredoc_open(char *token);
+int			outfile_open(char *token);
+int			append_open(char *token);
+int			redirect_file_open(char *token);
+int			get_redirect_fd(t_list *token_list);
+void		do_redirect(int infile_fd, int outfile_fd);
 //builtin
 int			is_builtin(char *cmd_name);
 void		do_builtin(char *cmd, int argc, char *argv[]);
