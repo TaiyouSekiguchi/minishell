@@ -99,7 +99,7 @@ char		*remove_quotation(char *token);
 
 //executer
 void		executer(t_list *cmds);
-void		do_exec(t_cmd *cmd, int fd);
+void		do_exec(t_cmd *cmd);
 void		do_redirect(char *tmp, t_kind kind);
 void		do_pipe(t_list *cmds, int fd);
 
