@@ -1,28 +1,19 @@
+
 #include "minishell.h"
 
-/*void
-infile_part(char *token)
+extern int g_status;
+
+int		infile_open(char *token)
 {
 	int	fd;
 
 	fd = open(&token[2], O_RDONLY);
 	if (fd < 0)
 		ms_error("open");
-	close(0);
-	dup2(fd, 0);
-	close(fd);
-}*/
+	return (fd);
+}
 
-/*char
-*rl_gets_heredoc(void)
-{
-	char	*line_read;
-
-	line_read = readline("heredoc > ");
-	return (line_read);
-}*/
-
-/*void
+void
 heredoc_loop(int fd, char *token)
 {
 	char	*line;
@@ -38,16 +29,14 @@ heredoc_loop(int fd, char *token)
 	free(line);
 }
 
-void	heredoc_part(char *token)
+int
+heredoc_open(char *token)
 {
 	int	fd;
 
-	//make tmp file for input heredoc
 	fd = open("./tmp", O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
 	if (fd < 0)
 		ms_error("open");
-
-	//exec heredoc
 	heredoc_loop(fd, token);
 	close(fd);
 
@@ -56,16 +45,31 @@ void	heredoc_part(char *token)
 		ms_error("open failed");
 
 	unlink("./tmp");
-
-	close(0);
-	dup2(fd, 0);
-	close(fd);
+	return (fd);
 }
 
-void	do_redirect(char *token, t_kind kind)
+int
+outfile_open(char *token)
 {
-	if (kind == INFILE)
-		infile_part(token);
-	else if (kind == HEREDOC)
-		heredoc_part(token);
-}*/
+	int	fd;
+	
+	printf("outfile_open\n");
+	fd = open(&token[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+		ms_error("open failed");
+
+	return (fd);
+}
+
+int
+append_open(char *token)
+{
+	int	fd;
+
+	printf("append_open\n");
+	fd = open(&token[3], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd < 0)
+		ms_error("open failed");
+
+	return (fd);
+}

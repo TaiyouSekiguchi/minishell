@@ -3,22 +3,6 @@
 
 extern int g_status;
 
-static t_kind
-distinguish_redirect_kind(char	*str)
-{
-	t_kind	kind;
-
-	if (str[0] == '<' && str[1] == ' ')
-		kind = INFILE;
-	else if (str[0] == '<' && str[1] == '<')
-		kind = HEREDOC;
-	else if (str[0] == '>' && str[1] == ' ')
-		kind = OUTFILE;
-	else
-		kind = APPEND;
-	return (kind);
-}
-
 int		infile_open(char *token)
 {
 	int	fd;
@@ -90,18 +74,31 @@ append_open(char *token)
 	return (fd);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int
-get_redirect_fd(char *token)
+redirect_file_open(char *token)
 {
-	t_kind	kind;
 	int		fd;
 
-	kind = distinguish_redirect_kind(token);
-	if (kind == INFILE)
+	if (token[0] == '<' && token[1] == ' ')
 		fd = infile_open(token);
-	else if (kind == HEREDOC)
+	else if (token[0] == '<' && token[1] == '<')
 		fd = heredoc_open(token);
-	else if (kind == OUTFILE)
+	else if (token[0] == '>' && token[1] == ' ')
 		fd = outfile_open(token);
 	else
 		fd = append_open(token);
@@ -109,46 +106,41 @@ get_redirect_fd(char *token)
 	return (fd);
 }
 
-int		get_infile_fd(t_list *infile)
+int
+get_redirect_fd(t_list *token_list)
 {
 	int		fd;
 	char	*token;
 
 	fd = -1;
 	token = NULL;
-
-	while (infile != NULL)
+	while (token_list != NULL)
 	{
-		token = infile->content;
+		token = token_list->content;
 		if (token != NULL)
-			fd = get_redirect_fd(token);
+			fd = redirect_file_open(token);
 		else
 			fd = -1;
-		infile = infile->next;
+		token_list = token_list->next;
 	}
 
 	return (fd);
 }
 
-int		get_outfile_fd(t_list *outfile)
+void	do_redirect(int infile_fd, int outfile_fd)
 {
-	int		fd;
-	char	*token;
-
-	fd = -1;
-	token = NULL;
-
-	while (outfile != NULL)
+	if (infile_fd >= 0)
 	{
-		token = outfile->content;
-		if (token != NULL)
-			fd = get_redirect_fd(token);
-		else
-			fd = -1;
-		outfile = outfile->next;
+		close(0);
+		dup2(infile_fd, 0);
+		close(infile_fd);
 	}
-
-	return (fd);
+	if (outfile_fd >= 0)
+	{
+		close(1);
+		dup2(outfile_fd, 1);
+		close(outfile_fd);
+	}
 }
 
 void	do_cmd(t_cmd *cmd_group, t_boolean is_last)
@@ -160,9 +152,11 @@ void	do_cmd(t_cmd *cmd_group, t_boolean is_last)
 
 	if (is_last == TRUE)
 	{
-		infile_fd = get_infile_fd(cmd_group->infile);
-		outfile_fd = get_outfile_fd(cmd_group->outfile);
-		do_exec(cmd_group, infile_fd, outfile_fd);
+		infile_fd = get_redirect_fd(cmd_group->infile);
+		outfile_fd = get_redirect_fd(cmd_group->outfile);
+
+		do_redirect(infile_fd, outfile_fd);
+		do_exec(cmd_group);
 	}
 
 	if (pipe(pipe_fd) == -1)
@@ -170,14 +164,15 @@ void	do_cmd(t_cmd *cmd_group, t_boolean is_last)
 	pid = fork();
 	if (pid == 0)
 	{
-		//file open
-		infile_fd = get_infile_fd(cmd_group->infile);
-		outfile_fd = get_outfile_fd(cmd_group->outfile);
+		infile_fd = get_redirect_fd(cmd_group->infile);
+		outfile_fd = get_redirect_fd(cmd_group->outfile);
 
 		close(pipe_fd[0]);
 		if (is_last != TRUE)
 			dup2(pipe_fd[1], STDOUT_FILENO);
-		do_exec(cmd_group, infile_fd, outfile_fd);
+
+		do_redirect(infile_fd, outfile_fd);
+		do_exec(cmd_group);
 	}
 	else
 	{
@@ -191,17 +186,19 @@ void	tmp_exec(t_list *cmds)
 {
 	size_t	cmd_len;
 	size_t	i;
+	t_list *last_elem;
 
+	last_elem = ms_lstlast(cmds);
 	cmd_len = ms_lstsize(cmds);
-	i = cmd_len;
-	while (cmd_len)
+	i = 0;
+	while (i < cmd_len)
 	{
-		if (cmd_len == 1)
+		if (cmds == last_elem)
 			do_cmd(cmds->content, TRUE);
 		else
 			do_cmd(cmds->content, FALSE);
 		cmds = cmds->next;
-		cmd_len--;
+		i++;
 		wait(&g_status);
 	}
 }
@@ -221,22 +218,4 @@ void	executer(t_list *cmds)
 		wait(&status);
 		g_status = WEXITSTATUS(status);
 	}
-
-	/*cmd_len = ms_lstsize(cmds);
-	i = cmd_len;
-	while (cmd_len)
-	{
-		if (cmd_len == 1)
-			do_cmd(cmds->content, TRUE);
-		else
-			do_cmd(cmds->content, FALSE);
-		cmds = cmds->next;
-		cmd_len--;
-		wait(&g_status);
-	}*/
-	//while (i)
-	//{
-		//wait(&g_status);
-		//i--;
-	//}
 }
