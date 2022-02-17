@@ -11,6 +11,12 @@ char	*rl_gets(void)
 	}
 
 	line_read = readline(">> ");
+	if (line_read == NULL)
+	{
+		//改行がきになる
+		ms_putendl_fd("exit", STDOUT);
+		exit(0);
+	}
 
 	if (line_read && *line_read)
 		add_history(line_read);
