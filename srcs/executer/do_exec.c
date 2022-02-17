@@ -1,15 +1,15 @@
 #include "minishell.h"
 
-t_kind
+/*static t_kind
 distinguish_redirect_kind(char	*str)
 {
 	if (str[0] == '<' && str[1] == '<')
 		return (HEREDOC);
 	else
 		return (INFILE);
-}
+}*/
 
-void	infile_redirect_part(t_list *infile)
+/*void	infile_redirect_part(t_list *infile)
 {
 	t_list	*current;
 	t_kind	kind;
@@ -20,7 +20,7 @@ void	infile_redirect_part(t_list *infile)
 		kind = distinguish_redirect_kind(current->content);
 		do_redirect(current->content, kind);
 	}
-}
+}*/
 
 char
 **make_argv_for_execve(t_list *cmd, size_t cmd_token_count)
@@ -73,14 +73,21 @@ char
 }
 
 void
-do_exec(t_cmd *cmd_group)
+do_exec(t_cmd *cmd_group, int fd)
 {
 	extern char		**environ;
 	char			**argv;
 	size_t			cmd_token_count;
 
 	//redirect part
-	infile_redirect_part(cmd_group->infile);
+	//infile_redirect_part(cmd_group->infile);
+	if (fd >= 0)
+	{
+		close(0);
+		dup2(fd, 0);
+		close(fd);
+	}
+	
 	//parse from list to array for execve
 	cmd_token_count = ms_lstsize(cmd_group->cmd);
 	argv = make_argv_for_execve(cmd_group->cmd, cmd_token_count);
