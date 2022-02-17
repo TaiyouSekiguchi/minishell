@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   do_redirect.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/02 15:51:03 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/15 21:26:49 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-/*void
+void
 infile_part(char *token)
 {
 	int	fd;
@@ -33,7 +21,6 @@ char
 	line_read = readline("heredoc > ");
 	return (line_read);
 }
-
 void
 heredoc_loop(int fd, char *token)
 {
@@ -42,29 +29,13 @@ heredoc_loop(int fd, char *token)
 
 	while(1)
 	{
-		//write(STDOUT, "heredoc > ", 10);
-		//result = get_next_line(STDIN, &line);
-		line = rl_gets_heredoc();
+		line = readline("heredoc > ");
 		if (ms_strcmp(line, &token[3]) == 0)
 			break ;
-		write(fd, line, ms_strlen(line));
-		write(fd, "\n", 1);
+		ms_putendl_fd(line, fd);
 		free(line);
-		if (result == ERROR)
-		{
-			close(fd);
-			ms_error("gnl failed");
-		}
-		else if (result == END)
-			break ;
-		else
-		{
-			if (ms_strcmp(line, &token[3]) == 0)
-				break ;
-			write(fd, line, ms_strlen(line));
-			write(fd, "\n", 1);
-		}
 	}
+	free(line);
 }
 
 void	heredoc_part(char *token)
@@ -97,4 +68,4 @@ void	do_redirect(char *token, t_kind kind)
 		infile_part(token);
 	else if (kind == HEREDOC)
 		heredoc_part(token);
-}*/
+}

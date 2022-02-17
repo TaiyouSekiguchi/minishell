@@ -1,5 +1,5 @@
 #include "minishell.h"
-
+/*
 static t_kind
 distinguish_redirect_kind(char	*str)
 {
@@ -42,15 +42,23 @@ heredoc_loop(int fd, char *token)
 	free(line);
 }
 
+void
+pipe_handler(int fd_1, int fd_2, int io)
+{
+	close(fd_1);
+	dup2(fd_2, io);
+	close(fd_2);
+}
+
 int
-heredoc_open(char *token)
+heredoc_open(char *token, int pipe_fd[])
 {
 	int	fd;
 
 	fd = open("./tmp", O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
 	if (fd < 0)
 		ms_error("open");
-
+	dprintf(32, "%d\n", pipe_fd[1]);
 	heredoc_loop(fd, token);
 	close(fd);
 
@@ -63,7 +71,7 @@ heredoc_open(char *token)
 }
 
 int
-get_redirect_fd(char *token)
+get_redirect_fd(char *token, int pipe_fd[])
 {
 	t_kind	kind;
 	int		fd;
@@ -72,12 +80,12 @@ get_redirect_fd(char *token)
 	if (kind == INFILE)
 		fd = infile_open(token);
 	else
-		fd = heredoc_open(token);
+		fd = heredoc_open(token, pipe_fd);
 
 	return (fd);
 }
 
-int		get_infile_fd(t_cmd *cmd_group)
+int		get_infile_fd(t_cmd *cmd_group, int pipe_fd[])
 {
 	int		fd;
 	t_list	*infile;
@@ -91,7 +99,7 @@ int		get_infile_fd(t_cmd *cmd_group)
 	{
 		token = infile->content;
 		if (token != NULL)
-			fd = get_redirect_fd(token);
+			fd = get_redirect_fd(token, pipe_fd);
 		else
 			fd = -1;
 		infile = infile->next;
@@ -99,49 +107,43 @@ int		get_infile_fd(t_cmd *cmd_group)
 
 	return (fd);
 }
-
-void
-pipe_handler(int fd_1, int fd_2, int io)
-{
-	close(fd_1);
-	dup2(fd_2, io);
-	close(fd_2);
-}
-
-void
-do_pipe(t_list *cmds, int fd)
-{
-	int		pp[2];
-	pid_t	ret;
-	t_list	*prev_cmds;
-	char	*token;
-
-	token = NULL;
-	if (cmds->prev == NULL)
-	{
-		if (fd < 0)
-			fd = get_infile_fd(cmds->content);
-		do_exec(cmds->content, fd);
-	}
-	else
-	{
-		pipe(pp);
-		ret = fork();
-		if (ret == 0)
-		{
-			prev_cmds = cmds->prev;
-			fd = get_infile_fd(prev_cmds->content);
-
-			pipe_handler(pp[0], pp[1], 1);
-			do_pipe(cmds->prev, fd);
-		}
-		else
-		{
-			wait(NULL);
-			fd = get_infile_fd(cmds->content);
-
-			pipe_handler(pp[1], pp[0], 0);
-			do_exec(cmds->content, fd);
-		}
-	}
-}
+//
+//
+//void
+//do_pipe(t_list *cmds, int fd)
+//{
+//	int		pp[2];
+//	pid_t	ret;
+//	t_list	*prev_cmds;
+//	char	*token;
+//
+//	token = NULL;
+//	if (cmds->prev == NULL)
+//	{
+//		if (fd < 0)
+//			fd = get_infile_fd(cmds->content, pp);
+//		do_exec(cmds->content, fd);
+//	}
+//	else
+//	{
+//		pipe(pp);
+//		ret = fork();
+//		if (ret == 0)
+//		{
+//			prev_cmds = cmds->prev;
+//			fd = get_infile_fd(prev_cmds->content, pp);
+//			pipe_handler(pp[0], pp[1], 1);
+//			do_pipe(cmds->prev, fd);
+//		}
+//		else
+//		{
+//			wait(NULL);
+//			fd = get_infile_fd(cmds->content, pp);
+//
+//			pipe_handler(pp[1], pp[0], 0);
+//			do_exec(cmds->content, fd);
+//		}
+//	}
+//}
+//
+*/

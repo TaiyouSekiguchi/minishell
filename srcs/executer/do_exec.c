@@ -73,20 +73,20 @@ char
 }
 
 void
-do_exec(t_cmd *cmd_group, int fd)
+do_exec(t_cmd *cmd_group)
 {
 	extern char		**environ;
 	char			**argv;
 	size_t			cmd_token_count;
 
 	//redirect part
-	//infile_redirect_part(cmd_group->infile);
-	if (fd >= 0)
-	{
-		close(0);
-		dup2(fd, 0);
-		close(fd);
-	}
+	infile_redirect_part(cmd_group->infile);
+	//if (fd >= 0)
+	//{
+	//	close(0);
+	//	dup2(fd, 0);
+	//	close(fd);
+	//}
 	
 	//parse from list to array for execve
 	cmd_token_count = ms_lstsize(cmd_group->cmd);
