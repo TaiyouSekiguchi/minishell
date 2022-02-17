@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:05:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/15 21:28:55 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/17 14:11:53 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char		*remove_quotation(char *token);
 
 //executer
 void		executer(t_list *cmds);
-void		do_exec(t_cmd *cmd);
+void		do_exec(t_cmd *cmd, int infile_fd, int outfile_fd);
 void		do_redirect(char *tmp, t_kind kind);
 void		do_pipe(t_list *cmds, int fd);
 

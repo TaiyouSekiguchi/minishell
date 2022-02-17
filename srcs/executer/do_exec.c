@@ -7,9 +7,9 @@ distinguish_redirect_kind(char	*str)
 		return (HEREDOC);
 	else
 		return (INFILE);
-}*/
+}
 
-/*void	infile_redirect_part(t_list *infile)
+void	infile_redirect_part(t_list *infile)
 {
 	t_list	*current;
 	t_kind	kind;
@@ -73,20 +73,26 @@ char
 }
 
 void
-do_exec(t_cmd *cmd_group)
+do_exec(t_cmd *cmd_group, int infile_fd, int outfile_fd)
 {
 	extern char		**environ;
 	char			**argv;
 	size_t			cmd_token_count;
 
 	//redirect part
-	infile_redirect_part(cmd_group->infile);
-	//if (fd >= 0)
-	//{
-	//	close(0);
-	//	dup2(fd, 0);
-	//	close(fd);
-	//}
+	//infile_redirect_part(cmd_group->infile);
+	if (infile_fd >= 0)
+	{
+		close(0);
+		dup2(infile_fd, 0);
+		close(infile_fd);
+	}
+	if (outfile_fd >= 0)
+	{
+		close(1);
+		dup2(outfile_fd, 1);
+		close(outfile_fd);
+	}
 	
 	//parse from list to array for execve
 	cmd_token_count = ms_lstsize(cmd_group->cmd);

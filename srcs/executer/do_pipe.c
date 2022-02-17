@@ -1,6 +1,6 @@
 #include "minishell.h"
-/*
-static t_kind
+
+/*static t_kind
 distinguish_redirect_kind(char	*str)
 {
 	t_kind	kind;
@@ -107,43 +107,42 @@ int		get_infile_fd(t_cmd *cmd_group, int pipe_fd[])
 
 	return (fd);
 }
-//
-//
-//void
-//do_pipe(t_list *cmds, int fd)
-//{
-//	int		pp[2];
-//	pid_t	ret;
-//	t_list	*prev_cmds;
-//	char	*token;
-//
-//	token = NULL;
-//	if (cmds->prev == NULL)
-//	{
-//		if (fd < 0)
-//			fd = get_infile_fd(cmds->content, pp);
-//		do_exec(cmds->content, fd);
-//	}
-//	else
-//	{
-//		pipe(pp);
-//		ret = fork();
-//		if (ret == 0)
-//		{
-//			prev_cmds = cmds->prev;
-//			fd = get_infile_fd(prev_cmds->content, pp);
-//			pipe_handler(pp[0], pp[1], 1);
-//			do_pipe(cmds->prev, fd);
-//		}
-//		else
-//		{
-//			wait(NULL);
-//			fd = get_infile_fd(cmds->content, pp);
-//
-//			pipe_handler(pp[1], pp[0], 0);
-//			do_exec(cmds->content, fd);
-//		}
-//	}
-//}
-//
-*/
+
+
+void
+do_pipe(t_list *cmds, int fd)
+{
+	int		pp[2];
+	pid_t	ret;
+	t_list	*prev_cmds;
+	char	*token;
+
+	token = NULL;
+	if (cmds->prev == NULL)
+	{
+		if (fd < 0)
+			fd = get_infile_fd(cmds->content, pp);
+		do_exec(cmds->content, fd);
+	}
+	else
+	{
+		pipe(pp);
+		ret = fork();
+		if (ret == 0)
+		{
+			prev_cmds = cmds->prev;
+			fd = get_infile_fd(prev_cmds->content, pp);
+			pipe_handler(pp[0], pp[1], 1);
+			do_pipe(cmds->prev, fd);
+		}
+		else
+		{
+			wait(NULL);
+			fd = get_infile_fd(cmds->content, pp);
+
+			pipe_handler(pp[1], pp[0], 0);
+			do_exec(cmds->content, fd);
+		}
+	}
+}*/
+

@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/02 13:11:17 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/17 14:28:56 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ int main(void)
 //	test("/bin/cat << LOVE");
 //	test("/bin/ls -a -l | /usr/bin/grep git | /usr/bin/wc ");
 //	test("echo This is echo test");
-	test("cat -e .gitignore");
-	test("cat -e .gitignore | wc -l");
-	test("cat -e .gitignore | grep vs | wc -l");
-	test("cat -e .gitignore | grep vs | wc -l | cat -e");
+//	test("cat << END");
+//	test("cat < Makefile < .gitignore << END");
+//	test("cat < Makefile < .gitignore << END | grep a < Makefile | wc -l");
+	test("cat < Makefile | wc > outfile");
 	//test("/bin/cat Makefile | /usr/bin/wc -l");
 	//test("/bin/cat < .gitmodules < Makefile < .gitignore");
 	//test("/bin/cat << END < Makefile < .gitignore");
