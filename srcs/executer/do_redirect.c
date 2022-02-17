@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void
+/*void
 infile_part(char *token)
 {
 	int	fd;
@@ -11,21 +11,21 @@ infile_part(char *token)
 	close(0);
 	dup2(fd, 0);
 	close(fd);
-}
+}*/
 
-char
+/*char
 *rl_gets_heredoc(void)
 {
 	char	*line_read;
 
 	line_read = readline("heredoc > ");
 	return (line_read);
-}
-void
+}*/
+
+/*void
 heredoc_loop(int fd, char *token)
 {
 	char	*line;
-	//int		result;
 
 	while(1)
 	{
@@ -68,4 +68,4 @@ void	do_redirect(char *token, t_kind kind)
 		infile_part(token);
 	else if (kind == HEREDOC)
 		heredoc_part(token);
-}
+}*/
