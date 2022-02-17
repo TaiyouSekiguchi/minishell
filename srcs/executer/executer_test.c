@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/17 14:28:56 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/17 19:57:15 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,21 +68,22 @@ void	test(char *str)
 
 int main(void)
 {
-//	test("/bin/cat << LOVE");
-//	test("/bin/ls -a -l | /usr/bin/grep git | /usr/bin/wc ");
-//	test("echo This is echo test");
-//	test("cat << END");
-//	test("cat < Makefile < .gitignore << END");
-//	test("cat < Makefile < .gitignore << END | grep a < Makefile | wc -l");
-	test("cat < Makefile | wc > outfile");
-	//test("/bin/cat Makefile | /usr/bin/wc -l");
-	//test("/bin/cat < .gitmodules < Makefile < .gitignore");
-	//test("/bin/cat << END < Makefile < .gitignore");
-	//test("/bin/cat << END < Makefile < .gitignore | /usr/bin/wc -l | wc -l");
-	//test("/bin/cat < Makefile < .gitignore | /usr/bin/wc -l");
-	//test("env");
-	//test("export TEST=taiyou");
-//	test("env");
-//	test("cd ..");
+	//test("cat");
+	//test("cat < Makefile");
+	//test("cat << END");
+	//test("cat < Makefile | wc -l");
+	//test("cat < Makefile | wc -l > outfile1");
+	//test("cat < Makefile | wc -l >> outfile1");
+	test("cat < Makefile | grep a | wc -l >> outfile2");
+	test("cat < Makefile < .gitignore | grep a | wc -l >> outfile2");
+	test("cat < Makefile < .gitignore | grep a | wc -l >> outfile2");
+	test("cat < Makefile < .gitignore << END | grep a | wc -l >> outfile3");
+	test("cat < Makefile < .gitignore << END | grep a | wc -l >> outfile3");
+	test("cat < Makefile < .gitignore << END | grep a | wc -l >> outfile3");
+	test("cat < Makefile < .gitignore << END | grep a | wc -l >> outfile3");
+	test("cat < Makefile << END < .gitignore | grep a | wc -l >> outfile3");
+	test("cat < Makefile << END | grep a < .gitignore | wc -l >> outfile4");
+	test("cat < Makefile << END | grep a < .gitignore | wc -l >> outfile4");
+	test("cat < Makefile > outfile5 | cat -e");
 	return (0);
 }

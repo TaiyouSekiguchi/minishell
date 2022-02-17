@@ -158,6 +158,13 @@ void	do_cmd(t_cmd *cmd_group, t_boolean is_last)
 	int	infile_fd;
 	int	outfile_fd;
 
+	if (is_last == TRUE)
+	{
+		infile_fd = get_infile_fd(cmd_group->infile);
+		outfile_fd = get_outfile_fd(cmd_group->outfile);
+		do_exec(cmd_group, infile_fd, outfile_fd);
+	}
+
 	if (pipe(pipe_fd) == -1)
 		perror("minishell");
 	pid = fork();
@@ -180,7 +187,7 @@ void	do_cmd(t_cmd *cmd_group, t_boolean is_last)
 	}
 }
 
-void	executer(t_list *cmds)
+void	tmp_exec(t_list *cmds)
 {
 	size_t	cmd_len;
 	size_t	i;
@@ -197,6 +204,36 @@ void	executer(t_list *cmds)
 		cmd_len--;
 		wait(&g_status);
 	}
+}
+
+void	executer(t_list *cmds)
+{
+	pid_t	ret;
+	int		status;
+
+	ret = fork();
+	if (ret == 0)
+	{
+		tmp_exec(cmds);
+	}
+	else
+	{
+		wait(&status);
+		g_status = WEXITSTATUS(status);
+	}
+
+	/*cmd_len = ms_lstsize(cmds);
+	i = cmd_len;
+	while (cmd_len)
+	{
+		if (cmd_len == 1)
+			do_cmd(cmds->content, TRUE);
+		else
+			do_cmd(cmds->content, FALSE);
+		cmds = cmds->next;
+		cmd_len--;
+		wait(&g_status);
+	}*/
 	//while (i)
 	//{
 		//wait(&g_status);
