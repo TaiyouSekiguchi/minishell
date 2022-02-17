@@ -46,8 +46,6 @@ EXECUTER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_TEST_SRCS:.c=.o))
 ########### utils ############
 UTILS_SRCS				=	srcs/utils/is_func.c\
 							srcs/utils/quote_set.c\
-							srcs/utils/get_next_line.c\
-							srcs/utils/get_next_line_utils.c\
 							srcs/utils/search_environ.c \
 							srcs/utils/remove_quotation.c
 UTILS_OBJS				=	$(addprefix $(OBJS_DIR)/, $(UTILS_SRCS:.c=.o))
@@ -91,7 +89,8 @@ BUILTIN_OBJS			=	$(addprefix $(OBJS_DIR)/, $(BUILTIN_SRCS:.c=.o))
 ############ executer #############
 EXECUTER_SRCS			=	srcs/executer/executer.c\
 							srcs/executer/do_pipe.c\
-							srcs/executer/redirect_open.c\
+							srcs/executer/redirect_open_utils.c\
+							srcs/executer/redirect.c\
 							srcs/executer/do_exec.c
 EXECUTER_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_SRCS:.c=.o))
 ########################################
