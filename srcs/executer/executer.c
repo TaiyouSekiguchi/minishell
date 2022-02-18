@@ -58,17 +58,30 @@ void	exec_process(t_list *cmds)
 
 void	executer(t_list *cmds)
 {
+	t_cmd	*first_cmd_group;
+	char	*first_cmd_name;
+	int		cmd_group_count;
 	pid_t	ret;
 	int		status;
-
-	ret = fork();
-	if (ret == 0)
+	
+	first_cmd_group = cmds->content;
+	first_cmd_name = first_cmd_group->cmd->content;
+	cmd_group_count = ms_lstsize(cmds);
+	if (is_builtin(first_cmd_name) && cmd_group_count == 1)
 	{
-		exec_process(cmds);
+		do_exec(first_cmd_group);
 	}
 	else
 	{
-		wait(&status);
-		g_status = WEXITSTATUS(status);
+		ret = fork();
+		if (ret == 0)
+		{
+			exec_process(cmds);
+		}
+		else
+		{
+			wait(&status);
+			g_status = WEXITSTATUS(status);
+		}
 	}
 }
