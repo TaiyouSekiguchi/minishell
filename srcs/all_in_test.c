@@ -80,7 +80,7 @@ void	print_cmds(t_list *cmds)
 	}
 }
 
-void	test(char *str)
+void	test(char *str, t_dir *d_info)
 {
 	t_list	*tokens;
 	t_list	*cmds;
@@ -96,20 +96,39 @@ void	test(char *str)
 	expander(cmds);
 	print_cmds(cmds);
 	printf("***********test************\n\n");
-	executer(cmds);
+	executer(cmds, d_info);
+}
+
+void	init_dir_info(t_dir *d_info)
+{
+	struct stat	env_buf;
+	struct stat	now_buf;
+	char		*env_pwd;
+
+	stat(".", &now_buf);
+	env_pwd = getenv("PWD");
+	stat(env_pwd, &env_buf);
+
+	if (now_buf.st_ino == env_buf.st_ino)
+		d_info->pwd = env_pwd;
+	else
+		d_info->pwd = getcwd(NULL, 0);
+	
+	d_info->old_pwd = NULL;
 }
 
 int	main(void)
 {
 	char	*command;
+	t_dir	info;
 
-	builtin_pwd(1);
+	init_dir_info(&info);
 	//signal(SIGINT, sig_handler);
 	while (1)
 	{
 		command = rl_gets();
 		printf("%s\n", command);
-		test(command);
+		test(command, &info);
 		if (ms_strcmp(command, "clear_history") == 0)
 			clear_history();
 			//rl_clear_history();

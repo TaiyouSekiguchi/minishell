@@ -73,7 +73,7 @@ char
 }
 
 void
-do_exec(t_cmd *cmd_group)
+do_exec(t_cmd *cmd_group, t_dir *d_info)
 {
 	extern char		**environ;
 	char			**argv;
@@ -85,7 +85,7 @@ do_exec(t_cmd *cmd_group)
 	//exec part
 	if (is_builtin(argv[0]))
 	{
-		do_builtin(argv[0], cmd_token_count, argv);
+		do_builtin(argv[0], cmd_token_count, argv, d_info);
 		return ;
 	}
 	else if (ms_strchr(argv[0], '/') == NULL)
