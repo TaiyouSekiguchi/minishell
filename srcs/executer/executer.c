@@ -16,6 +16,9 @@ void	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
 		outfile_fd = get_redirect_fd(cmd_group->outfile);
 		do_redirect(infile_fd, outfile_fd);
 		do_exec(cmd_group, d_info);
+		
+		//for builtin
+		exit(g_status);
 	}
 	else
 	{
@@ -30,6 +33,9 @@ void	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
 			dup2(pipe_fd[WRITE], STDOUT);
 			do_redirect(infile_fd, outfile_fd);
 			do_exec(cmd_group, d_info);
+
+			//for builtin
+			exit(g_status);
 		}
 		else
 		{
