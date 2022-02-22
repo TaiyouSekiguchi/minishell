@@ -3,7 +3,7 @@
 
 extern int g_status;
 
-void	do_cmd(t_cmd *cmd_group, t_boolean is_last)
+void	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
 {
 	int	pipe_fd[2];
 	int	pid;
@@ -15,7 +15,7 @@ void	do_cmd(t_cmd *cmd_group, t_boolean is_last)
 		infile_fd = get_redirect_fd(cmd_group->infile);
 		outfile_fd = get_redirect_fd(cmd_group->outfile);
 		do_redirect(infile_fd, outfile_fd);
-		do_exec(cmd_group);
+		do_exec(cmd_group, d_info);
 	}
 	else
 	{
@@ -29,7 +29,7 @@ void	do_cmd(t_cmd *cmd_group, t_boolean is_last)
 			close(pipe_fd[READ]);
 			dup2(pipe_fd[WRITE], STDOUT);
 			do_redirect(infile_fd, outfile_fd);
-			do_exec(cmd_group);
+			do_exec(cmd_group, d_info);
 		}
 		else
 		{
@@ -40,7 +40,7 @@ void	do_cmd(t_cmd *cmd_group, t_boolean is_last)
 	}
 }
 
-void	exec_process(t_list *cmds)
+void	exec_process(t_list *cmds, t_dir *d_info)
 {
 	t_list *last_elem;
 
@@ -48,15 +48,15 @@ void	exec_process(t_list *cmds)
 	while (cmds != NULL)
 	{
 		if (cmds == last_elem)
-			do_cmd(cmds->content, TRUE);
+			do_cmd(cmds->content, TRUE, d_info);
 		else
-			do_cmd(cmds->content, FALSE);
+			do_cmd(cmds->content, FALSE, d_info);
 		cmds = cmds->next;
 		wait(&g_status);
 	}
 }
 
-void	executer(t_list *cmds)
+void	executer(t_list *cmds, t_dir *d_info)
 {
 	t_cmd	*first_cmd_group;
 	char	*first_cmd_name;
@@ -69,14 +69,14 @@ void	executer(t_list *cmds)
 	cmd_group_count = ms_lstsize(cmds);
 	if (is_builtin(first_cmd_name) && cmd_group_count == 1)
 	{
-		do_exec(first_cmd_group);
+		do_exec(first_cmd_group, d_info);
 	}
 	else
 	{
 		ret = fork();
 		if (ret == 0)
 		{
-			exec_process(cmds);
+			exec_process(cmds, d_info);
 		}
 		else
 		{

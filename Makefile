@@ -10,7 +10,8 @@ SRCS_DIR				=	$(dir $(SRCS))\
 							${dir ${PARSER_SRCS}}\
 							${dir ${EXPANDER_SRCS}}\
 							${dir ${BUILTIN_SRCS}}\
-							${dir ${EXECUTER_SRCS}}
+							${dir ${EXECUTER_SRCS}}\
+							${dir ${OUTPUT_TEST_SRCS}}
 OBJS_DIR				=	./objs
 BINDIRS					=	${addprefix ${OBJS_DIR}/, ${SRCS_DIR}}
 
@@ -41,6 +42,10 @@ LEXER_TEST_OBJS			=	$(addprefix $(OBJS_DIR)/, $(LEXER_TEST_SRCS:.c=.o))
 PARSER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(PARSER_TEST_SRCS:.c=.o))
 EXPANDER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXPANDER_TEST_SRCS:.c=.o))
 EXECUTER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_TEST_SRCS:.c=.o))
+
+OUTPUT_TEST				=	output_test
+OUTPUT_TEST_SRCS		=	test/executer_output_test.c
+OUTPUT_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(OUTPUT_TEST_SRCS:.c=.o))
 #####################################
 
 ########### utils ############
@@ -120,6 +125,13 @@ $(EXECUTER_TEST)	:	$(EXECUTER_TEST_OBJS) $(EXECUTER_OBJS) $(BUILTIN_OBJS)\
 
 $(ALL_IN_TEST)		:	$(ALL_IN_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
+
+$(OUTPUT_TEST)		:	$(OUTPUT_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
+						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
+
+test_out				: $(OUTPUT_TEST)
+						bash ./test/executer_test.sh
+
 
 $(OBJS_DIR)/%.o		:	%.c
 						@mkdir -p ${BINDIRS}

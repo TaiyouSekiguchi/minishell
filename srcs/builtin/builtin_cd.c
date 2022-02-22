@@ -1,13 +1,15 @@
 
 #include "minishell.h"
 
-void	builtin_cd(int argc, char *argv[])
+void	builtin_cd(int argc, char *argv[], t_dir *d_info)
 {
 	char	*home_path;
 	int		ret;
 
-	(void)argv;
+	if (d_info == NULL)
+		printf("d_info NULL dayo");
 
+	(void)argv;
 	if (argc > 2)
 		ms_error("cd failed");
 

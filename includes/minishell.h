@@ -77,6 +77,12 @@ typedef	struct s_cmd
 	t_list	*outfile;
 }				t_cmd;
 
+typedef struct s_dir
+{
+	char	*pwd;
+	char	*old_pwd;
+}				t_dir;
+
 //readline
 char	*rl_gets(void);
 
@@ -101,8 +107,8 @@ char		*search_environ(char *name);
 char		*remove_quotation(char *token);
 
 //executer
-void		executer(t_list *cmds);
-void		do_exec(t_cmd *cmd);
+void		executer(t_list *cmds, t_dir *d_info);
+void		do_exec(t_cmd *cmd, t_dir *d_info);
 void		do_redirect(int infile_fd, int outfile_fd);
 void		do_pipe(t_list *cmds, int fd);
 int			infile_open(char *token);
@@ -115,12 +121,12 @@ int			get_redirect_fd(t_list *token_list);
 void		do_redirect(int infile_fd, int outfile_fd);
 //builtin
 int			is_builtin(char *cmd_name);
-void		do_builtin(char *cmd, int argc, char *argv[]);
+void		do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info);
 void		builtin_echo(int argc, char *argv[]);
-void		builtin_cd(int argc, char *argv[]);
+void		builtin_cd(int argc, char *argv[], t_dir *d_info);
 void		builtin_export(int argc, char *argv[]);
 void		builtin_unset(int argc, char *argv[]);
-void		builtin_pwd(int act);
+void		builtin_pwd(t_dir *d_info);
 void		builtin_env(void);
 void		builtin_exit(int argc, char *argv[]);
 

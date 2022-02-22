@@ -15,14 +15,14 @@ is_builtin(char *cmd_name)
 }
 
 void
-do_builtin(char *cmd, int argc, char *argv[])
+do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info)
 {
 	if (ms_strcmp(cmd, "echo") == 0)
 		builtin_echo(argc, argv);
 	else if (ms_strcmp(cmd, "cd") == 0)
-		builtin_cd(argc, argv);
+		builtin_cd(argc, argv, d_info);
 	else if (ms_strcmp(cmd, "pwd") == 0)
-		builtin_pwd(2);
+		builtin_pwd(d_info);
 	else if (ms_strcmp(cmd, "export") == 0)
 		builtin_export(argc, argv);
 	else if (ms_strcmp(cmd, "unset") == 0)
