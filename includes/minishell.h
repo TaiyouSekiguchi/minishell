@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/29 17:05:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/17 21:07:12 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -27,6 +15,8 @@
 # define NONE_FD (-1)
 # define READ (0)
 # define WRITE (1)
+
+int	g_status;
 
 typedef	enum e_boolean
 {
@@ -85,7 +75,8 @@ typedef struct s_dir
 
 //readline
 char	*rl_gets(void);
-
+//utils
+void	init_dir_info(t_dir *d_info);
 //lexer
 void		lexer(t_list **list, char *cmd);
 int			is_quote(char c);
@@ -94,18 +85,15 @@ int			is_delimiter(char c);
 int			is_metachar(char c);
 int			is_redirect(char c1, char c2);
 void		quote_set(char c, t_quote *quote);
-
 //parser
 void		parser(t_list **cmds, t_list *tokens);
 int			syntax_check(t_list *tokens);
 int			token_kind(char *token);
-
 //expander
 void		expander(t_list *cmds);
 void		expand(char **token);
 char		*search_environ(char *name);
 char		*remove_quotation(char *token);
-
 //executer
 void		executer(t_list *cmds, t_dir *d_info);
 void		do_exec(t_cmd *cmd, t_dir *d_info);
