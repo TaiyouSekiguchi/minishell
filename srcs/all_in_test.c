@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 14:05:09 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/15 15:21:12 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/02/22 16:05:47 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	init_dir_info(t_dir *d_info)
 	char		*env_pwd;
 
 	stat(".", &now_buf);
-	env_pwd = getenv("PWD");
+	env_pwd = ms_strdup(getenv("PWD"));
 	stat(env_pwd, &env_buf);
 
 	if (now_buf.st_ino == env_buf.st_ino)
