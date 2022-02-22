@@ -52,7 +52,8 @@ OUTPUT_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(OUTPUT_TEST_SRCS:.c=.o))
 UTILS_SRCS				=	srcs/utils/is_func.c\
 							srcs/utils/quote_set.c\
 							srcs/utils/search_environ.c \
-							srcs/utils/remove_quotation.c
+							srcs/utils/remove_quotation.c \
+							srcs/utils/init_dir_info.c
 UTILS_OBJS				=	$(addprefix $(OBJS_DIR)/, $(UTILS_SRCS:.c=.o))
 #####################################
 
@@ -156,7 +157,8 @@ tclean				:
 						$(PARSER_TEST_OBJS)\
 						$(EXPANDER_TEST_OBJS)\
 						$(EXECUTER_TEST_OBJS)\
-						$(ALL_IN_TEST_OBJS)
+						$(ALL_IN_TEST_OBJS) \
+						$(OUTPUT_TEST)
 
 tfclean				:
 						$(RM) $(READLINE_TEST_OBJS) $(READLINE_TEST) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST) $(EXPANDER_TEST) $(EXPANDER_TEST_OBJS) $(EXECUTER_TEST) $(EXECUTER_TEST_OBJS) $(ALL_IN_TEST) $(ALL_IN_TEST_OBJS)

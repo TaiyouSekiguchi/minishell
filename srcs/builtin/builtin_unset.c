@@ -59,7 +59,7 @@ builtin_unset(int argc, char *argv[])
 	index = get_index_of_name_in_environ(name);
 	if (index >= 0)
 	{
-		free(environ[index]);
+		//free(environ[index]);
 		i = index;
 		while (environ[i] != NULL)
 		{

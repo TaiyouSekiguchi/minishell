@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   all_in_test.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/02 14:05:09 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/22 16:05:47 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-int	g_status;
+//int	g_status;
 
 /*
 char	*rl_gets(void)
@@ -34,7 +22,7 @@ char	*rl_gets(void)
 }
 */
 
-/*void	sig_handler(int signum)
+void	sig_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -43,7 +31,7 @@ char	*rl_gets(void)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-}*/
+}
 
 void	print_list(t_list *list, char *kind)
 {
@@ -99,31 +87,13 @@ void	test(char *str, t_dir *d_info)
 	executer(cmds, d_info);
 }
 
-void	init_dir_info(t_dir *d_info)
-{
-	struct stat	env_buf;
-	struct stat	now_buf;
-	char		*env_pwd;
-
-	stat(".", &now_buf);
-	env_pwd = ms_strdup(getenv("PWD"));
-	stat(env_pwd, &env_buf);
-
-	if (now_buf.st_ino == env_buf.st_ino)
-		d_info->pwd = env_pwd;
-	else
-		d_info->pwd = getcwd(NULL, 0);
-	
-	d_info->old_pwd = NULL;
-}
-
 int	main(void)
 {
 	char	*command;
 	t_dir	info;
 
 	init_dir_info(&info);
-	//signal(SIGINT, sig_handler);
+	signal(SIGINT, sig_handler);
 	while (1)
 	{
 		command = rl_gets();

@@ -20,6 +20,8 @@ void	builtin_cd(int argc, char *argv[], t_dir *d_info)
 	if (argc == 1)
 	{
 		//引数がなにもなかった場合
+		//if (gerenv() != NULL)
+
 		home_path = ms_strdup(getenv("HOME"));
 		if (ms_strcmp(home_path, "") == 0)
 			ms_error("cd: HOME is empty.");
