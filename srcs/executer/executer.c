@@ -10,27 +10,15 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
 	int	infile_fd;
 	int	outfile_fd;
 
+	//タイミング制御のため前に切り出した
 	infile_fd = get_redirect_fd(cmd_group->infile);
 	outfile_fd = get_redirect_fd(cmd_group->outfile);
 
 	if (is_last == TRUE)
 	{
-		/*infile_fd = get_redirect_fd(cmd_group->infile);
-		outfile_fd = get_redirect_fd(cmd_group->outfile);
-		do_redirect(infile_fd, outfile_fd);
-		do_exec(cmd_group, d_info);
-		
-		//for builtin
-		exit(g_status);*/
 		pid = fork();
 		if (pid == 0)
 		{
-			//infile_fd = get_redirect_fd(cmd_group->infile);
-			//outfile_fd = get_redirect_fd(cmd_group->outfile);
-
-			//close(pipe_fd[READ]);
-			//dup2(pipe_fd[WRITE], STDOUT);
-			
 			do_redirect(infile_fd, outfile_fd);
 			do_exec(cmd_group, d_info);
 
@@ -39,12 +27,12 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
 		}
 		else
 		{
-			/*close(pipe_fd[WRITE]);
-			dup2(pipe_fd[READ], STDIN_FILENO);
-			close(pipe_fd[READ]);*/
-
+			//親プロセスでは不要のためclose
 			close(infile_fd);
 			close(outfile_fd);
+
+			//これは前のコマンドのパイプとつながっている。
+			//親プロセスでは不要
 			close(STDIN);
 		}
 	}
@@ -55,8 +43,6 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
 		pid = fork();
 		if (pid == 0)
 		{
-			//infile_fd = get_redirect_fd(cmd_group->infile);
-			//outfile_fd = get_redirect_fd(cmd_group->outfile);
 			close(pipe_fd[READ]);
 			dup2(pipe_fd[WRITE], STDOUT);
 			do_redirect(infile_fd, outfile_fd);
@@ -67,6 +53,7 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
 		}
 		else
 		{
+			//親プロセスでは不要のためclose
 			close(infile_fd);
 			close(outfile_fd);
 
@@ -109,9 +96,9 @@ void	exec_process(t_list *cmds, t_dir *d_info)
 		else
 			last_pid = do_cmd(cmds->content, FALSE, d_info);
 		cmds = cmds->next;
+		//したでまとめてwaitするので削除
 		//wait(&g_status);
 	}
-
 
 	//まとめてwait追加
 	ret_pid = 0;

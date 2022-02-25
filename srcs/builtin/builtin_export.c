@@ -56,7 +56,7 @@ count_environ_variable(void)
 	return (i);
 }
 
-void
+int
 builtin_export(int argc, char *argv[])
 {
 	extern char	**environ;
@@ -68,7 +68,7 @@ builtin_export(int argc, char *argv[])
 	int		i;
 
 	if (argc == 1)
-		return ;
+		return (1);
 
 	name = get_variable_name(argv[1]);
 	index = get_index_of_name_in_environ(name);
@@ -93,4 +93,5 @@ builtin_export(int argc, char *argv[])
 		free(environ[index]);
 		environ[index] = ms_strdup(argv[1]);
 	}
+	return (0);
 }

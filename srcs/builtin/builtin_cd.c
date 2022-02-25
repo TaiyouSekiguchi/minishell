@@ -124,7 +124,7 @@ char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
 	return (new_path);
 }
 
-void	builtin_cd(int argc, char *argv[], t_dir *d_info)
+int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 {
 	t_list		*dir_lst;
 	char		*input_path;
@@ -132,7 +132,8 @@ void	builtin_cd(int argc, char *argv[], t_dir *d_info)
 
 	input_path = set_input_path(argc, argv);
 	if (input_path == NULL)
-		g_status = EXIT_FAILURE;
+		return (EXIT_FAILURE);
+		//g_status = EXIT_FAILURE;
 	else
 	{
 		dir_lst = split_lst(input_path, '/');
@@ -152,4 +153,5 @@ void	builtin_cd(int argc, char *argv[], t_dir *d_info)
 			free(new_pwd);
 		}
 	}
+	return (0);
 }

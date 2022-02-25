@@ -109,13 +109,13 @@ int			get_redirect_fd(t_list *token_list);
 void		do_redirect(int infile_fd, int outfile_fd);
 //builtin
 int			is_builtin(char *cmd_name);
-void		do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info);
-void		builtin_echo(int argc, char *argv[]);
-void		builtin_cd(int argc, char *argv[], t_dir *d_info);
-void		builtin_export(int argc, char *argv[]);
-void		builtin_unset(int argc, char *argv[]);
-void		builtin_pwd(t_dir *d_info);
-void		builtin_env(void);
-void		builtin_exit(int argc, char *argv[]);
+int			do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info);
+int			builtin_echo(int argc, char *argv[]);
+int			builtin_cd(int argc, char *argv[], t_dir *d_info);
+int			builtin_export(int argc, char *argv[]);
+int			builtin_unset(int argc, char *argv[]);
+int			builtin_pwd(t_dir *d_info);
+int			builtin_env(void);
+int			builtin_exit(int argc, char *argv[]);
 
 #endif

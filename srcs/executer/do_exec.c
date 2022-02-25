@@ -85,7 +85,7 @@ do_exec(t_cmd *cmd_group, t_dir *d_info)
 	//exec part
 	if (is_builtin(argv[0]))
 	{
-		do_builtin(argv[0], cmd_token_count, argv, d_info);
+		g_status = do_builtin(argv[0], cmd_token_count, argv, d_info);
 		return ;
 	}
 	else if (ms_strchr(argv[0], '/') == NULL)

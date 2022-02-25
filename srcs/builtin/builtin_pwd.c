@@ -1,9 +1,10 @@
 
 #include "minishell.h"
 
-void	builtin_pwd(t_dir *d_info)
+int	builtin_pwd(t_dir *d_info)
 {
 	ms_putendl_fd(d_info->pwd, STDOUT);
+	return (0);
 }
 //void	builtin_pwd(t_dir *d_info)
 //{
