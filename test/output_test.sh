@@ -24,11 +24,11 @@ function test () {
 }
 
 commands=(
+	"echo \$HOME"
+	"pwd"
+	"ls"
 	"cat \-e \<.gitignore"
-	"cat \-e \<.gitignore"
-	"cat \-e \<.gitignore"
-	"cat \-e \<.gitignore"
-	"cat \-e \<.gitignore"
+	"cat \| wc \-l"
 )
 
 rm -rf ./test/test.log
