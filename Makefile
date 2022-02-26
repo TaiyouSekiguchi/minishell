@@ -44,7 +44,7 @@ EXPANDER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXPANDER_TEST_SRCS:.c=.o))
 EXECUTER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_TEST_SRCS:.c=.o))
 
 OUTPUT_TEST				=	output_test
-OUTPUT_TEST_SRCS		=	test/executer_output_test.c
+OUTPUT_TEST_SRCS		=	test/output_test.c
 OUTPUT_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(OUTPUT_TEST_SRCS:.c=.o))
 #####################################
 
@@ -131,7 +131,7 @@ $(OUTPUT_TEST)		:	$(OUTPUT_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
 test_out				: $(OUTPUT_TEST)
-						bash ./test/executer_test.sh
+						bash ./test/output_test.sh
 
 
 $(OBJS_DIR)/%.o		:	%.c
