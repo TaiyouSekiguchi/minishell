@@ -90,7 +90,7 @@ builtin_export(int argc, char *argv[])
 	}
 	else
 	{
-		free(environ[index]);
+		//free(environ[index]);
 		environ[index] = ms_strdup(argv[1]);
 	}
 	return (0);
