@@ -130,7 +130,7 @@ $(ALL_IN_TEST)		:	$(ALL_IN_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(
 $(OUTPUT_TEST)		:	$(OUTPUT_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
-test_out				: $(OUTPUT_TEST)
+out_test				: $(OUTPUT_TEST)
 						bash ./test/output_test.sh
 
 
