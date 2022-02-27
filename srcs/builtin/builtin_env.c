@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-void	builtin_env(void)
+int	builtin_env(void)
 {
 	extern char **environ;
 	size_t		i;
@@ -12,6 +12,7 @@ void	builtin_env(void)
 		ms_putendl_fd(environ[i], STDOUT);
 		i++;
 	}
+	return (0);
 }
 
 /*int main(void)

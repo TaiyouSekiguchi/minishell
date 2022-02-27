@@ -1,13 +1,14 @@
 
 #include "minishell.h"
 
-void	builtin_echo(int argc, char *argv[])
+int	builtin_echo(int argc, char *argv[])
 {
 	int		flag;
 	size_t	i;
 
 	if (argc == 1)
-		return ;
+		return (1);
+
 	if (ms_strcmp(argv[1], "-n") == 0)
 	{
 		flag = 1;
@@ -27,6 +28,8 @@ void	builtin_echo(int argc, char *argv[])
 	}
 	if (flag == 0)
 		ms_putstr_fd("\n", STDOUT);
+
+	return (0);
 }
 
 /*int main(void)
