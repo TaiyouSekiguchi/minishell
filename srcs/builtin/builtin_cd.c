@@ -34,15 +34,17 @@ void	del_last_elem(t_list **pptr)
 
 char	*set_input_path(int argc, char **argv)
 {
-	if (argc == 1)
+	if (argc == 1 || argv[1][0] == '~')
 	{
 		if (getenv("HOME") == NULL)
 		{
 			ms_putendl_fd("minishell:HOME not set", STDERR);
 			return (NULL);
 		}
+		else if (argc == 1 || ms_strlen(argv[1]) == 1)
+			return (ms_strdup(getenv("HOME")));
 		else
-			return(ms_strdup(getenv("HOME")));
+			return (ms_strjoin(getenv("HOME"), argv[1] + 1));
 	}
 	else
 		return(argv[1]);
@@ -55,6 +57,8 @@ t_list	*split_lst(char *str, char c)
 	int		i;
 
 	dir_pptr = ms_split(str, c);
+	if (dir_pptr[0] == NULL)
+		return (NULL);
 	lst = ms_lstnew(dir_pptr[0]);
 	i = 1;
 	while (dir_pptr[i] != NULL)
@@ -81,12 +85,14 @@ char	*lst_to_string(t_list *list)
 	return (str);
 }
 
-char	*rewrite_absolute_path(t_list *dir_lst)
+char	*rewrite_absolute_path(t_list *dir_lst, char *input_path)
 {
 	char	*new_path;
 	t_list	*new_dir_lst;
 
 	new_dir_lst = NULL;
+	if (dir_lst == NULL)
+		return (input_path);
 	while (dir_lst != NULL)
 	{
 		if (ms_strcmp((char *)dir_lst->content, "..") == 0)
@@ -148,13 +154,14 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 	char		*new_pwd;
 
 	input_path = set_input_path(argc, argv);
+	dprintf(STDERR, "input_path=%s\n", input_path);
 	if (input_path == NULL)
 		return (EXIT_FAILURE);
 	else
 	{
 		dir_lst = split_lst(input_path, '/');
 		if (input_path[0] == '/')
-			new_pwd = ms_strdup(rewrite_absolute_path(dir_lst));
+			new_pwd = ms_strdup(rewrite_absolute_path(dir_lst, input_path));
 		else
 			new_pwd = ms_strdup(rewrite_relative_path(dir_lst, d_info->pwd));
 		if (chdir(new_pwd) < 0)
@@ -166,9 +173,9 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 			d_info->old_pwd = ms_strdup(d_info->pwd);
 			free(d_info->pwd);
 			d_info->pwd = ms_strdup(new_pwd);
-			free(new_pwd);
 			export_pwd_oldpwd(d_info);
 		}
+		free(new_pwd);
 	}
 	return (0);
 }
