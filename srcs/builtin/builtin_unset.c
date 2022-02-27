@@ -43,8 +43,7 @@ static char
 	return (name);
 }
 
-void
-builtin_unset(int argc, char *argv[])
+int	builtin_unset(int argc, char *argv[])
 {
 	extern char	**environ;
 	char	*name;
@@ -53,7 +52,7 @@ builtin_unset(int argc, char *argv[])
 	int		i;
 
 	if (argc == 1)
-		return ;
+		return (1);
 
 	name = get_variable_name(argv[1]);
 	index = get_index_of_name_in_environ(name);
@@ -67,4 +66,5 @@ builtin_unset(int argc, char *argv[])
 			i++;
 		}
 	}
+	return (0);
 }

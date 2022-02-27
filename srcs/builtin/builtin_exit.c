@@ -3,12 +3,12 @@
 
 extern int g_status;
 
-void	builtin_exit(int argc, char *argv[])
+int	builtin_exit(int argc, char *argv[])
 {
 	int	exit_code;
 
 	if (argc > 2)
-		ms_error("too many");
+		return (1);
 	if (argc == 2)
 	{
 		exit_code = ms_atoi(argv[1]);
@@ -18,4 +18,5 @@ void	builtin_exit(int argc, char *argv[])
 	{
 		exit(g_status);
 	}
+	return (0);
 }
