@@ -3,7 +3,7 @@
 
 extern int g_status;
 
-pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
+pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
 {
 	int	pipe_fd[2];
 	int	pid;
@@ -11,8 +11,8 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
 	int	outfile_fd;
 
 	//タイミング制御のため前に切り出した
-	infile_fd = get_redirect_fd(cmd_group->infile);
-	outfile_fd = get_redirect_fd(cmd_group->outfile);
+	infile_fd = get_redirect_fd(cmd_group->infile, stdin_save);
+	outfile_fd = get_redirect_fd(cmd_group->outfile, stdin_save);
 
 	if (is_last == TRUE)
 	{
@@ -87,14 +87,17 @@ void	exec_process(t_list *cmds, t_dir *d_info)
 	int		status;
 	int		last_status;
 
+	//パイプ後ヒアドキュメントのためstdinを複製
+	int		stdin_save;
+	stdin_save = dup(STDIN);
 
 	last_elem = ms_lstlast(cmds);
 	while (cmds != NULL)
 	{
 		if (cmds == last_elem)
-			last_pid = do_cmd(cmds->content, TRUE, d_info);
+			last_pid = do_cmd(cmds->content, TRUE, d_info, stdin_save);
 		else
-			last_pid = do_cmd(cmds->content, FALSE, d_info);
+			last_pid = do_cmd(cmds->content, FALSE, d_info, stdin_save);
 		cmds = cmds->next;
 		//したでまとめてwaitするので削除
 		//wait(&g_status);

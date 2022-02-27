@@ -29,10 +29,16 @@ heredoc_loop(int fd, char *token)
 	free(line);
 }
 
-int
-heredoc_open(char *token)
+int	heredoc_open(char *token, int stdin_save)
 {
 	int	fd;
+
+	//fd = 0がstdinじゃなかったときはstdinに変更
+	if (!isatty(0))
+	{
+		close(0);
+		dup2(stdin_save, 0);
+	}
 
 	fd = open("./tmp", O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
 	if (fd < 0)
