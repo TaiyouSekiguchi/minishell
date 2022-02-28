@@ -94,6 +94,10 @@ int	main(void)
 
 	init_dir_info(&info);
 	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, SIG_IGN);
+
+
+
 	while (1)
 	{
 		command = rl_gets();
