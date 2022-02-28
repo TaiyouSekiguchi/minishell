@@ -14,6 +14,16 @@ static void	sig_handler(int signum)
 	}
 }
 
+static void	sigquit_handler(int signum)
+{
+	ms_putendl_fd("Quit: 3", STDERR);
+	if (signum == SIGQUIT)
+	{
+		ms_putendl_fd("Quit: 3", STDERR);
+		exit(131);
+	}
+}
+
 pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
 {
 	int	pipe_fd[2];
@@ -30,6 +40,9 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
 		pid = fork();
 		if (pid == 0)
 		{
+
+			signal(SIGQUIT, sigquit_handler);
+			signal(SIGINT, SIG_DFL);
 
 			do_redirect(infile_fd, outfile_fd);
 			do_exec(cmd_group, d_info);
@@ -55,6 +68,10 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
 		pid = fork();
 		if (pid == 0)
 		{
+
+			signal(SIGQUIT, sigquit_handler);
+			signal(SIGINT, SIG_DFL);
+			//signal(SIGQUIT, SIG_DFL);
 
 			close(pipe_fd[READ]);
 			dup2(pipe_fd[WRITE], STDOUT);
@@ -83,7 +100,17 @@ static int	return_status(int status)
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
-		return (WTERMSIG(status));
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+		{
+			ms_putendl_fd("Quit: 3", STDOUT);
+		}
+		else if (WTERMSIG(status) == SIGINT)
+		{
+			ms_putchar_fd('\n', STDOUT);
+		}
+		return (128 + WTERMSIG(status));
+	}
 	else if (WIFSTOPPED(status))
 		return (WSTOPSIG(status));
 	else
@@ -145,16 +172,15 @@ void	executer(t_list *cmds, t_dir *d_info)
 	}
 	else
 	{
+		signal(SIGINT, SIG_IGN);
 		ret = fork();
 		if (ret == 0)
 		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
+			//signal(SIGQUIT, SIG_DFL);
 			exec_process(cmds, d_info);
 		}
 		else
 		{
-			signal(SIGINT, SIG_IGN);
 			wait(&status);
 			signal(SIGINT, sig_handler);
 			g_status = WEXITSTATUS(status);
