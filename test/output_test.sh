@@ -29,6 +29,8 @@ commands=(
 	"ls"
 	"cat \-e \<.gitignore"
 	"cat \| wc \-l"
+	"cat .\/test\/big_file \| wc \-l"
+	"cat .\/test\/big_file \| cat \<.gitignore"
 )
 
 rm -rf ./test/test.log
