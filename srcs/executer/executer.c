@@ -3,6 +3,17 @@
 
 extern int g_status;
 
+static void	sig_handler(int signum)
+{
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+
 pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
 {
 	int	pipe_fd[2];
@@ -19,6 +30,7 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
 		pid = fork();
 		if (pid == 0)
 		{
+
 			do_redirect(infile_fd, outfile_fd);
 			do_exec(cmd_group, d_info);
 
@@ -43,6 +55,7 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
 		pid = fork();
 		if (pid == 0)
 		{
+
 			close(pipe_fd[READ]);
 			dup2(pipe_fd[WRITE], STDOUT);
 			do_redirect(infile_fd, outfile_fd);
@@ -135,11 +148,15 @@ void	executer(t_list *cmds, t_dir *d_info)
 		ret = fork();
 		if (ret == 0)
 		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			exec_process(cmds, d_info);
 		}
 		else
 		{
+			signal(SIGINT, SIG_IGN);
 			wait(&status);
+			signal(SIGINT, sig_handler);
 			g_status = WEXITSTATUS(status);
 		}
 	}
