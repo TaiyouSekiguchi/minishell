@@ -101,11 +101,11 @@ void		do_redirect(int infile_fd, int outfile_fd);
 void		do_pipe(t_list *cmds, int fd);
 int			infile_open(char *token);
 void		heredoc_loop(int fd, char *token);
-int			heredoc_open(char *token);
+int			heredoc_open(char *token, int stdin_save);
 int			outfile_open(char *token);
 int			append_open(char *token);
-int			redirect_file_open(char *token);
-int			get_redirect_fd(t_list *token_list);
+int			redirect_file_open(char *token, int stdin_save);
+int			get_redirect_fd(t_list *token_list, int stdin_save);
 void		do_redirect(int infile_fd, int outfile_fd);
 //builtin
 int			is_builtin(char *cmd_name);
