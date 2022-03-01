@@ -93,6 +93,7 @@ int	main(void)
 	t_dir	info;
 
 	init_dir_info(&info);
+	init_shlvl();
 
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);

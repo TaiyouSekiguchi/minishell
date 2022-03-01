@@ -130,23 +130,6 @@ char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
 	return (new_path);
 }
 
-void	export_pwd_oldpwd(t_dir *d_info)
-{
-	char	**argv_pwd;
-	char	**argv_old_pwd;
-
-	argv_pwd = malloc(sizeof(char *) * 3);
-	argv_pwd[0] = ms_strdup("export");
-	argv_pwd[1] = ms_strjoin("PWD=", d_info->pwd);
-	argv_pwd[2] = NULL;
-	builtin_export(2, argv_pwd);
-	argv_old_pwd = malloc(sizeof(char *) * 3);
-	argv_old_pwd[0] = ms_strdup("export");
-	argv_old_pwd[1] = ms_strjoin("OLDPWD=", d_info->old_pwd);
-	argv_old_pwd[2] = NULL;
-	builtin_export(2, argv_old_pwd);
-}
-
 int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 {
 	t_list		*dir_lst;
@@ -173,7 +156,8 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 			d_info->old_pwd = ms_strdup(d_info->pwd);
 			free(d_info->pwd);
 			d_info->pwd = ms_strdup(new_pwd);
-			export_pwd_oldpwd(d_info);
+			call_export("PWD", d_info->pwd);
+			call_export("OLDPWD", d_info->old_pwd);
 		}
 		free(new_pwd);
 	}

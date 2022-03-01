@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+         #
+#    By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 15:18:12 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/01/24 16:35:13 by tsekiguc         ###   ########.fr        #
+#    Updated: 2022/03/01 18:01:04 by yjimpei          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,8 @@ SRCS	=	ms_atoi.c\
 			ms_strcpy.c\
 			ms_strcat.c\
 			ms_strappend.c\
-			ms_split_free.c
+			ms_split_free.c\
+			ms_isnum_string.c
 
 OBJS	=	$(SRCS:.c=.o)
 
