@@ -2,14 +2,14 @@
 
 extern int g_status;
 
-int	redirect_file_open(char *token, int stdin_save)
+int	redirect_file_open(char *token)
 {
 	int		fd;
 
 	if (token[0] == '<' && token[1] == ' ')
 		fd = infile_open(token);
 	else if (token[0] == '<' && token[1] == '<')
-		fd = heredoc_open(token, stdin_save);
+		fd = heredoc_open(token);
 	else if (token[0] == '>' && token[1] == ' ')
 		fd = outfile_open(token);
 	else
@@ -18,7 +18,7 @@ int	redirect_file_open(char *token, int stdin_save)
 	return (fd);
 }
 
-int	get_redirect_fd(t_list *token_list, int stdin_save)
+int	get_redirect_fd(t_list *token_list)
 {
 	int		fd;
 	char	*token;
@@ -29,7 +29,7 @@ int	get_redirect_fd(t_list *token_list, int stdin_save)
 	{
 		token = token_list->content;
 		if (token != NULL)
-			fd = redirect_file_open(token, stdin_save);
+			fd = redirect_file_open(token);
 		else
 			fd = NONE_FD;
 		token_list = token_list->next;

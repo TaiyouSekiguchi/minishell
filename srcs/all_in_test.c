@@ -22,7 +22,7 @@ char	*rl_gets(void)
 }
 */
 
-static void	sig_handler(int signum)
+static void	sigint_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -94,7 +94,7 @@ int	main(void)
 
 	init_dir_info(&info);
 
-	signal(SIGINT, sig_handler);
+	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 
 	while (1)

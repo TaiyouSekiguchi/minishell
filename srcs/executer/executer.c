@@ -3,7 +3,7 @@
 
 extern int g_status;
 
-static void	sig_handler(int signum)
+static void	sigint_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -14,17 +14,7 @@ static void	sig_handler(int signum)
 	}
 }
 
-static void	sigquit_handler(int signum)
-{
-	ms_putendl_fd("Quit: 3", STDERR);
-	if (signum == SIGQUIT)
-	{
-		ms_putendl_fd("Quit: 3", STDERR);
-		exit(131);
-	}
-}
-
-pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
+pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
 {
 	int	pipe_fd[2];
 	int	pid;
@@ -32,8 +22,8 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
 	int	outfile_fd;
 
 	//タイミング制御のため前に切り出した
-	infile_fd = get_redirect_fd(cmd_group->infile, stdin_save);
-	outfile_fd = get_redirect_fd(cmd_group->outfile, stdin_save);
+	infile_fd = get_redirect_fd(cmd_group->infile);
+	outfile_fd = get_redirect_fd(cmd_group->outfile);
 
 	if (is_last == TRUE)
 	{
@@ -41,7 +31,7 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
 		if (pid == 0)
 		{
 
-			signal(SIGQUIT, sigquit_handler);
+			signal(SIGQUIT, SIG_DFL);
 			signal(SIGINT, SIG_DFL);
 
 			do_redirect(infile_fd, outfile_fd);
@@ -69,7 +59,7 @@ pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info, int stdin_save)
 		if (pid == 0)
 		{
 
-			signal(SIGQUIT, sigquit_handler);
+			signal(SIGQUIT, SIG_DFL);
 			signal(SIGINT, SIG_DFL);
 			//signal(SIGQUIT, SIG_DFL);
 
@@ -101,14 +91,10 @@ static int	return_status(int status)
 		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
 	{
-		if (WTERMSIG(status) == SIGQUIT)
-		{
-			ms_putendl_fd("Quit: 3", STDOUT);
-		}
-		else if (WTERMSIG(status) == SIGINT)
-		{
+		if (WTERMSIG(status) == SIGINT)
 			ms_putchar_fd('\n', STDOUT);
-		}
+		else if (WTERMSIG(status) == SIGQUIT)
+			ms_putendl_fd("Quit: 3", STDOUT);
 		return (128 + WTERMSIG(status));
 	}
 	else if (WIFSTOPPED(status))
@@ -127,17 +113,13 @@ void	exec_process(t_list *cmds, t_dir *d_info)
 	int		status;
 	int		last_status;
 
-	//パイプ後ヒアドキュメントのためstdinを複製
-	int		stdin_save;
-	stdin_save = dup(STDIN);
-
 	last_elem = ms_lstlast(cmds);
 	while (cmds != NULL)
 	{
 		if (cmds == last_elem)
-			last_pid = do_cmd(cmds->content, TRUE, d_info, stdin_save);
+			last_pid = do_cmd(cmds->content, TRUE, d_info);
 		else
-			last_pid = do_cmd(cmds->content, FALSE, d_info, stdin_save);
+			last_pid = do_cmd(cmds->content, FALSE, d_info);
 		cmds = cmds->next;
 		//したでまとめてwaitするので削除
 		//wait(&g_status);
@@ -176,13 +158,12 @@ void	executer(t_list *cmds, t_dir *d_info)
 		ret = fork();
 		if (ret == 0)
 		{
-			//signal(SIGQUIT, SIG_DFL);
 			exec_process(cmds, d_info);
 		}
 		else
 		{
 			wait(&status);
-			signal(SIGINT, sig_handler);
+			signal(SIGINT, sigint_handler);
 			g_status = WEXITSTATUS(status);
 		}
 	}
