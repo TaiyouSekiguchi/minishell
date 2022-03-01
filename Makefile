@@ -95,7 +95,6 @@ BUILTIN_OBJS			=	$(addprefix $(OBJS_DIR)/, $(BUILTIN_SRCS:.c=.o))
 
 ############ executer #############
 EXECUTER_SRCS			=	srcs/executer/executer.c\
-							srcs/executer/do_pipe.c\
 							srcs/executer/redirect_open_utils.c\
 							srcs/executer/redirect.c\
 							srcs/executer/do_exec.c
