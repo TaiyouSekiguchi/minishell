@@ -15,7 +15,7 @@ char	*rl_gets(void)
 	{
 		//改行がきになる
 		ms_putendl_fd("exit", STDOUT);
-		exit(0);
+		exit(g_status);
 	}
 
 	if (line_read && *line_read)
