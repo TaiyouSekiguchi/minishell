@@ -29,7 +29,7 @@ heredoc_loop(int fd, char *token)
 	free(line);
 }
 
-int	heredoc_open(char *token, int stdin_save)
+int	heredoc_open(char *token)
 {
 	int	fd;
 
@@ -37,7 +37,7 @@ int	heredoc_open(char *token, int stdin_save)
 	if (!isatty(0))
 	{
 		close(0);
-		dup2(stdin_save, 0);
+		open("/dev/tty", O_RDONLY);
 	}
 
 	fd = open("./tmp", O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
