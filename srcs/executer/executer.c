@@ -95,6 +95,8 @@ static int	return_status(int status)
 			ms_putchar_fd('\n', STDOUT);
 		else if (WTERMSIG(status) == SIGQUIT)
 			ms_putendl_fd("Quit: 3", STDOUT);
+		else if (WTERMSIG(status) == SIGTERM)
+			ms_putendl_fd("Terminated: 15", STDOUT);
 		return (128 + WTERMSIG(status));
 	}
 	else if (WIFSTOPPED(status))
