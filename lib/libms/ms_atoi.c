@@ -1,41 +1,63 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/21 15:15:56 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 15:16:07 by tsekiguc         ###   ########.fr       */
+/*   Created: 2021/04/18 00:15:41 by yjimpei           #+#    #+#             */
+/*   Updated: 2022/03/01 18:17:03 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libms.h"
 
-int	ms_atoi(const char *str)
+static int	check_flow(long num, int minus, long next)
 {
-	unsigned int	num;
-	int				minus;
-	int				i;
+	if ((num * minus) > (LONG_MAX / 10))
+		return ((int)LONG_MAX);
+	if ((num * minus) == (LONG_MAX / 10) && next > (LONG_MAX % 10))
+		return ((int)LONG_MAX);
+	if ((num * minus) < (LONG_MIN / 10))
+		return ((int)LONG_MIN);
+	if ((num * minus) == (LONG_MIN / 10) && (next * -1) < (LONG_MIN % 10))
+		return ((int)LONG_MIN);
+	return (42);
+}
 
-	minus = 0;
-	num = 0;
-	i = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		i++;
-	if (str[i] == '+' || str[i] == '-')
+static long	make_num(const char *nptr, long minus)
+{
+	long	num;
+
+	if (*nptr >= '0' && *nptr <= '9')
 	{
-		if (str[i] == '-')
-			minus = 1;
-		i++;
+		num = *nptr - '0';
+		nptr++;
+		while (*nptr && *nptr >= '0' && *nptr <= '9')
+		{
+			num *= 10;
+			if (check_flow(num, minus, *nptr - '0') != 42)
+				return (check_flow(num, minus, *nptr - '0'));
+			num += *nptr - '0';
+			nptr++;
+		}
+		return ((int)(num * minus));
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	return (0);
+}
+
+int	ms_atoi(const char *nptr)
+{
+	long	minus;
+
+	minus = 1;
+	while ((*nptr >= 9 && *nptr <= 13) || *nptr == ' ')
+		nptr++;
+	if (*nptr == '+' || *nptr == '-')
 	{
-		num = num * 10 + (str[i] - '0');
-		i++;
+		if (*nptr == '-')
+			minus *= -1;
+		nptr++;
 	}
-	if (minus == 0)
-		return (num);
-	else
-		return (-num);
+	return (make_num(nptr, minus));
 }

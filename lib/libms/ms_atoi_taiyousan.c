@@ -1,44 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ms_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/29 17:08:47 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/28 16:02:57 by tsekiguc         ###   ########.fr       */
+/*   Created: 2022/01/21 15:15:56 by tsekiguc          #+#    #+#             */
+/*   Updated: 2022/01/21 15:16:07 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libms.h"
 
-void	is_nl(char *cmd)
+int	ms_atoi(const char *str)
 {
-	int	i;
+	unsigned int	num;
+	int				minus;
+	int				i;
 
+	minus = 0;
+	num = 0;
 	i = 0;
-	while (cmd[i] != '\0')
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+		i++;
+	if (str[i] == '+' || str[i] == '-')
 	{
-		if (cmd[i] == '\n')
-			printf("nl exist!!\n");
+		if (str[i] == '-')
+			minus = 1;
 		i++;
 	}
-}
-
-int	main(void)
-{
-	char	*command;
-
-	using_history();
-	read_history(".my_history");
-	while (1)
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		command = readline(">> ");
-		add_history(command);
-		printf("%s\n", command);
-		is_nl(command);
-		free(command);
+		num = num * 10 + (str[i] - '0');
+		i++;
 	}
-	write_history(".my_history");
-	return (0);
+	if (minus == 0)
+		return (num);
+	else
+		return (-num);
 }

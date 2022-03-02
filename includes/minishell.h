@@ -74,9 +74,11 @@ typedef struct s_dir
 }				t_dir;
 
 //readline
-char	*rl_gets(void);
+char		*rl_gets(void);
 //utils
-void	init_dir_info(t_dir *d_info);
+void		init_dir_info(t_dir *d_info);
+void		init_shlvl(void);
+void		call_export(char *env_name, char *value);
 //lexer
 void		lexer(t_list **list, char *cmd);
 int			is_quote(char c);
