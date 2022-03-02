@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 15:17:56 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/01 18:00:50 by yjimpei          ###   ########.fr       */
+/*   Updated: 2022/03/02 17:38:20 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,6 @@ char	*ms_strcat(char *dst, const char *src);
 char	*ms_strappend(char *body, char *add);
 void	ms_split_free(char **split);
 int		ms_isnum_string(char *str);
+char	*ms_char_replace(char *str, char old, char new);
 
 #endif
