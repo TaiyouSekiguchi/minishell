@@ -13,19 +13,43 @@ int		infile_open(char *token)
 	return (fd);
 }
 
+static t_boolean	exist_quote(char *word)
+{
+	size_t	i;
+
+	i = 0;
+	while (word[i] != '\0')
+	{
+		if (word[i] == '\'' || word[i] == '\"')
+			return (TRUE);
+		i++;
+	}
+	return (FALSE);
+}
+
 void
 heredoc_loop(int fd, char *token)
 {
-	char	*line;
+	char		*word;
+	char		*line;
+	t_boolean	quote;
 
+	word = ms_strdup(&token[3]);
+	quote = exist_quote(word);
+	word = remove_quotation(word);
 	while(1)
 	{
 		line = readline("heredoc > ");
-		if (line == NULL || ms_strcmp(line, &token[3]) == 0)
+		if (line == NULL || ms_strcmp(line, word) == 0)
 			break ;
+
+		if (quote == FALSE)
+			expand(&line, 1);
+
 		ms_putendl_fd(line, fd);
 		free(line);
 	}
+	free(word);
 	free(line);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 16:54:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/25 15:55:57 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/03 16:17:49 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ t_list	*cmd_list_remake(t_list *cmd)
 	return (ret);
 }
 
+static t_boolean	is_heredoc(char *token)
+{
+	if (token[0] == '<' && token[1] == '<')
+		return (TRUE);
+	return (FALSE);
+}
+
 static void	expand_cmd_member(t_list **list)
 {
 	t_list	*current;
@@ -40,9 +47,12 @@ static void	expand_cmd_member(t_list **list)
 	while (current != NULL)
 	{
 		token = current->content;
-		expand(&token);
-		token = remove_quotation(token);
-		current->content = token;
+		if (!is_heredoc(token))
+		{
+			expand(&token);
+			token = remove_quotation(token);
+			current->content = token;
+		}
 		current = current->next;
 	}
 }
