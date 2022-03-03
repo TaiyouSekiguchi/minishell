@@ -16,6 +16,10 @@
 # define READ (0)
 # define WRITE (1)
 
+# define COMMAND_NOT_FOUND 127
+# define PERMISSION_DENIED 126
+
+
 int	g_status;
 
 typedef	enum e_boolean
