@@ -11,7 +11,8 @@ SRCS_DIR				=	$(dir $(SRCS))\
 							${dir ${EXPANDER_SRCS}}\
 							${dir ${BUILTIN_SRCS}}\
 							${dir ${EXECUTER_SRCS}}\
-							${dir ${OUTPUT_TEST_SRCS}}
+							${dir ${OUTPUT_TEST_SRCS}}\
+							${dir ${ERROR_TEST_SRCS}}
 OBJS_DIR				=	./objs
 BINDIRS					=	${addprefix ${OBJS_DIR}/, ${SRCS_DIR}}
 
@@ -46,6 +47,10 @@ EXECUTER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_TEST_SRCS:.c=.o))
 OUTPUT_TEST				=	output_test
 OUTPUT_TEST_SRCS		=	test/output_test.c
 OUTPUT_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(OUTPUT_TEST_SRCS:.c=.o))
+
+ERROR_TEST				=	error_test
+ERROR_TEST_SRCS			=	test/error_test.c
+ERROR_TEST_OBJS			=	$(addprefix $(OBJS_DIR)/, $(ERROR_TEST_SRCS:.c=.o))
 #####################################
 
 ########### utils ############
@@ -53,7 +58,8 @@ UTILS_SRCS				=	srcs/utils/is_func.c\
 							srcs/utils/quote_set.c\
 							srcs/utils/search_environ.c \
 							srcs/utils/remove_quotation.c \
-							srcs/utils/init_dir_info.c
+							srcs/utils/init.c \
+							srcs/utils/call_export.c
 UTILS_OBJS				=	$(addprefix $(OBJS_DIR)/, $(UTILS_SRCS:.c=.o))
 #####################################
 
@@ -94,7 +100,6 @@ BUILTIN_OBJS			=	$(addprefix $(OBJS_DIR)/, $(BUILTIN_SRCS:.c=.o))
 
 ############ executer #############
 EXECUTER_SRCS			=	srcs/executer/executer.c\
-							srcs/executer/do_pipe.c\
 							srcs/executer/redirect_open_utils.c\
 							srcs/executer/redirect.c\
 							srcs/executer/do_exec.c
@@ -133,6 +138,11 @@ $(OUTPUT_TEST)		:	$(OUTPUT_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(
 out_test				: $(OUTPUT_TEST)
 						bash ./test/output_test.sh
 
+$(ERROR_TEST)		:	$(ERROR_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
+						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
+
+error_msg_test		: $(ERROR_TEST)
+						bash ./test/error_test.sh
 
 $(OBJS_DIR)/%.o		:	%.c
 						@mkdir -p ${BINDIRS}
@@ -158,7 +168,8 @@ tclean				:
 						$(EXPANDER_TEST_OBJS)\
 						$(EXECUTER_TEST_OBJS)\
 						$(ALL_IN_TEST_OBJS) \
-						$(OUTPUT_TEST)
+						$(OUTPUT_TEST) \
+						$(ERROR_TEST)
 
 tfclean				:
 						$(RM) $(READLINE_TEST_OBJS) $(READLINE_TEST) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST) $(EXPANDER_TEST) $(EXPANDER_TEST_OBJS) $(EXECUTER_TEST) $(EXECUTER_TEST_OBJS) $(ALL_IN_TEST) $(ALL_IN_TEST_OBJS)

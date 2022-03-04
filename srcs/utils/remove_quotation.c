@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 15:28:32 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/25 15:35:59 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/03 17:30:44 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ char	*remove_quotation(char *token)
 				|| (quote == DOUBLE && token[i] == '\"'))
 				quote_set(token[i++], &quote);
 			else
-				i++;
+				ret[j++] = token[i++];
+				//i++;
 		}
 		else
 			ret[j++] = token[i++];

@@ -1,29 +1,6 @@
 #include "minishell.h"
 
-/*static t_kind
-distinguish_redirect_kind(char	*str)
-{
-	if (str[0] == '<' && str[1] == '<')
-		return (HEREDOC);
-	else
-		return (INFILE);
-}
-
-void	infile_redirect_part(t_list *infile)
-{
-	t_list	*current;
-	t_kind	kind;
-
-	current = infile;
-	if (current != NULL)
-	{
-		kind = distinguish_redirect_kind(current->content);
-		do_redirect(current->content, kind);
-	}
-}*/
-
-char
-**make_argv_for_execve(t_list *cmd, size_t cmd_token_count)
+char	**make_argv_for_execve(t_list *cmd, size_t cmd_token_count)
 {
 	char	**argv;
 	t_list	*current;
@@ -42,34 +19,47 @@ char
 	return (argv);
 }
 
-char
-*cmd_path_search(char *cmd_name)
+char	*cmd_path_search(char *cmd_name)
 {
 	char	**env_path_lst;
 	int		i;
 	char	*tmp;
 	char	*tmp2;
+	int		exit_status;
 
 	env_path_lst = ms_split(getenv("PATH"), ':');
 	if (env_path_lst == NULL)
 		return (NULL);
+
+	exit_status = COMMAND_NOT_FOUND;
 	i = 0;
 	while (env_path_lst[i] != NULL)
 	{
 		tmp = ms_strjoin(env_path_lst[i], "/");
 		tmp2 = ms_strjoin(tmp, cmd_name);
-		if (access(tmp2, X_OK) == 0)
+
+		if (access(tmp2, F_OK) == 0)
 		{
-			free(tmp);
-			ms_split_free(env_path_lst);
-			return (tmp2);
+			if (access(tmp2, X_OK) == 0)
+			{
+				free(tmp);
+				ms_split_free(env_path_lst);
+				return (tmp2);
+			}
+			else
+				exit_status = PERMISSION_DENIED;
 		}
 		i++;
 	}
 	ms_split_free(env_path_lst);
 	free(tmp);
 	free(tmp2);
-	return (NULL);
+	if (exit_status == COMMAND_NOT_FOUND)
+		ms_putendl_fd("minishell command not found", STDERR);
+	else
+		ms_putendl_fd("minishell permission denied", STDERR);
+	exit(exit_status);
+	//return (NULL);
 }
 
 void
@@ -95,12 +85,20 @@ do_exec(t_cmd *cmd_group, t_dir *d_info)
 	}
 	else
 	{
-		//absolute_PATHから探す　
+		//absolute_PATHから探す
+		if (access(argv[0], F_OK) != 0)
+		{
+			ms_putendl_fd("minishell command not found", STDERR);
+			exit(127);
+		}
 		if (access(argv[0], X_OK) != 0)
-			argv[0] = NULL;
+		{
+			ms_putendl_fd("minishell permission denied", STDERR);
+			exit(126);
+		}
 	}
-	if (argv[0] == NULL)
-		ms_error("minishell command not found");
+	//if (argv[0] == NULL)
+	//	ms_error("minishell command not found");
 	if (execve(argv[0], argv, environ) < 0)
 	{
 		ms_putendl_fd(argv[0], STDERR_FILENO);
