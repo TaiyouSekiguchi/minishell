@@ -3,32 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   quote_set.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 14:42:27 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/25 14:42:32 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/04 16:56:22 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	quote_set(char c, t_quote *quote)
+t_quote	quote_set(char c, t_quote quote)
 {
-	if (*quote == NONE)
+	if (quote == NONE)
 	{
 		if (c == '\'')
-			*quote = SINGLE;
+			return (SINGLE);
 		else if (c == '\"')
-			*quote = DOUBLE;
+			return (DOUBLE);
 	}
-	else if (*quote == SINGLE)
+	else if (quote == SINGLE)
 	{
 		if (c == '\'')
-			*quote = NONE;
+			return (NONE);
 	}
-	else if (*quote == DOUBLE)
+	else if (quote == DOUBLE)
 	{
 		if (c == '\"')
-			*quote = NONE;
+			return (NONE);
 	}
+	return (quote);
 }

@@ -21,75 +21,44 @@ static char	*get_val_name(char *token)
 	return (val_name);
 }
 
-void	expand(char **token, int type)
+char	*expand(char *token, t_boolean in_heredoc)
 {
-	char	*val_name;
-	char	*new_word;
+	char	*value;
 	char	*ret;
-	char	*tmp;
-	int		start;
-	int		i;
 	t_quote	quote;
+	char	*start;
 
 	quote = NONE;
-	start = 0;
-	i = 0;
 	ret = ms_strdup("");
-	while ((*token)[i] != '\0')
+	start = token;
+	while (*token != '\0')
 	{
-		if (type == 0 && is_quote((*token)[i]))
-			quote_set((*token)[i++], &quote);
-		else if (quote == SINGLE || (*token)[i] != '$')
-			i++;
+		if (in_heredoc == FALSE && is_quote(*token))
+		{
+			quote = quote_set(*token, quote);
+			token++;
+		}
+		else if (quote == SINGLE || *token != '$')
+			token++;
 		else
 		{
-			//＄より前をtmpにいれる。
-			tmp = ms_substr(*token, start, i - start);
-			//printf("tmp is %s\n", tmp);
-
-			//上で作ったtmpを, retにくっつける。
-			ret = ms_strappend(ret, tmp);
-			//printf("ret is %s\n", ret);
-
-			//$の次へいく
-			i++;
-
-			// $? のとき終了ステータスをいれる
-			if ((*token)[i] == '?')
+			ret = ms_strappend(ret, ms_strndup(start, token - start));
+			token++;
+			if (*token == '?')
 			{
-				new_word = ms_itoa(g_status);
-				ret = ms_strappend(ret, new_word);
-				i++;
-				start = i;
+				value = ms_itoa(g_status);
+				token++;
 			}
 			else
 			{
-				//tokenにある$後の変数名を取得
-				val_name = get_val_name(&(*token)[i]);
-				//printf("val_name is %s\n", val_name);
-
-				//変数名から環境変数にある右辺を取得する
-				new_word = search_environ(val_name);
-				//printf("new_word is %s\n", new_word);
-
-				//取得した右辺の値をretにくっつける（展開）
-				ret = ms_strappend(ret, new_word);
-				//printf("ret is %s\n", ret);
-
-				//tokenのインデックスを変数名の大きさだけ進める
-				while ((*token)[i] != '\0' && is_name((*token)[i]))
-					i++;
-				start = i;
+				value = search_environ(get_val_name(token));
+				while (*token != '\0' && is_name(*token))
+					token++;
 			}
+			ret = ms_strappend(ret, value);
+			start = token;
 		}
 	}
-
-	tmp = ms_substr(*token, start, i);
-	//printf("tmp is %s\n", tmp);
-
-	ret = ms_strappend(ret, tmp);
-	//printf("ret is %s\n", ret);
-
-	free(*token);
-	*token = ret;
+	ret = ms_strappend(ret, ms_strndup(start, token - start));
+	return (ret);
 }
