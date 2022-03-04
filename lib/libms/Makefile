@@ -6,7 +6,7 @@
 #    By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 15:18:12 by tsekiguc          #+#    #+#              #
-#    Updated: 2022/03/01 18:01:04 by yjimpei          ###   ########.fr        #
+#    Updated: 2022/03/02 17:31:00 by tsekiguc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,8 @@ SRCS	=	ms_atoi.c\
 			ms_strcat.c\
 			ms_strappend.c\
 			ms_split_free.c\
-			ms_isnum_string.c
+			ms_isnum_string.c\
+			ms_char_replace.c
 
 OBJS	=	$(SRCS:.c=.o)
 

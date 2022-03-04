@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expand.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/25 14:19:34 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/15 16:44:18 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 extern int g_status;
@@ -33,7 +21,7 @@ static char	*get_val_name(char *token)
 	return (val_name);
 }
 
-void	expand(char **token)
+void	expand(char **token, int type)
 {
 	char	*val_name;
 	char	*new_word;
@@ -49,7 +37,7 @@ void	expand(char **token)
 	ret = ms_strdup("");
 	while ((*token)[i] != '\0')
 	{
-		if (is_quote((*token)[i]))
+		if (type == 0 && is_quote((*token)[i]))
 			quote_set((*token)[i++], &quote);
 		else if (quote == SINGLE || (*token)[i] != '$')
 			i++;

@@ -97,7 +97,7 @@ int			syntax_check(t_list *tokens);
 int			token_kind(char *token);
 //expander
 void		expander(t_list *cmds);
-void		expand(char **token);
+void		expand(char **token, int type);
 char		*search_environ(char *name);
 char		*remove_quotation(char *token);
 //executer

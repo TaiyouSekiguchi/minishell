@@ -13,25 +13,51 @@ int		infile_open(char *token)
 	return (fd);
 }
 
+static t_boolean	exist_quote(char *word)
+{
+	size_t	i;
+
+	i = 0;
+	while (word[i] != '\0')
+	{
+		if (word[i] == '\'' || word[i] == '\"')
+			return (TRUE);
+		i++;
+	}
+	return (FALSE);
+}
+
 void
 heredoc_loop(int fd, char *token)
 {
-	char	*line;
+	char		*word;
+	char		*line;
+	t_boolean	quote;
 
+	word = ms_strdup(&token[3]);
+	quote = exist_quote(word);
+	word = remove_quotation(word);
 	while(1)
 	{
 		line = readline("heredoc > ");
-		if (ms_strcmp(line, &token[3]) == 0)
+		if (line == NULL || ms_strcmp(line, word) == 0)
 			break ;
+
+		if (quote == FALSE)
+			expand(&line, 1);
+
 		ms_putendl_fd(line, fd);
 		free(line);
 	}
+	free(word);
 	free(line);
 }
 
 int	heredoc_open(char *token)
 {
-	int	fd;
+	int		fd;
+	char	*tty;
+	char	*tmp_file_name;
 
 	//fd = 0がstdinじゃなかったときはstdinに変更
 	if (!isatty(0))
@@ -40,17 +66,29 @@ int	heredoc_open(char *token)
 		open("/dev/tty", O_RDONLY);
 	}
 
-	fd = open("./tmp", O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
+	tty = ms_strdup(ttyname(0));
+	tty = ms_char_replace(tty, '/', '_');
+	tmp_file_name = ms_strjoin("./tmp", tty);
+	free(tty);
+
+	fd = open(tmp_file_name, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
 	if (fd < 0)
+	{
+		free(tmp_file_name);
 		ms_error("open");
+	}
 	heredoc_loop(fd, token);
 	close(fd);
 
-	fd = open("./tmp", O_RDONLY);
+	fd = open(tmp_file_name, O_RDONLY);
 	if (fd < 0)
+	{
+		free(tmp_file_name);
 		ms_error("open failed");
+	}
 
-	unlink("./tmp");
+	unlink(tmp_file_name);
+	free(tmp_file_name);
 	return (fd);
 }
 
