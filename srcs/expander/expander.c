@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 16:54:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/03 16:17:49 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/04 13:51:19 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	expand_cmd_member(t_list **list)
 		token = current->content;
 		if (!is_heredoc(token))
 		{
-			expand(&token);
+			expand(&token, 0);
 			token = remove_quotation(token);
 			current->content = token;
 		}
