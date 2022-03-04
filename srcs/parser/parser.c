@@ -6,21 +6,21 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:41:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 18:24:10 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/04 14:48:10 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	cmd_init(t_cmd **cmd)
+static void	cmd_init(t_cmd_info **cmd)
 {
-	*cmd = (t_cmd *)ms_xmalloc(sizeof(t_cmd));
+	*cmd = (t_cmd_info *)ms_xmalloc(sizeof(t_cmd_info));
 	(*cmd)->cmd = NULL;
 	(*cmd)->infile = NULL;
 	(*cmd)->outfile = NULL;
 }
 
-static void	redirect_parse(t_list **current, int kind, t_cmd *cmd)
+static void	redirect_parse(t_list **current, int kind, t_cmd_info *cmd)
 {
 	char	*token;
 	char	*prefix;
@@ -50,7 +50,7 @@ static void	redirect_parse(t_list **current, int kind, t_cmd *cmd)
 
 static void	parse_loop(t_list **cmds, t_list *tokens)
 {
-	t_cmd	*cmd;
+	t_cmd_info	*cmd;
 	t_list	*current;
 	t_kind	kind;
 	char	*tmp;

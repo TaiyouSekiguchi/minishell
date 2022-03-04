@@ -14,7 +14,7 @@ static void	sigint_handler(int signum)
 	}
 }
 
-pid_t	do_cmd(t_cmd *cmd_group, t_boolean is_last, t_dir *d_info)
+pid_t	do_cmd(t_cmd_info *cmd_group, t_boolean is_last, t_dir *d_info)
 {
 	int	pipe_fd[2];
 	int	pid;
@@ -141,7 +141,7 @@ void	exec_process(t_list *cmds, t_dir *d_info)
 
 void	executer(t_list *cmds, t_dir *d_info)
 {
-	t_cmd	*first_cmd_group;
+	t_cmd_info	*first_cmd_group;
 	char	*first_cmd_name;
 	int		cmd_group_count;
 	pid_t	ret;

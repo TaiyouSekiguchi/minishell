@@ -63,7 +63,7 @@ char	*cmd_path_search(char *cmd_name)
 }
 
 void
-do_exec(t_cmd *cmd_group, t_dir *d_info)
+do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 {
 	extern char		**environ;
 	char			**argv;

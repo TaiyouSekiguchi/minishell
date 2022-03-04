@@ -11,54 +11,19 @@ static void	sigint_handler(int signum)
 	}
 }
 
-void	print_list(t_list *list, char *kind)
-{
-	t_list	*current;
-
-	printf("%-10s: ", kind);
-	current = list;
-	while (current != NULL)
-	{
-		printf("[%s] ", (char *)current->content);
-		current = current->next;
-	}
-	printf("\n");
-}
-
-void	print_cmd(t_cmd *cmd)
-{
-	printf("\n");
-	print_list(cmd->cmd, "cmd");
-	print_list(cmd->infile, "infile");
-	print_list(cmd->outfile, "outfile");
-	printf("\n\n");
-}
-
-void	print_cmds(t_list *cmds)
-{
-	t_list	*current;
-
-	current = cmds;
-	while (current != NULL)
-	{
-		print_cmd(current->content);
-		current = current->next;
-	}
-}
-
 void	do_process(char *str, t_dir *d_info)
 {
 	t_list	*tokens;
-	t_list	*cmds;
+	t_list	*cmd_info_list;
 
 	if (str[0] == '\0')
 		return ;
 	tokens = NULL;
 	lexer(&tokens, str);
-	cmds = NULL;
-	parser(&cmds, tokens);
-	expander(cmds);
-	executer(cmds, d_info);
+	cmd_info_list = NULL;
+	parser(&cmd_info_list, tokens);
+	expander(cmd_info_list);
+	executer(cmd_info_list, d_info);
 }
 
 int	main(void)
