@@ -2,37 +2,39 @@
 
 extern int g_status;
 
-int	redirect_file_open(char *token)
+int	redirect_file_open(char *file_name)
 {
 	int		fd;
 
-	if (token[0] == '<' && token[1] == ' ')
-		fd = infile_open(token);
-	else if (token[0] == '<' && token[1] == '<')
-		fd = heredoc_open(token);
-	else if (token[0] == '>' && token[1] == ' ')
-		fd = outfile_open(token);
+	if (file_name[0] == '<' && file_name[1] == ' ')
+		fd = infile_open(file_name);
+	else if (file_name[0] == '<' && file_name[1] == '<')
+		fd = heredoc_open(file_name);
+	else if (file_name[0] == '>' && file_name[1] == ' ')
+		fd = outfile_open(file_name);
+	else if (file_name[0] == '>' && file_name[1] == '>')
+		fd = append_open(file_name);
 	else
-		fd = append_open(token);
+		fd = NONE_FD;
 
 	return (fd);
 }
 
-int	get_redirect_fd(t_list *token_list)
+int	get_redirect_fd(t_list *file_list)
 {
 	int		fd;
-	char	*token;
+	char	*file_name;
 
 	fd = NONE_FD;
-	token = NULL;
-	while (token_list != NULL)
+	file_name = NULL;
+	while (file_list != NULL)
 	{
-		token = token_list->content;
-		if (token != NULL)
-			fd = redirect_file_open(token);
+		file_name = file_list->content;
+		if (file_name != NULL)
+			fd = redirect_file_open(file_name);
 		else
 			fd = NONE_FD;
-		token_list = token_list->next;
+		file_list = file_list->next;
 	}
 
 	return (fd);

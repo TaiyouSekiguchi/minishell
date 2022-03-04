@@ -14,7 +14,7 @@ static void	sigint_handler(int signum)
 	}
 }
 
-pid_t	do_cmd(t_cmd_info *cmd_group, t_boolean is_last, t_dir *d_info)
+pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 {
 	int	pipe_fd[2];
 	int	pid;
@@ -22,32 +22,25 @@ pid_t	do_cmd(t_cmd_info *cmd_group, t_boolean is_last, t_dir *d_info)
 	int	outfile_fd;
 
 	//タイミング制御のため前に切り出した
-	infile_fd = get_redirect_fd(cmd_group->infile);
-	outfile_fd = get_redirect_fd(cmd_group->outfile);
+	infile_fd = get_redirect_fd(cmd_info->infile);
+	outfile_fd = get_redirect_fd(cmd_info->outfile);
 
 	if (is_last == TRUE)
 	{
 		pid = fork();
-		if (pid == 0)
+		if (pid == CHILD)
 		{
-
 			signal(SIGQUIT, SIG_DFL);
 			signal(SIGINT, SIG_DFL);
 
 			do_redirect(infile_fd, outfile_fd);
-			do_exec(cmd_group, d_info);
-
-			//for builtin
+			do_exec(cmd_info, d_info);
 			exit(g_status);
 		}
 		else
 		{
-			//親プロセスでは不要のためclose
 			close(infile_fd);
 			close(outfile_fd);
-
-			//これは前のコマンドのパイプとつながっている。
-			//親プロセスでは不要
 			close(STDIN);
 		}
 	}
@@ -56,27 +49,22 @@ pid_t	do_cmd(t_cmd_info *cmd_group, t_boolean is_last, t_dir *d_info)
 		if (pipe(pipe_fd) == -1)
 			perror("minishell");
 		pid = fork();
-		if (pid == 0)
+		if (pid == CHILD)
 		{
-
 			signal(SIGQUIT, SIG_DFL);
 			signal(SIGINT, SIG_DFL);
-			//signal(SIGQUIT, SIG_DFL);
 
 			close(pipe_fd[READ]);
 			dup2(pipe_fd[WRITE], STDOUT);
-			do_redirect(infile_fd, outfile_fd);
-			do_exec(cmd_group, d_info);
 
-			//for builtin
+			do_redirect(infile_fd, outfile_fd);
+			do_exec(cmd_info, d_info);
 			exit(g_status);
 		}
 		else
 		{
-			//親プロセスでは不要のためclose
 			close(infile_fd);
 			close(outfile_fd);
-
 			close(pipe_fd[WRITE]);
 			dup2(pipe_fd[READ], STDIN_FILENO);
 			close(pipe_fd[READ]);

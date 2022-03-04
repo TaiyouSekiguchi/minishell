@@ -6,18 +6,18 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:41:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/04 17:31:03 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/04 18:03:20 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	cmd_init(t_cmd_info **cmd)
+static void	cmd_init(t_cmd_info **cmd_info)
 {
-	*cmd = (t_cmd_info *)ms_xmalloc(sizeof(t_cmd_info));
-	(*cmd)->cmd = NULL;
-	(*cmd)->infile = NULL;
-	(*cmd)->outfile = NULL;
+	*cmd_info = (t_cmd_info *)ms_xmalloc(sizeof(t_cmd_info));
+	(*cmd_info)->cmd = NULL;
+	(*cmd_info)->infile = NULL;
+	(*cmd_info)->outfile = NULL;
 }
 
 static void	redirect_parse(t_list **current, int kind, t_cmd_info *cmd)

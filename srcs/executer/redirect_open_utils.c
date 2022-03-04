@@ -3,13 +3,13 @@
 
 extern int g_status;
 
-int		infile_open(char *token)
+int		infile_open(char *file_name)
 {
 	int	fd;
 
-	fd = open(&token[2], O_RDONLY);
+	fd = open(&file_name[2], O_RDONLY);
 	if (fd < 0)
-		ms_error("open");
+		ms_error("infile_open");
 	return (fd);
 }
 
@@ -59,7 +59,6 @@ int	heredoc_open(char *token)
 	char	*tty;
 	char	*tmp_file_name;
 
-	//fd = 0がstdinじゃなかったときはstdinに変更
 	if (!isatty(0))
 	{
 		close(0);
@@ -75,7 +74,7 @@ int	heredoc_open(char *token)
 	if (fd < 0)
 	{
 		free(tmp_file_name);
-		ms_error("open");
+		ms_error("heredoc open");
 	}
 	heredoc_loop(fd, token);
 	close(fd);
