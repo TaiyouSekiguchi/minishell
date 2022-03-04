@@ -19,6 +19,8 @@
 # define COMMAND_NOT_FOUND 127
 # define PERMISSION_DENIED 126
 
+# define CHILD 0
+
 
 int	g_status;
 

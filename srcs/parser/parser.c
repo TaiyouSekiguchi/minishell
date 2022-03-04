@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:41:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/04 14:48:10 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/04 17:31:03 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ static void	redirect_parse(t_list **current, int kind, t_cmd_info *cmd)
 	}
 }
 
-static void	parse_loop(t_list **cmds, t_list *tokens)
+static void	parse_loop(t_list **cmd_info_list, t_list *tokens)
 {
-	t_cmd_info	*cmd;
-	t_list	*current;
-	t_kind	kind;
-	char	*tmp;
+	t_cmd_info	*cmd_info;
+	t_list		*current;
+	t_kind		kind;
+	char		*tmp;
 
-	cmd_init(&cmd);
+	cmd_init(&cmd_info);
 	current = tokens;
 	while (current != NULL)
 	{
@@ -63,23 +63,23 @@ static void	parse_loop(t_list **cmds, t_list *tokens)
 		if (kind == CMD)
 		{
 			tmp = ms_strdup(current->content);
-			ms_lstadd_back(&cmd->cmd, ms_lstnew(tmp));
+			ms_lstadd_back(&cmd_info->cmd, ms_lstnew(tmp));
 		}
 		else if (kind == PIPE)
 		{
-			ms_lstadd_back(cmds, ms_lstnew(cmd));
-			cmd_init(&cmd);
+			ms_lstadd_back(cmd_info_list, ms_lstnew(cmd_info));
+			cmd_init(&cmd_info);
 		}
 		else
-			redirect_parse(&current, kind, cmd);
+			redirect_parse(&current, kind, cmd_info);
 		current = current->next;
 	}
-	ms_lstadd_back(cmds, ms_lstnew(cmd));
+	ms_lstadd_back(cmd_info_list, ms_lstnew(cmd_info));
 }
 
-void	parser(t_list **cmds, t_list *tokens)
+void	parser(t_list **cmd_info_list, t_list *tokens)
 {
 	if (!syntax_check(tokens))
 		return ;
-	parse_loop(cmds, tokens);
+	parse_loop(cmd_info_list, tokens);
 }

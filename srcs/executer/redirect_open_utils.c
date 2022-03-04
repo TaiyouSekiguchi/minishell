@@ -44,7 +44,7 @@ heredoc_loop(int fd, char *token)
 			break ;
 
 		if (quote == FALSE)
-			expand(&line, 1);
+			line = expand(line, TRUE);
 
 		ms_putendl_fd(line, fd);
 		free(line);

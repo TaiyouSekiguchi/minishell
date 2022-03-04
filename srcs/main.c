@@ -22,6 +22,9 @@ void	do_process(char *str, t_dir *d_info)
 	lexer(&tokens, str);
 	cmd_info_list = NULL;
 	parser(&cmd_info_list, tokens);
+
+
+
 	expander(cmd_info_list);
 	executer(cmd_info_list, d_info);
 }

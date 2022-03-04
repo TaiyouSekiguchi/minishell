@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 20:51:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/25 14:42:42 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/04 17:36:55 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	lexer(t_list **tokens, char *cmd)
 	while (cmd[i] != '\0' )
 	{
 		if (is_quote(cmd[i]))
-			quote_set(cmd[i++], &quote);
+			quote = quote_set(cmd[i++], quote);
 		else if (quote != NONE || !is_metachar(cmd[i]))
 			i++;
 		else
