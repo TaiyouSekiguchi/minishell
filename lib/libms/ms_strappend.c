@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_strappend.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 14:57:09 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/04 17:05:21 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/04 16:22:59 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ char	*ms_strappend(char *body, char *add)
 	new = ms_strcpy(new, body);
 	new = ms_strcat(new, add);
 	free(body);
+	free(add);
 	return (new);
 }

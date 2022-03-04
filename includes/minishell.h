@@ -90,14 +90,15 @@ int			is_blank(char c);
 int			is_delimiter(char c);
 int			is_metachar(char c);
 int			is_redirect(char c1, char c2);
-void		quote_set(char c, t_quote *quote);
+int			is_heredoc(char *token);
+t_quote		quote_set(char c, t_quote quote);
 //parser
 void		parser(t_list **cmds, t_list *tokens);
 int			syntax_check(t_list *tokens);
 int			token_kind(char *token);
 //expander
 void		expander(t_list *cmds);
-void		expand(char **token, int type);
+char		*expand(char *token, t_boolean in_heredoc);
 char		*search_environ(char *name);
 char		*remove_quotation(char *token);
 //executer
