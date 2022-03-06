@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 16:10:42 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 18:03:42 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/06 17:44:06 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,9 @@ int		syntax_check(t_list	*tokens)
 	{
 		if (token_kind(current->content) != CMD)
 		{
-			if (current->next == NULL)
+			if (current->next == NULL || token_kind(current->next->content) != CMD)
 			{
-				printf("syntax error new line\n");
-				return (0);
-			}
-			else if (token_kind(current->next->content) != CMD)
-			{
-				printf("syntax error\n");
+				put_error_exit(NULL, g_status, SYNTAX_ERROR_MSG, FALSE);
 				return (0);
 			}
 		}

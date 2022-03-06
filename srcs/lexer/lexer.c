@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 20:51:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/04 17:36:55 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/06 17:44:23 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,10 @@ void	lexer(t_list **tokens, char *cmd)
 	}
 	if (quote != NONE)
 	{
-		printf("quote is not close\n");
-		exit(1);
+		put_error_exit(NULL, g_status, SYNTAX_ERROR_MSG, FALSE);
+		ms_lstclear(tokens, free);
+		*tokens = NULL;
 	}
-	add_tokens(tokens, cmd, start, &i);
+	else
+		add_tokens(tokens, cmd, start, &i);
 }

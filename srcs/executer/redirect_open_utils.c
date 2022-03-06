@@ -9,8 +9,7 @@ int		infile_open(char *file_name)
 
 	fd = open(&file_name[2], O_RDONLY);
 	if (fd < 0)
-		perror("infile_open");
-		//ms_error("infile_open");
+		put_error_exit(&file_name[2], g_status, NULL, FALSE);
 	return (fd);
 }
 
@@ -75,7 +74,7 @@ int	heredoc_open(char *token)
 	if (fd < 0)
 	{
 		free(tmp_file_name);
-		ms_error("heredoc open");
+		put_error_exit(tmp_file_name, g_status, NULL, FALSE);
 	}
 	heredoc_loop(fd, token);
 	close(fd);
@@ -84,7 +83,7 @@ int	heredoc_open(char *token)
 	if (fd < 0)
 	{
 		free(tmp_file_name);
-		ms_error("open failed");
+		put_error_exit(tmp_file_name, g_status, NULL, FALSE);
 	}
 
 	unlink(tmp_file_name);
@@ -99,9 +98,7 @@ outfile_open(char *token)
 
 	fd = open(&token[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		perror("outfile_open");
-		//ms_error("open failed");
-
+		put_error_exit(&token[2], g_status, NULL, FALSE);
 	return (fd);
 }
 
@@ -112,7 +109,7 @@ append_open(char *token)
 
 	fd = open(&token[3], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-		perror("appned_open");
+		put_error_exit(&token[3], g_status, NULL, FALSE);
 		//ms_error("open failed");
 
 	return (fd);
