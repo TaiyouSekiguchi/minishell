@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   remove_quotation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 15:28:32 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/03 17:30:44 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/04 17:34:32 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_boolean	is_last_quote(char c, t_quote quote)
+{
+	if ((quote == NONE)
+		|| (quote == SINGLE && c == '\'')
+		|| (quote == DOUBLE && c == '\"'))
+		return (TRUE);
+	else
+		return (FALSE);
+}
 
 char	*remove_quotation(char *token)
 {
@@ -21,22 +31,14 @@ char	*remove_quotation(char *token)
 	size_t	j;
 
 	len = ms_strlen(token);
-	ret = (char *)ms_xmalloc(sizeof(char) * (len + 1));
+	ret = (char *)ms_calloc(len + 1, sizeof(char));
 	quote = NONE;
 	i = 0;
 	j = 0;
 	while (token[i] != '\0')
 	{
-		if (is_quote(token[i]))
-		{
-			if ((quote == NONE)
-				|| (quote == SINGLE && token[i] == '\'')
-				|| (quote == DOUBLE && token[i] == '\"'))
-				quote_set(token[i++], &quote);
-			else
-				ret[j++] = token[i++];
-				//i++;
-		}
+		if (is_quote(token[i]) && is_last_quote(token[i], quote))
+				quote = quote_set(token[i++], quote);
 		else
 			ret[j++] = token[i++];
 	}

@@ -19,6 +19,8 @@
 # define COMMAND_NOT_FOUND 127
 # define PERMISSION_DENIED 126
 
+# define CHILD 0
+
 
 int	g_status;
 
@@ -64,12 +66,12 @@ typedef enum e_kind
 	APPEND,
 }			t_kind;
 
-typedef	struct s_cmd
+typedef	struct s_cmd_info
 {
 	t_list	*cmd;
 	t_list	*infile;
 	t_list	*outfile;
-}				t_cmd;
+}				t_cmd_info;
 
 typedef struct s_dir
 {
@@ -90,19 +92,20 @@ int			is_blank(char c);
 int			is_delimiter(char c);
 int			is_metachar(char c);
 int			is_redirect(char c1, char c2);
-void		quote_set(char c, t_quote *quote);
+int			is_heredoc(char *token);
+t_quote		quote_set(char c, t_quote quote);
 //parser
 void		parser(t_list **cmds, t_list *tokens);
 int			syntax_check(t_list *tokens);
 int			token_kind(char *token);
 //expander
 void		expander(t_list *cmds);
-void		expand(char **token, int type);
+char		*expand(char *token, t_boolean in_heredoc);
 char		*search_environ(char *name);
 char		*remove_quotation(char *token);
 //executer
 void		executer(t_list *cmds, t_dir *d_info);
-void		do_exec(t_cmd *cmd, t_dir *d_info);
+void		do_exec(t_cmd_info *cmd_info, t_dir *d_info);
 void		do_redirect(int infile_fd, int outfile_fd);
 void		do_pipe(t_list *cmds, int fd);
 int			infile_open(char *token);
