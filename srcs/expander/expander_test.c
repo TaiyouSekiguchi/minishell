@@ -28,7 +28,7 @@ void	print_list(t_list *list, char *kind)
 	printf("\n");
 }
 
-void	print_cmd(t_cmd *cmd)
+void	print_cmd(t_cmd_info *cmd)
 {
 	printf("**************\n");
 	print_list(cmd->cmd, "cmd");
@@ -68,22 +68,29 @@ void	test(char *str)
 
 int main(void)
 {
-	test("");
-	test("aaa");
-	test("aaa   ");
-	test("aaa bbb ccc      ");
-	test("    aaa bbb ccc    ");
-	test("echo taiyou");
-	test("cat <infile -e | grep test | wc -l > outfile");
-	test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
-	test("> outfile");
-	test("cat $TEST < $TEST | grep test | wc -l >> outfile > outfile");
-	test("cat \"-e $TEST\"");
-	test("cat \'-e $TEST\'");
-	test("cat \'-e $TEST\"taiyou\"\'");
-	test("cat \"-e $TEST\'taiyou\'\"");
-	test("cat \'taiyou\'$TEST\'sekiguchi\'");
-	test("cat $EDITOR");
-
+	//test("");
+	//test("aaa");
+	//test("aaa   ");
+	//test("aaa bbb ccc      ");
+	//test("    aaa bbb ccc    ");
+	//test("echo taiyou");
+	//test("cat <infile -e | grep test | wc -l > outfile");
+	//test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
+	//test("> outfile");
+	//test("cat $HOME < $HOME | grep test | wc -l >> outfile > outfile");
+	//test("cat \"-e $PWD\"");
+	//test("cat \'-e $OLDPWD\'");
+	//test("cat \'-e $HOME\"taiyou\"\'");
+	//test("cat \"-e $SHLVL\'taiyou\'\"");
+	//test("cat \'taiyou\'$HOME\'sekiguchi\'");
+	test("cat $PATH");
+	test("echo \"'$PATH'\"");
+	test("echo \"'\\''$PATH'\"");
+	test("echo \"\\'$PATH'\"");
+	test("echo \"$USER '$TEST1'\"");
+	test("echo '$'");
+	test("echo '\"$PATH\"'");
+	test("echo $TEST1");
+	test("echo $TEST");
 	return (0);
 }

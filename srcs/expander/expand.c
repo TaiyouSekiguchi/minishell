@@ -9,7 +9,7 @@ static int	is_name(char c)
 	return (FALSE);
 }
 
-static char	*get_val_name(char *token)
+char	*get_val_name(char *token)
 {
 	char	*val_name;
 	int		i;
@@ -27,6 +27,7 @@ char	*expand(char *token, t_boolean in_heredoc)
 	char	*ret;
 	t_quote	quote;
 	char	*start;
+	char	*tmp;
 
 	quote = NONE;
 	ret = ms_strdup("");
@@ -51,7 +52,11 @@ char	*expand(char *token, t_boolean in_heredoc)
 			}
 			else
 			{
-				value = search_environ(get_val_name(token));
+				tmp = getenv(get_val_name(token));
+				if (tmp == NULL)
+					value = ms_strdup("");
+				else
+					value = ms_strdup(tmp);
 				while (*token != '\0' && is_name(*token))
 					token++;
 			}
