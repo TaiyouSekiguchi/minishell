@@ -12,7 +12,8 @@
 
 #include "libms.h"
 
-# define NONE_FD (-1)
+# define NONE_FD (-2)
+# define ERROR_FD (-1)
 # define READ (0)
 # define WRITE (1)
 

@@ -15,7 +15,7 @@ int	redirect_file_open(char *file_name)
 	else if (file_name[0] == '>' && file_name[1] == '>')
 		fd = append_open(file_name);
 	else
-		fd = NONE_FD;
+		fd = ERROR_FD;
 
 	return (fd);
 }
@@ -25,15 +25,16 @@ int	get_redirect_fd(t_list *file_list)
 	int		fd;
 	char	*file_name;
 
-	fd = NONE_FD;
+	if (file_list == NULL)
+		return (NONE_FD);
+
 	file_name = NULL;
 	while (file_list != NULL)
 	{
 		file_name = file_list->content;
-		if (file_name != NULL)
-			fd = redirect_file_open(file_name);
-		else
-			fd = NONE_FD;
+		fd = redirect_file_open(file_name);
+		if (fd == ERROR_FD)
+			break ;
 		file_list = file_list->next;
 	}
 

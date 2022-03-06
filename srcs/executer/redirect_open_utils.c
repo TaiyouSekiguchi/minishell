@@ -9,7 +9,8 @@ int		infile_open(char *file_name)
 
 	fd = open(&file_name[2], O_RDONLY);
 	if (fd < 0)
-		ms_error("infile_open");
+		perror("infile_open");
+		//ms_error("infile_open");
 	return (fd);
 }
 
@@ -95,11 +96,11 @@ int
 outfile_open(char *token)
 {
 	int	fd;
-	
-	printf("outfile_open\n");
+
 	fd = open(&token[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		ms_error("open failed");
+		perror("outfile_open");
+		//ms_error("open failed");
 
 	return (fd);
 }
@@ -109,10 +110,10 @@ append_open(char *token)
 {
 	int	fd;
 
-	printf("append_open\n");
 	fd = open(&token[3], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-		ms_error("open failed");
+		perror("appned_open");
+		//ms_error("open failed");
 
 	return (fd);
 }
