@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_test.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/24 14:04:50 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/06 15:24:47 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	print_list(t_list *list, char *kind)
 	printf("\n");
 }
 
-void	print_cmd(t_cmd *cmd)
+void	print_cmd(t_cmd_info *cmd)
 {
 	printf("\n");
 	print_list(cmd->cmd, "cmd");
@@ -74,6 +74,7 @@ int main(void)
 	test("> outfile");
 	test("cat < $TEST | grep test | wc -l >> outfile > outfile");
 	test("cat Makefile | wc -l");
+	//test("cat <");
 	//test("> outfile |");
 	return (0);
 }
