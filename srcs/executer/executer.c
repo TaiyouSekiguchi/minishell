@@ -23,7 +23,10 @@ pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 
 	//タイミング制御のため前に切り出した
 	infile_fd = get_redirect_fd(cmd_info->infile);
-	outfile_fd = get_redirect_fd(cmd_info->outfile);
+	if (infile_fd != ERROR_FD)
+		outfile_fd = get_redirect_fd(cmd_info->outfile);
+	else
+		outfile_fd = ERROR_FD;
 
 	if (is_last == TRUE)
 	{
@@ -33,8 +36,13 @@ pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 			signal(SIGQUIT, SIG_DFL);
 			signal(SIGINT, SIG_DFL);
 
-			do_redirect(infile_fd, outfile_fd);
-			do_exec(cmd_info, d_info);
+			if (infile_fd != ERROR_FD && outfile_fd != ERROR_FD)
+			{
+				do_redirect(infile_fd, outfile_fd);
+				do_exec(cmd_info, d_info);
+			}
+			close(infile_fd);
+			close(outfile_fd);
 			exit(g_status);
 		}
 		else
@@ -57,8 +65,14 @@ pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 			close(pipe_fd[READ]);
 			dup2(pipe_fd[WRITE], STDOUT);
 
-			do_redirect(infile_fd, outfile_fd);
-			do_exec(cmd_info, d_info);
+			if (infile_fd != ERROR_FD && outfile_fd != ERROR_FD)
+			{
+				do_redirect(infile_fd, outfile_fd);
+				do_exec(cmd_info, d_info);
+			}
+
+			close(infile_fd);
+			close(outfile_fd);
 			exit(g_status);
 		}
 		else
