@@ -1,5 +1,6 @@
 CC						=	gcc
 CFLAGS					=	-Wall -Wextra -Werror
+#CFLAGS					+=	-g -fsanitize=leaks
 INCLUDE					=	-I includes -I ${shell brew --prefix readline}/include
 READLINE_LIB			=	-l readline -L ${shell brew --prefix readline}/lib
 LIBMS					=	./lib/libms/libms.a
