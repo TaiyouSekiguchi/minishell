@@ -43,11 +43,22 @@ char	*expand(char *token, t_boolean in_heredoc)
 			token++;
 		else
 		{
+			if (!is_name(*(token + 1)))
+			{
+				token++;
+				continue ;
+			}
+
 			ret = ms_strappend(ret, ms_strndup(start, token - start));
 			token++;
 			if (*token == '?')
 			{
 				value = ms_itoa(g_status);
+				token++;
+			}
+			else if (*token >= '0' && *token <= '9')
+			{
+				value = ms_strdup("");
 				token++;
 			}
 			else
