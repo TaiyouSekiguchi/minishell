@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/15 16:26:13 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/06 16:46:32 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,14 @@ int main(void)
 	test("echo '\"$PATH\"'");
 	test("echo $TEST1");
 	test("echo $TEST");
+	test("echo $1TEST");
+	test("echo $13TEST");
+	test("echo $13TEST$$");
+	test("echo $13TEST$$$");
+	test("echo $+TEST");
+	test("echo $!TEST");
+	test("echo $ TEST");
+	test("echo \'$1TEST\'");
+
 	return (0);
 }
