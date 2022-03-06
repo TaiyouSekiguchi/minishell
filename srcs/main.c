@@ -20,11 +20,12 @@ void	do_process(char *str, t_dir *d_info)
 		return ;
 	tokens = NULL;
 	lexer(&tokens, str);
+	if (tokens == NULL)
+		return ;
 	cmd_info_list = NULL;
 	parser(&cmd_info_list, tokens);
-
-
-
+	if (cmd_info_list == NULL)
+		return ;
 	expander(cmd_info_list);
 	executer(cmd_info_list, d_info);
 }

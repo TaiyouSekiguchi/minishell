@@ -20,6 +20,8 @@
 # define COMMAND_NOT_FOUND 127
 # define PERMISSION_DENIED 126
 
+# define SYNTAX_ERROR_MSG "syntax error near unexpected token 'newline'"
+
 # define CHILD 0
 
 
@@ -86,6 +88,7 @@ char		*rl_gets(void);
 void		init_dir_info(t_dir *d_info);
 void		init_shlvl(void);
 void		call_export(char *env_name, char *value);
+void		put_error_exit(char *name, int status, char *msg, t_boolean is_exit);
 //lexer
 void		lexer(t_list **list, char *cmd);
 int			is_quote(char c);

@@ -59,7 +59,8 @@ UTILS_SRCS				=	srcs/utils/is_func.c\
 							srcs/utils/search_environ.c \
 							srcs/utils/remove_quotation.c \
 							srcs/utils/init.c \
-							srcs/utils/call_export.c
+							srcs/utils/call_export.c \
+							srcs/utils/put_error_exit.c
 UTILS_OBJS				=	$(addprefix $(OBJS_DIR)/, $(UTILS_SRCS:.c=.o))
 #####################################
 

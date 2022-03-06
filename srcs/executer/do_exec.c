@@ -30,14 +30,12 @@ char	*cmd_path_search(char *cmd_name)
 	env_path_lst = ms_split(getenv("PATH"), ':');
 	if (env_path_lst == NULL)
 		return (NULL);
-
-	exit_status = COMMAND_NOT_FOUND;
 	i = 0;
+	exit_status = COMMAND_NOT_FOUND;
 	while (env_path_lst[i] != NULL)
 	{
 		tmp = ms_strjoin(env_path_lst[i], "/");
 		tmp2 = ms_strjoin(tmp, cmd_name);
-
 		if (access(tmp2, F_OK) == 0)
 		{
 			if (access(tmp2, X_OK) == 0)
@@ -51,15 +49,12 @@ char	*cmd_path_search(char *cmd_name)
 		}
 		i++;
 	}
+	g_status = exit_status;
 	ms_split_free(env_path_lst);
 	free(tmp);
 	free(tmp2);
-	if (exit_status == COMMAND_NOT_FOUND)
-		ms_putendl_fd("minishell command not found", STDERR);
-	else
-		ms_putendl_fd("minishell permission denied", STDERR);
-	exit(exit_status);
-	//return (NULL);
+	put_error_exit(cmd_name, g_status, NULL, FALSE);
+	return (NULL);
 }
 
 void
@@ -82,27 +77,23 @@ do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 	{
 		//$PATHから探す
 		argv[0] = cmd_path_search(argv[0]);
+		if (argv[0] == NULL)
+			exit(g_status);
 	}
 	else
 	{
-		//absolute_PATHから探す
+		//relate absolute_PATHから探す
 		if (access(argv[0], F_OK) != 0)
 		{
-			ms_putendl_fd("minishell command not found", STDERR);
-			exit(127);
+			put_error_exit(argv[0], COMMAND_NOT_FOUND, NULL, TRUE);
 		}
 		if (access(argv[0], X_OK) != 0)
 		{
-			ms_putendl_fd("minishell permission denied", STDERR);
-			exit(126);
+			put_error_exit(argv[0], PERMISSION_DENIED, NULL, TRUE);
 		}
 	}
-	//if (argv[0] == NULL)
-	//	ms_error("minishell command not found");
 	if (execve(argv[0], argv, environ) < 0)
 	{
-		ms_putendl_fd(argv[0], STDERR_FILENO);
-		perror("execve");
-		ms_error("execve failed");
+		put_error_exit(argv[0], g_status, NULL, TRUE);
 	}
 }
