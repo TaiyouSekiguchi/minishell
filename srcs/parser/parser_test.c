@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser_test.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/06 19:16:51 by yjimpei          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 void end(void)__attribute__((destructor));
@@ -18,7 +6,6 @@ void end(void)
 {
 	system("leaks parser_test");
 }
-
 
 void	print_list(t_list *list, char *kind)
 {
@@ -85,18 +72,18 @@ void	test(char *command)
 
 int main(void)
 {
-	//test("");
-	//test("aaa");
-	//test("aaa   ");
-	//test("aaa bbb ccc      ");
-	//test("    aaa bbb ccc    ");
-	//test("echo taiyou");
-	//test("cat <infile -e | grep test | wc -l > outfile");
-	//test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
-	//test("> outfile");
+	test("");
+	test("aaa");
+	test("aaa   ");
+	test("aaa bbb ccc      ");
+	test("    aaa bbb ccc    ");
+	test("echo taiyou");
+	test("cat <infile -e | grep test | wc -l > outfile");
+	test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
+	test("> outfile");
 	test("cat < $TEST | grep test | wc -l >> outfile > outfile");
-	//test("cat Makefile | wc -l");
-	//test("cat <");
-	//test("> outfile |");
+	test("cat Makefile | wc -l");
+	test("cat <");
+	test("> outfile |");
 	return (0);
 }

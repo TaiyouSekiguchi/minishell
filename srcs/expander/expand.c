@@ -28,6 +28,7 @@ char	*expand(char *token, t_boolean in_heredoc)
 	t_quote	quote;
 	char	*start;
 	char	*tmp;
+	char	*val_name;
 
 	quote = NONE;
 	ret = ms_strdup("");
@@ -63,7 +64,9 @@ char	*expand(char *token, t_boolean in_heredoc)
 			}
 			else
 			{
-				tmp = getenv(get_val_name(token));
+				val_name = get_val_name(token);
+				tmp = getenv(val_name);
+				free(val_name);
 				if (tmp == NULL)
 					value = ms_strdup("");
 				else
