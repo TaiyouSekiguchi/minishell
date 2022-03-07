@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+void end(void)__attribute__((destructor));
+
+void end(void)
+{
+	system("leaks minishell");
+}
+
 static void	sigint_handler(int signum)
 {
 	if (signum == SIGINT)
