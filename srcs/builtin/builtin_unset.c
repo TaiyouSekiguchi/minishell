@@ -7,7 +7,7 @@ get_index_of_name_in_environ(char *name)
 	extern char		**environ;
 	char			**split;
 	char			*env_name;
-	char			*env_value;
+	//char			*env_value;
 	int				index;
 	size_t			i;
 
@@ -18,7 +18,7 @@ get_index_of_name_in_environ(char *name)
 	{
 		split = ms_split(environ[i], '=');
 		env_name = split[0];
-		env_value = split[1];
+		//env_value = split[1];
 		if (ms_strcmp(env_name, name) == 0)
 		{
 			index = i;

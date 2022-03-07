@@ -1,7 +1,4 @@
-
 #include "minishell.h"
-
-extern int g_status;
 
 static void	sigint_handler(int signum)
 {
@@ -43,7 +40,7 @@ pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 			}
 			close(infile_fd);
 			close(outfile_fd);
-			exit(g_status);
+			exit(get_g_status());
 		}
 		else
 		{
@@ -73,7 +70,7 @@ pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 
 			close(infile_fd);
 			close(outfile_fd);
-			exit(g_status);
+			exit(get_g_status());
 		}
 		else
 		{
@@ -157,7 +154,7 @@ void	executer(t_list *cmd_info_list, t_dir *d_info)
 		{
 			wait(&status);
 			signal(SIGINT, sigint_handler);
-			g_status = WEXITSTATUS(status);
+			set_g_status(WEXITSTATUS(status));
 		}
 	}
 }

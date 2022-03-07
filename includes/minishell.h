@@ -25,7 +25,7 @@
 # define CHILD 0
 
 
-int	g_status;
+//static int	g_status;
 
 typedef	enum e_boolean
 {
@@ -89,6 +89,8 @@ void		init_dir_info(t_dir *d_info);
 void		init_shlvl(void);
 void		call_export(char *env_name, char *value);
 void		put_error_exit(char *name, int status, char *msg, t_boolean is_exit);
+int			get_g_status(void);
+void		set_g_status(long num);
 //lexer
 void		lexer(t_list **list, char *cmd);
 int			is_quote(char c);

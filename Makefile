@@ -1,6 +1,6 @@
 CC						=	gcc
 CFLAGS					=	-Wall -Wextra -Werror
-#CFLAGS					+=	-g -fsanitize=leaks
+#CFLAGS					+=	-fsanitize=leak
 INCLUDE					=	-I includes -I ${shell brew --prefix readline}/include
 READLINE_LIB			=	-l readline -L ${shell brew --prefix readline}/lib
 LIBMS					=	./lib/libms/libms.a
@@ -61,7 +61,8 @@ UTILS_SRCS				=	srcs/utils/is_func.c\
 							srcs/utils/remove_quotation.c \
 							srcs/utils/init.c \
 							srcs/utils/call_export.c \
-							srcs/utils/put_error_exit.c
+							srcs/utils/put_error_exit.c\
+							srcs/utils/exit_status.c
 UTILS_OBJS				=	$(addprefix $(OBJS_DIR)/, $(UTILS_SRCS:.c=.o))
 #####################################
 

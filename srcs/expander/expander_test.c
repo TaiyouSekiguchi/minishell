@@ -1,13 +1,11 @@
 #include "minishell.h"
 
-int	g_status;
-
-void end(void)__attribute__((destructor));
+/*void end(void)__attribute__((destructor));
 
 void end(void)
 {
 	system("leaks expander_test");
-}
+}*/
 
 void	print_list(t_list *list, char *kind)
 {

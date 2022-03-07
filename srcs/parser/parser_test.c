@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-void end(void)__attribute__((destructor));
+/*void end(void)__attribute__((destructor));
 
 void end(void)
 {
 	system("leaks parser_test");
-}
+}*/
 
 void	print_list(t_list *list, char *kind)
 {

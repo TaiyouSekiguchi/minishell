@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 16:10:42 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/06 17:44:06 by yjimpei          ###   ########.fr       */
+/*   Updated: 2022/03/07 17:56:39 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		syntax_check(t_list	*tokens)
 		{
 			if (current->next == NULL || token_kind(current->next->content) != CMD)
 			{
-				put_error_exit(NULL, g_status, SYNTAX_ERROR_MSG, FALSE);
+				put_error_exit(NULL, get_g_status(), SYNTAX_ERROR_MSG, FALSE);
 				return (0);
 			}
 		}

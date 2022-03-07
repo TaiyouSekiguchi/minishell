@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-extern int g_status;
-
 static int	is_name(char c)
 {
 	if (ms_isdigit(c) || ms_isalpha(c) || c == '_')
@@ -54,7 +52,7 @@ char	*expand(char *token, t_boolean in_heredoc)
 			token++;
 			if (*token == '?')
 			{
-				value = ms_itoa(g_status);
+				value = ms_itoa(get_g_status());
 				token++;
 			}
 			else if (*token >= '0' && *token <= '9')

@@ -18,23 +18,38 @@ static void	sigint_handler(int signum)
 	}
 }
 
-void	do_process(char *str, t_dir *d_info)
+void	do_process(char *command, t_dir *d_info)
 {
-	t_list	*tokens;
-	t_list	*cmd_info_list;
+	t_list		*token_list;
+	t_list		*cmd_info_list;
+	t_list		*current;
+	t_cmd_info	*cmd_info;
 
-	if (str[0] == '\0')
+	if (command[0] == '\0')
 		return ;
-	tokens = NULL;
-	lexer(&tokens, str);
-	if (tokens == NULL)
+	token_list = NULL;
+	lexer(&token_list, command);
+	if (token_list == NULL)
 		return ;
 	cmd_info_list = NULL;
-	parser(&cmd_info_list, tokens);
+	parser(&cmd_info_list, token_list);
 	if (cmd_info_list == NULL)
 		return ;
 	expander(cmd_info_list);
 	executer(cmd_info_list, d_info);
+
+	//free part
+	ms_lstclear(&token_list, free);
+	current = cmd_info_list;
+	while (current != NULL)
+	{
+		cmd_info = current->content;
+		ms_lstclear(&(cmd_info->infile), free);
+		ms_lstclear(&(cmd_info->cmd), free);
+		ms_lstclear(&(cmd_info->outfile), free);
+		current = current->next;
+	}
+	ms_lstclear(&(cmd_info_list), free);
 }
 
 int	main(void)
@@ -61,5 +76,5 @@ int	main(void)
 	free(input_line);
 	free(info.pwd);
 	free(info.old_pwd);
-	return (g_status);
+	return (get_g_status());
 }
