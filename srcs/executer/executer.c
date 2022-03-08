@@ -47,6 +47,7 @@ pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 			close(infile_fd);
 			close(outfile_fd);
 			close(STDIN);
+			open("/dev/tty", O_RDONLY);
 		}
 	}
 	else
@@ -104,7 +105,7 @@ static int	return_status(int status)
 		return (1);
 }
 
-void	exec_process(t_list *cmd_info_list, t_dir *d_info)
+static int	exec_process(t_list *cmd_info_list, t_dir *d_info)
 {
 	pid_t	ret_pid;
 	pid_t	last_pid;
@@ -127,14 +128,14 @@ void	exec_process(t_list *cmd_info_list, t_dir *d_info)
 			last_status = status;
 	}
 
-	exit(return_status(last_status));
+	return (return_status(last_status));
 }
 
 void	executer(t_list *cmd_info_list, t_dir *d_info)
 {
 	t_cmd_info	*first_cmd_info;
-	pid_t		pid;
-	int			status;
+	//pid_t		pid;
+	//int			status;
 
 	first_cmd_info = cmd_info_list->content;
 	if (is_builtin(first_cmd_info->cmd->content)
@@ -145,6 +146,9 @@ void	executer(t_list *cmd_info_list, t_dir *d_info)
 	else
 	{
 		signal(SIGINT, SIG_IGN);
+		set_g_status(exec_process(cmd_info_list, d_info));
+		signal(SIGINT, sigint_handler);
+		/*signal(SIGINT, SIG_IGN);
 		pid = fork();
 		if (pid == CHILD)
 		{
@@ -155,6 +159,6 @@ void	executer(t_list *cmd_info_list, t_dir *d_info)
 			wait(&status);
 			signal(SIGINT, sigint_handler);
 			set_g_status(WEXITSTATUS(status));
-		}
+		}*/
 	}
 }
