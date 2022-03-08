@@ -25,7 +25,7 @@ static t_boolean	exist_quote(char *word)
 }
 
 void
-heredoc_loop(int fd, char *token)
+heredoc_loop(int fd, char *token, char **my_env)
 {
 	char		*word;
 	char		*line;
@@ -41,7 +41,7 @@ heredoc_loop(int fd, char *token)
 			break ;
 
 		if (quote == FALSE)
-			line = expand(line, TRUE);
+			line = expand(line, TRUE, my_env);
 
 		ms_putendl_fd(line, fd);
 		free(line);
@@ -50,7 +50,7 @@ heredoc_loop(int fd, char *token)
 	free(line);
 }
 
-int	heredoc_open(char *token)
+int	heredoc_open(char *token, char **my_env)
 {
 	int		fd;
 	char	*tty;
@@ -73,7 +73,7 @@ int	heredoc_open(char *token)
 		free(tmp_file_name);
 		put_error_exit(tmp_file_name, get_g_status(), NULL, FALSE);
 	}
-	heredoc_loop(fd, token);
+	heredoc_loop(fd, token, my_env);
 	close(fd);
 
 	fd = open(tmp_file_name, O_RDONLY);

@@ -156,8 +156,8 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 			d_info->old_pwd = ms_strdup(d_info->pwd);
 			free(d_info->pwd);
 			d_info->pwd = ms_strdup(new_pwd);
-			call_export("PWD", d_info->pwd);
-			call_export("OLDPWD", d_info->old_pwd);
+			call_export("PWD", d_info->pwd, &d_info->my_env);
+			call_export("OLDPWD", d_info->old_pwd, &d_info->my_env);
 		}
 		free(new_pwd);
 	}

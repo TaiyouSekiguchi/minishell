@@ -35,7 +35,7 @@ void	do_process(char *command, t_dir *d_info)
 	parser(&cmd_info_list, token_list);
 	if (cmd_info_list == NULL)
 		return ;
-	expander(cmd_info_list);
+	expander(cmd_info_list, d_info->my_env);
 	executer(cmd_info_list, d_info);
 
 	//free part
@@ -52,13 +52,27 @@ void	do_process(char *command, t_dir *d_info)
 	ms_lstclear(&(cmd_info_list), free);
 }
 
+void	my_env_print(char **my_env)
+{
+	int i;
+
+	i = 0;
+	while (my_env[i] != NULL)
+	{
+		ms_putendl_fd(my_env[i], STDOUT);
+		i++;
+	}
+}
+
 int	main(void)
 {
 	char	*input_line;
 	t_dir	info;
 
 	init_dir_info(&info);
-	init_shlvl();
+	init_my_env(&info);
+	//my_env_print(info.my_env);
+	init_shlvl(&info.my_env);
 
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);

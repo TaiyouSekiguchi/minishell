@@ -80,14 +80,16 @@ typedef struct s_dir
 {
 	char	*pwd;
 	char	*old_pwd;
+	char	**my_env;
 }				t_dir;
 
 //readline
 char		*rl_gets(void);
 //utils
 void		init_dir_info(t_dir *d_info);
-void		init_shlvl(void);
-void		call_export(char *env_name, char *value);
+void		init_shlvl(char ***my_env);
+void		init_my_env(t_dir *d_info);
+void		call_export(char *env_name, char *value, char ***my_env);
 void		put_error_exit(char *name, int status, char *msg, t_boolean is_exit);
 int			get_g_status(void);
 void		set_g_status(long num);
@@ -105,9 +107,9 @@ void		parser(t_list **cmds, t_list *tokens);
 int			syntax_check(t_list *tokens);
 int			token_kind(char *token);
 //expander
-void		expander(t_list *cmds);
-char		*expand(char *token, t_boolean in_heredoc);
-char		*search_environ(char *name);
+void		expander(t_list *cmds, char **my_env);
+char		*expand(char *token, t_boolean in_heredoc, char **my_env);
+char		*search_environ(char **my_env, char *name);
 char		*remove_quotation(char *token);
 //executer
 void		executer(t_list *cmds, t_dir *d_info);
@@ -115,22 +117,22 @@ void		do_exec(t_cmd_info *cmd_info, t_dir *d_info);
 void		do_redirect(int infile_fd, int outfile_fd);
 void		do_pipe(t_list *cmds, int fd);
 int			infile_open(char *token);
-void		heredoc_loop(int fd, char *token);
-int			heredoc_open(char *token);
+void		heredoc_loop(int fd, char *token, char **my_env);
+int			heredoc_open(char *token, char **my_env);
 int			outfile_open(char *token);
 int			append_open(char *token);
-int			redirect_file_open(char *token);
-int			get_redirect_fd(t_list *token_list);
+int			redirect_file_open(char *token, char **my_env);
+int			get_redirect_fd(t_list *token_list, char **my_env);
 void		do_redirect(int infile_fd, int outfile_fd);
 //builtin
 int			is_builtin(char *cmd_name);
 int			do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info);
 int			builtin_echo(int argc, char *argv[]);
 int			builtin_cd(int argc, char *argv[], t_dir *d_info);
-int			builtin_export(int argc, char *argv[]);
-int			builtin_unset(int argc, char *argv[]);
+int			builtin_export(int argc, char *argv[], char ***environ);
+int			builtin_unset(int argc, char *argv[], char ***environ);
 int			builtin_pwd(t_dir *d_info);
-int			builtin_env(void);
+int			builtin_env(char **environ);
 int			builtin_exit(int argc, char *argv[]);
 
 #endif

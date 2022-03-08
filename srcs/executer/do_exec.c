@@ -60,7 +60,7 @@ char	*cmd_path_search(char *cmd_name)
 void
 do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 {
-	extern char		**environ;
+	//extern char		**environ;
 	char			**argv;
 	size_t			cmd_token_count;
 
@@ -93,7 +93,7 @@ do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 			put_error_exit(argv[0], PERMISSION_DENIED, NULL, TRUE);
 		}
 	}
-	if (execve(argv[0], argv, environ) < 0)
+	if (execve(argv[0], argv, d_info->my_env) < 0)
 	{
 		put_error_exit(argv[0], get_g_status(), NULL, TRUE);
 	}

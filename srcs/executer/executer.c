@@ -19,9 +19,9 @@ pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 	int	outfile_fd;
 
 	//タイミング制御のため前に切り出した
-	infile_fd = get_redirect_fd(cmd_info->infile);
+	infile_fd = get_redirect_fd(cmd_info->infile, d_info->my_env);
 	if (infile_fd != ERROR_FD)
-		outfile_fd = get_redirect_fd(cmd_info->outfile);
+		outfile_fd = get_redirect_fd(cmd_info->outfile, d_info->my_env);
 	else
 		outfile_fd = ERROR_FD;
 
