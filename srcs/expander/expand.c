@@ -42,12 +42,11 @@ char	*expand(char *token, t_boolean in_heredoc)
 			token++;
 		else
 		{
-			if (!is_name(*(token + 1)))
+			if (*(token + 1) != '?' && !is_name(*(token + 1)))
 			{
 				token++;
 				continue ;
 			}
-
 			ret = ms_strappend(ret, ms_strndup(start, token - start));
 			token++;
 			if (*token == '?')
