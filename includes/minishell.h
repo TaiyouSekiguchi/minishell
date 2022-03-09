@@ -106,7 +106,7 @@ int			token_kind(char *token);
 //expander
 void		expander(t_list *cmds, char **my_env);
 char		*expand(char *token, t_boolean in_heredoc, char **my_env);
-char		*search_environ(char **my_env, char *name);
+char		*ms_getenv(char **my_env, char *key);
 char		*remove_quotation(char *token);
 //executer
 void		executer(t_list *cmds, t_dir *d_info);

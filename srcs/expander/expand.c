@@ -63,9 +63,10 @@ char	*expand(char *token, t_boolean in_heredoc, char **my_env)
 			else
 			{
 				val_name = get_val_name(token);
-				value = search_environ(my_env, val_name);
-				//tmp = getenv(val_name);
+				value = ms_getenv(my_env, val_name);
 				free(val_name);
+				if (value == NULL)
+					value = ms_strdup("");
 
 				/*if (tmp == NULL)
 					value = ms_strdup("");

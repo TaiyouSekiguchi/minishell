@@ -11,29 +11,13 @@ static void	sigint_handler(int signum)
 	}
 }
 
-void	do_process(char *command, t_dir *d_info)
+static void	do_process_free(t_list **token_list, t_list **cmd_info_list)
 {
-	t_list		*token_list;
-	t_list		*cmd_info_list;
 	t_list		*current;
 	t_cmd_info	*cmd_info;
 
-	if (command[0] == '\0')
-		return ;
-	token_list = NULL;
-	lexer(&token_list, command);
-	if (token_list == NULL)
-		return ;
-	cmd_info_list = NULL;
-	parser(&cmd_info_list, token_list);
-	if (cmd_info_list == NULL)
-		return ;
-	expander(cmd_info_list, d_info->my_env);
-	executer(cmd_info_list, d_info);
-
-	//free part
-	ms_lstclear(&token_list, free);
-	current = cmd_info_list;
+	ms_lstclear(token_list, free);
+	current = *cmd_info_list;
 	while (current != NULL)
 	{
 		cmd_info = current->content;
@@ -42,19 +26,31 @@ void	do_process(char *command, t_dir *d_info)
 		ms_lstclear(&(cmd_info->outfile), free);
 		current = current->next;
 	}
-	ms_lstclear(&(cmd_info_list), free);
+	ms_lstclear(cmd_info_list, free);
 }
 
-void	my_env_print(char **my_env)
+static void	do_process(char *command, t_dir *d_info)
 {
-	int i;
+	t_list		*token_list;
+	t_list		*cmd_info_list;
 
-	i = 0;
-	while (my_env[i] != NULL)
-	{
-		ms_putendl_fd(my_env[i], STDOUT);
-		i++;
-	}
+	if (command[0] == '\0')
+		return ;
+
+	token_list = NULL;
+	lexer(&token_list, command);
+	if (token_list == NULL)
+		return ;
+
+	cmd_info_list = NULL;
+	parser(&cmd_info_list, token_list);
+	if (cmd_info_list == NULL)
+		return ;
+
+	expander(cmd_info_list, d_info->my_env);
+	executer(cmd_info_list, d_info);
+
+	do_process_free(&token_list, &cmd_info_list);
 }
 
 int	main(void)
@@ -62,6 +58,7 @@ int	main(void)
 	char	*input_line;
 	t_dir	info;
 
+	//init関数としてまとめたい
 	init_dir_info(&info);
 	init_my_env(&info);
 	init_shlvl(&info.my_env);
@@ -72,15 +69,16 @@ int	main(void)
 	input_line = NULL;
 	while (1)
 	{
-		//input_line free??
 		input_line = rl_gets();
 		do_process(input_line, &info);
 		if (ms_strcmp(input_line, "clear_history") == 0)
 			clear_history();
 	}
 
+	//main freeとしてまとめたい
 	free(input_line);
 	free(info.pwd);
 	free(info.old_pwd);
+
 	return (get_g_status());
 }

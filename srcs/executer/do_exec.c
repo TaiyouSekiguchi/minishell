@@ -28,7 +28,10 @@ char	*cmd_path_search(char *cmd_name, char **my_env)
 	char	*tmp;
 	char	*full_path;
 
-	env_path = search_environ(my_env, "PATH");
+	env_path = ms_getenv(my_env, "PATH");
+	if (env_path == NULL)
+		return (NULL);
+
 	split_env_path = ms_split(env_path, ':');
 	if (split_env_path == NULL)
 		return (NULL);
