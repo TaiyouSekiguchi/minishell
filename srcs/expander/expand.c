@@ -1,12 +1,5 @@
 #include "minishell.h"
 
-static int	is_name(char c)
-{
-	if (ms_isdigit(c) || ms_isalpha(c) || c == '_')
-		return (TRUE);
-	return (FALSE);
-}
-
 char	*get_val_name(char *token)
 {
 	char	*val_name;
@@ -26,7 +19,6 @@ char	*expand(char *token, t_boolean in_heredoc, char **my_env)
 	char	*ret;
 	t_quote	quote;
 	char	*start;
-	//char	*tmp;
 	char	*val_name;
 
 	quote = NONE;
@@ -68,10 +60,6 @@ char	*expand(char *token, t_boolean in_heredoc, char **my_env)
 				if (value == NULL)
 					value = ms_strdup("");
 
-				/*if (tmp == NULL)
-					value = ms_strdup("");
-				else
-					value = ms_strdup(tmp);*/
 				while (*token != '\0' && is_name(*token))
 					token++;
 			}

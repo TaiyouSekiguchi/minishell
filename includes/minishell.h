@@ -98,6 +98,7 @@ int			is_delimiter(char c);
 int			is_metachar(char c);
 int			is_redirect(char c1, char c2);
 int			is_heredoc(char *token);
+int			is_name(char c);
 t_quote		quote_set(char c, t_quote quote);
 //parser
 void		parser(t_list **cmds, t_list *tokens);
