@@ -24,8 +24,21 @@ static t_boolean	exist_quote(char *word)
 	return (FALSE);
 }
 
-void
-heredoc_loop(int fd, char *token, char **my_env)
+static char	*rl_gets_heredoc(void)
+{
+	static char *line_read = (char *)NULL;
+
+	if (line_read)
+	{
+		free(line_read);
+		line_read = (char *)NULL;
+	}
+
+	line_read = readline("heredoc > ");
+	return (line_read);
+}
+
+void	heredoc_loop(int fd, char *token, char **my_env)
 {
 	char		*word;
 	char		*line;
@@ -36,7 +49,8 @@ heredoc_loop(int fd, char *token, char **my_env)
 	word = remove_quotation(word);
 	while(1)
 	{
-		line = readline("heredoc > ");
+		line = rl_gets_heredoc();
+		//line = readline("heredoc > ");
 		if (line == NULL || ms_strcmp(line, word) == 0)
 			break ;
 

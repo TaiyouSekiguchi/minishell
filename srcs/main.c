@@ -1,12 +1,5 @@
 #include "minishell.h"
 
-/*void end(void)__attribute__((destructor));
-
-void end(void)
-{
-	system("leaks minishell");
-}*/
-
 static void	sigint_handler(int signum)
 {
 	if (signum == SIGINT)
@@ -44,8 +37,8 @@ void	do_process(char *command, t_dir *d_info)
 	while (current != NULL)
 	{
 		cmd_info = current->content;
-		ms_lstclear(&(cmd_info->infile), free);
 		ms_lstclear(&(cmd_info->cmd), free);
+		ms_lstclear(&(cmd_info->infile), free);
 		ms_lstclear(&(cmd_info->outfile), free);
 		current = current->next;
 	}
@@ -71,7 +64,6 @@ int	main(void)
 
 	init_dir_info(&info);
 	init_my_env(&info);
-	//my_env_print(info.my_env);
 	init_shlvl(&info.my_env);
 
 	signal(SIGINT, sigint_handler);

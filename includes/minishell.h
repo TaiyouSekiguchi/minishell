@@ -24,9 +24,6 @@
 
 # define CHILD 0
 
-
-//static int	g_status;
-
 typedef	enum e_boolean
 {
 	TRUE = 1,

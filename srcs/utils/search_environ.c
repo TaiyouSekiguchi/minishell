@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 14:12:49 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/08 17:07:36 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/09 14:17:51 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*search_environ(char **my_env, char *name)
 	row = 0;
 	while (my_env[row] != NULL)
 	{
-		printf("my_env[%d] : %s\n", row, my_env[row]);
+		//printf("my_env[%d] : %s\n", row, my_env[row]);
 		split = ms_split(my_env[row], '=');
 		if (ms_strcmp(split[0], name) == 0)
 		{
