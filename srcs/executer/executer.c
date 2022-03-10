@@ -133,6 +133,8 @@ static int	exec_process(t_list *cmd_info_list, t_dir *d_info)
 void	executer(t_list *cmd_info_list, t_dir *d_info)
 {
 	t_cmd_info	*first_cmd_info;
+	int			infile_fd;
+	int			outfile_fd;
 	//pid_t		pid;
 	//int			status;
 
@@ -140,7 +142,32 @@ void	executer(t_list *cmd_info_list, t_dir *d_info)
 	if (is_builtin(first_cmd_info->cmd->content)
 		&& ms_lstsize(cmd_info_list) == 1)
 	{
+		infile_fd = get_redirect_fd(first_cmd_info->infile, d_info->my_env);
+		if (infile_fd != ERROR_FD)
+			outfile_fd = get_redirect_fd(first_cmd_info->outfile, d_info->my_env);
+		else
+			outfile_fd = ERROR_FD;
+		do_redirect(infile_fd, outfile_fd);
+
 		do_exec(first_cmd_info, d_info);
+
+		if (!isatty(0) && !isatty(1))
+		{
+			close(0);
+			close(1);
+			open("/dev/tty", O_RDONLY);
+			open("/dev/tty", O_WRONLY);
+		}
+		else if (!isatty(0))
+		{
+			close(0);
+			open("/dev/tty", O_RDONLY);
+		}
+		else
+		{
+			close(1);
+			open("/dev/tty", O_WRONLY);
+		}
 	}
 	else
 	{
