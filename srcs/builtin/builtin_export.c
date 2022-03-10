@@ -1,24 +1,21 @@
 
 #include "minishell.h"
 
-static int	get_index_of_name_in_environ(char *name)
+static int	get_index_of_key(char *key, char **environ)
 {
-	extern char		**environ;
+	//extern char		**environ;
 	char			**split;
-	char			*env_name;
-//	char			*env_value;
+	char			*env_key;
 	int				index;
 	size_t			i;
 
 	index = -1;
-	split = NULL;
 	i = 0;
 	while (environ[i] != NULL)
 	{
 		split = ms_split(environ[i], '=');
-		env_name = split[0];
-	//	env_value = split[1];
-		if (ms_strcmp(env_name, name) == 0)
+		env_key = split[0];
+		if (ms_strcmp(env_key, key) == 0)
 		{
 			index = i;
 			ms_split_free(split);
@@ -31,64 +28,79 @@ static int	get_index_of_name_in_environ(char *name)
 	return (index);
 }
 
-static char	*get_variable_name(char *argv)
+static char	*get_key(char *argv)
 {
+	char	*key;
 	char	**split;
-	char	*name;
 
 	split = ms_split(argv, '=');
-	name = ms_strdup(split[0]);
+	key = ms_strdup(split[0]);
 	ms_split_free(split);
-	return (name);
+	return (key);
 }
 
 
-static int	count_environ_variable(void)
+static int	get_environ_row(char **environ)
 {
-	extern char	**environ;
-	int			i;
+	//extern char	**environ;
+	int		row;
+
+	row = 0;
+	while (environ[row] != NULL)
+		row++;
+	return (row);
+}
+
+void	free_environ(char **environ)
+{
+	int		i;
 
 	i = 0;
 	while (environ[i] != NULL)
+	{
+		free(environ[i]);
 		i++;
-	return (i);
+	}
+	free(environ);
 }
 
-int	builtin_export(int argc, char *argv[])
+int	builtin_export(int argc, char *argv[], char ***environ)
 {
-	extern char	**environ;
-	char		*name;
+	//extern char	**environ;
+	char		*key;
 	int			index;
-	int			len;
+	int			row;
 	char		**new_env;
 	int			i;
 
 	if (argc == 1)
 		return (1);
 
-	name = get_variable_name(argv[1]);
-	index = get_index_of_name_in_environ(name);
-	free(name);
+	//validation
+
+	key = get_key(argv[1]);
+	index = get_index_of_key(key, *environ);
+	free(key);
 	if (index == -1)
 	{
-		len = count_environ_variable();
-		new_env = (char **)ms_xmalloc(sizeof(char *) * (len + 1 + 1));
+		row = get_environ_row(*environ);
+		new_env = (char **)ms_xmalloc(sizeof(char *) * (row + 1 + 1));
 		i = 0;
-		while (environ[i] != NULL)
+		while ((*environ)[i] != NULL)
 		{
-			new_env[i] = environ[i];
+			new_env[i] = ms_strdup((*environ)[i]);
 			i++;
 		}
 		new_env[i] = ms_strdup(argv[1]);
 		i++;
 		new_env[i] = NULL;
-		//free(environ)???
-		environ = new_env;
+		free_environ(*environ);
+		*environ = new_env;
 	}
 	else
 	{
-		//free(environ[index]);
-		environ[index] = ms_strdup(argv[1]);
+		free((*environ)[index]);
+		(*environ)[index] = ms_strdup(argv[1]);
 	}
 	return (0);
 }

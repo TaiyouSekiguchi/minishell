@@ -19,13 +19,14 @@ char	*get_val_name(char *token)
 	return (val_name);
 }
 
-char	*expand(char *token, t_boolean in_heredoc)
+
+char	*expand(char *token, t_boolean in_heredoc, char **my_env)
 {
 	char	*value;
 	char	*ret;
 	t_quote	quote;
 	char	*start;
-	char	*tmp;
+	//char	*tmp;
 	char	*val_name;
 
 	quote = NONE;
@@ -62,12 +63,14 @@ char	*expand(char *token, t_boolean in_heredoc)
 			else
 			{
 				val_name = get_val_name(token);
-				tmp = getenv(val_name);
+				value = search_environ(my_env, val_name);
+				//tmp = getenv(val_name);
 				free(val_name);
-				if (tmp == NULL)
+
+				/*if (tmp == NULL)
 					value = ms_strdup("");
 				else
-					value = ms_strdup(tmp);
+					value = ms_strdup(tmp);*/
 				while (*token != '\0' && is_name(*token))
 					token++;
 			}

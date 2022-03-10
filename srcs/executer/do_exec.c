@@ -11,7 +11,7 @@ char	**make_argv_for_execve(t_list *cmd, size_t cmd_token_count)
 	i = 0;
 	while (current != NULL)
 	{
-		argv[i] = current->content;
+		argv[i] = ms_strdup(current->content);
 		current = current->next;
 		i++;
 	}
@@ -19,48 +19,60 @@ char	**make_argv_for_execve(t_list *cmd, size_t cmd_token_count)
 	return (argv);
 }
 
-char	*cmd_path_search(char *cmd_name)
+char	*cmd_path_search(char *cmd_name, char **my_env)
 {
-	char	**env_path_lst;
+	char	*env_path;
+	char	**split_env_path;
+	int		exit_status;
 	int		i;
 	char	*tmp;
-	char	*tmp2;
-	int		exit_status;
+	char	*full_path;
 
-	env_path_lst = ms_split(getenv("PATH"), ':');
-	if (env_path_lst == NULL)
+	env_path = search_environ(my_env, "PATH");
+	split_env_path = ms_split(env_path, ':');
+	if (split_env_path == NULL)
 		return (NULL);
-	i = 0;
+
 	exit_status = COMMAND_NOT_FOUND;
-	while (env_path_lst[i] != NULL)
+	i = 0;
+	while (split_env_path[i] != NULL)
 	{
-		tmp = ms_strjoin(env_path_lst[i], "/");
-		tmp2 = ms_strjoin(tmp, cmd_name);
-		if (access(tmp2, F_OK) == 0)
+		tmp = ms_strjoin(split_env_path[i], "/");
+		full_path = ms_strjoin(tmp, cmd_name);
+		if (access(full_path, F_OK) == 0)
 		{
-			if (access(tmp2, X_OK) == 0)
+			if (access(full_path, X_OK) == 0)
 			{
+				free(env_path);
+				ms_split_free(split_env_path);
 				free(tmp);
-				ms_split_free(env_path_lst);
-				return (tmp2);
+				free(cmd_name);
+				return (full_path);
 			}
 			else
 				exit_status = PERMISSION_DENIED;
 		}
+		free(tmp);
+		free(full_path);
 		i++;
 	}
-	set_g_status(exit_status);
-	ms_split_free(env_path_lst);
+
+	free(env_path);
+	ms_split_free(split_env_path);
 	free(tmp);
-	free(tmp2);
+	free(full_path);
+
+	set_g_status(exit_status);
+
 	put_error_exit(cmd_name, get_g_status(), NULL, FALSE);
+	free(cmd_name);
+
 	return (NULL);
 }
 
-void
-do_exec(t_cmd_info *cmd_group, t_dir *d_info)
+void	do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 {
-	extern char		**environ;
+	//extern char		**environ;
 	char			**argv;
 	size_t			cmd_token_count;
 
@@ -77,7 +89,7 @@ do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 	else if (ms_strchr(argv[0], '/') == NULL)
 	{
 		//$PATHから探す
-		argv[0] = cmd_path_search(argv[0]);
+		argv[0] = cmd_path_search(argv[0], d_info->my_env);
 		if (argv[0] == NULL)
 			exit(get_g_status());
 	}
@@ -93,8 +105,9 @@ do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 			put_error_exit(argv[0], PERMISSION_DENIED, NULL, TRUE);
 		}
 	}
-	if (execve(argv[0], argv, environ) < 0)
+	if (execve(argv[0], argv, d_info->my_env) < 0)
 	{
+		ms_split_free(argv);
 		put_error_exit(argv[0], get_g_status(), NULL, TRUE);
 	}
 }

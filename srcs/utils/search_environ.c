@@ -6,23 +6,36 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 14:12:49 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/29 16:50:57 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/09 14:17:51 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*search_environ(char *name)
+void	env_print(char **my_env)
 {
-	extern char		**environ;
-	char			*ret;
-	int				row;
-	char			**split;
+	int	i;
 
-	row = 0;
-	while (environ[row] != NULL)
+	i = 0;
+	while (my_env[i] != NULL)
 	{
-		split = ms_split(environ[row], '=');
+		ms_putendl_fd(my_env[i], STDOUT);
+		i++;
+	}
+}
+
+char	*search_environ(char **my_env, char *name)
+{
+	char	*ret;
+	int		row;
+	char	**split;
+
+	//env_print(my_env);
+	row = 0;
+	while (my_env[row] != NULL)
+	{
+		//printf("my_env[%d] : %s\n", row, my_env[row]);
+		split = ms_split(my_env[row], '=');
 		if (ms_strcmp(split[0], name) == 0)
 		{
 			ret = ms_strdup(split[1]);

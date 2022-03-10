@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-int	redirect_file_open(char *file_name)
+int	redirect_file_open(char *file_name, char **my_env)
 {
 	int		fd;
 
 	if (file_name[0] == '<' && file_name[1] == ' ')
 		fd = infile_open(file_name);
 	else if (file_name[0] == '<' && file_name[1] == '<')
-		fd = heredoc_open(file_name);
+		fd = heredoc_open(file_name, my_env);
 	else if (file_name[0] == '>' && file_name[1] == ' ')
 		fd = outfile_open(file_name);
 	else if (file_name[0] == '>' && file_name[1] == '>')
@@ -18,7 +18,7 @@ int	redirect_file_open(char *file_name)
 	return (fd);
 }
 
-int	get_redirect_fd(t_list *file_list)
+int	get_redirect_fd(t_list *file_list, char **my_env)
 {
 	int		fd;
 	char	*file_name;
@@ -30,7 +30,7 @@ int	get_redirect_fd(t_list *file_list)
 	while (file_list != NULL)
 	{
 		file_name = file_list->content;
-		fd = redirect_file_open(file_name);
+		fd = redirect_file_open(file_name, my_env);
 		if (fd == ERROR_FD)
 			break ;
 		file_list = file_list->next;

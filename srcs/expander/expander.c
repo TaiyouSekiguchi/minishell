@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 16:54:58 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/04 16:53:08 by yjimpei          ###   ########.fr       */
+/*   Updated: 2022/03/08 15:41:49 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_list	*cmd_relexer(t_list *old_cmd)
 	return (new_cmd);
 }
 
-static void	expand_cmd_info_element(t_list **elem_list)
+static void	expand_cmd_info_element(t_list **elem_list, char **my_env)
 {
 	t_list	*current;
 	char	*token;
@@ -43,7 +43,7 @@ static void	expand_cmd_info_element(t_list **elem_list)
 		token = current->content;
 		if (!is_heredoc(token))
 		{
-			after_token = expand(token, FALSE);
+			after_token = expand(token, FALSE, my_env);
 			free(token);
 			after_token = remove_quotation(after_token);
 			current->content = after_token;
@@ -52,15 +52,15 @@ static void	expand_cmd_info_element(t_list **elem_list)
 	}
 }
 
-static void	expand_cmd_info(t_cmd_info **cmd_info)
+static void	expand_cmd_info(t_cmd_info **cmd_info, char **my_env)
 {
-	expand_cmd_info_element(&(*cmd_info)->cmd);
-	expand_cmd_info_element(&(*cmd_info)->infile);
-	expand_cmd_info_element(&(*cmd_info)->outfile);
+	expand_cmd_info_element(&(*cmd_info)->cmd, my_env);
+	expand_cmd_info_element(&(*cmd_info)->infile, my_env);
+	expand_cmd_info_element(&(*cmd_info)->outfile, my_env);
 	(*cmd_info)->cmd = cmd_relexer((*cmd_info)->cmd);
 }
 
-void	expander(t_list *cmd_info_list)
+void	expander(t_list *cmd_info_list, char **my_env)
 {
 	t_list		*current;
 	t_cmd_info	*cmd_info;
@@ -69,7 +69,7 @@ void	expander(t_list *cmd_info_list)
 	while (current != NULL)
 	{
 		cmd_info = current->content;
-		expand_cmd_info(&cmd_info);
+		expand_cmd_info(&cmd_info, my_env);
 		current = current->next;
 	}
 }

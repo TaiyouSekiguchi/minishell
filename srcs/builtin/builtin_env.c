@@ -1,9 +1,9 @@
 
 #include "minishell.h"
 
-int	builtin_env(void)
+int	builtin_env(char **environ)
 {
-	extern char **environ;
+	//extern char **environ;
 	size_t		i;
 
 	i = 0;
