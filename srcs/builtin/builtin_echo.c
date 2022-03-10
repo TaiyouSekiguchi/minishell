@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 int	builtin_echo(int argc, char *argv[])

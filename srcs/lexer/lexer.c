@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 20:51:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/06 17:44:23 by yjimpei          ###   ########.fr       */
+/*   Updated: 2022/03/07 17:57:01 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	lexer(t_list **tokens, char *cmd)
 	}
 	if (quote != NONE)
 	{
-		put_error_exit(NULL, g_status, SYNTAX_ERROR_MSG, FALSE);
+		put_error_exit(NULL, get_g_status(), SYNTAX_ERROR_MSG, FALSE);
 		ms_lstclear(tokens, free);
 		*tokens = NULL;
 	}

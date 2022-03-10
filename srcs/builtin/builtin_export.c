@@ -1,13 +1,12 @@
 
 #include "minishell.h"
 
-static int
-get_index_of_name_in_environ(char *name)
+static int	get_index_of_name_in_environ(char *name)
 {
 	extern char		**environ;
 	char			**split;
 	char			*env_name;
-	char			*env_value;
+//	char			*env_value;
 	int				index;
 	size_t			i;
 
@@ -18,10 +17,11 @@ get_index_of_name_in_environ(char *name)
 	{
 		split = ms_split(environ[i], '=');
 		env_name = split[0];
-		env_value = split[1];
+	//	env_value = split[1];
 		if (ms_strcmp(env_name, name) == 0)
 		{
 			index = i;
+			ms_split_free(split);
 			break ;
 		}
 		i++;
@@ -31,8 +31,7 @@ get_index_of_name_in_environ(char *name)
 	return (index);
 }
 
-static char
-*get_variable_name(char *argv)
+static char	*get_variable_name(char *argv)
 {
 	char	**split;
 	char	*name;
@@ -44,8 +43,7 @@ static char
 }
 
 
-static int
-count_environ_variable(void)
+static int	count_environ_variable(void)
 {
 	extern char	**environ;
 	int			i;
@@ -56,22 +54,21 @@ count_environ_variable(void)
 	return (i);
 }
 
-int
-builtin_export(int argc, char *argv[])
+int	builtin_export(int argc, char *argv[])
 {
 	extern char	**environ;
-	char	*name;
-	int		index;
-
-	int		len;
-	char	**new_env;
-	int		i;
+	char		*name;
+	int			index;
+	int			len;
+	char		**new_env;
+	int			i;
 
 	if (argc == 1)
 		return (1);
 
 	name = get_variable_name(argv[1]);
 	index = get_index_of_name_in_environ(name);
+	free(name);
 	if (index == -1)
 	{
 		len = count_environ_variable();

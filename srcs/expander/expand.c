@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-extern int g_status;
-
 static int	is_name(char c)
 {
 	if (ms_isdigit(c) || ms_isalpha(c) || c == '_')
@@ -28,6 +26,7 @@ char	*expand(char *token, t_boolean in_heredoc)
 	t_quote	quote;
 	char	*start;
 	char	*tmp;
+	char	*val_name;
 
 	quote = NONE;
 	ret = ms_strdup("");
@@ -53,7 +52,7 @@ char	*expand(char *token, t_boolean in_heredoc)
 			token++;
 			if (*token == '?')
 			{
-				value = ms_itoa(g_status);
+				value = ms_itoa(get_g_status());
 				token++;
 			}
 			else if (*token >= '0' && *token <= '9')
@@ -63,7 +62,9 @@ char	*expand(char *token, t_boolean in_heredoc)
 			}
 			else
 			{
-				tmp = getenv(get_val_name(token));
+				val_name = get_val_name(token);
+				tmp = getenv(val_name);
+				free(val_name);
 				if (tmp == NULL)
 					value = ms_strdup("");
 				else

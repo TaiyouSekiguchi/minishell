@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-extern int g_status;
-
 int	redirect_file_open(char *file_name)
 {
 	int		fd;

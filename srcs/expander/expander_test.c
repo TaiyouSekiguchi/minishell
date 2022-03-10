@@ -1,18 +1,11 @@
-/************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expander_test.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/06 16:46:32 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-int	g_status;
+/*void end(void)__attribute__((destructor));
+
+void end(void)
+{
+	system("leaks expander_test");
+}*/
 
 void	print_list(t_list *list, char *kind)
 {
@@ -49,57 +42,72 @@ void	print_cmds(t_list *cmds)
 	}
 }
 
-void	test(char *str)
+void	test(char *command)
 {
-	t_list	*tokens;
-	t_list	*cmds;
+	t_list		*token_list;
+	t_list		*cmd_info_list;
+	t_list		*current;
+	t_cmd_info	*cmd_info;
 
 	printf("***********test************\n");
-	printf("[command] : %s\n", str);
-	tokens = NULL;
-	lexer(&tokens, str);
-	cmds = NULL;
-	parser(&cmds, tokens);
-	//print_cmds(cmds);
-	expander(cmds);
-	print_cmds(cmds);
+	printf("[command] : %s\n", command);
+	token_list = NULL;
+	lexer(&token_list, command);
+	cmd_info_list = NULL;
+	parser(&cmd_info_list, token_list);
+	//print_cmds(cmd_info_list);
+	expander(cmd_info_list);
+	print_cmds(cmd_info_list);
+
+	//free part
+	ms_lstclear(&token_list, free);
+	current = cmd_info_list;
+	while (current != NULL)
+	{
+		cmd_info = current->content;
+		ms_lstclear(&(cmd_info->infile), free);
+		ms_lstclear(&(cmd_info->cmd), free);
+		ms_lstclear(&(cmd_info->outfile), free);
+		current = current->next;
+	}
+	ms_lstclear(&(cmd_info_list), free);
 	printf("***********test************\n\n");
 }
 
 int main(void)
 {
-	//test("");
-	//test("aaa");
-	//test("aaa   ");
-	//test("aaa bbb ccc      ");
-	//test("    aaa bbb ccc    ");
-	//test("echo taiyou");
-	//test("cat <infile -e | grep test | wc -l > outfile");
-	//test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
-	//test("> outfile");
-	//test("cat $HOME < $HOME | grep test | wc -l >> outfile > outfile");
-	//test("cat \"-e $PWD\"");
-	//test("cat \'-e $OLDPWD\'");
-	//test("cat \'-e $HOME\"taiyou\"\'");
-	//test("cat \"-e $SHLVL\'taiyou\'\"");
-	//test("cat \'taiyou\'$HOME\'sekiguchi\'");
-	//test("cat $PATH");
-	//test("echo \"'$PATH'\"");
-	//test("echo \"'\\''$PATH'\"");
-	//test("echo \"\\'$PATH'\"");
-	//test("echo \"$USER '$TEST1'\"");
-	//test("echo '$'");
-	//test("echo '\"$PATH\"'");
-	//test("echo $TEST1");
-	//test("echo $TEST");
-	//test("echo $1TEST");
-	//test("echo $13TEST");
-	//test("echo $13TEST$$");
-	//test("echo $13TEST$$$");
-	//test("echo $+TEST");
-	//test("echo $!TEST");
-	//test("echo $ TEST");
-	//test("echo \'$1TEST\'");
+	test("");
+	test("aaa");
+	test("aaa   ");
+	test("aaa bbb ccc      ");
+	test("    aaa bbb ccc    ");
+	test("echo taiyou");
+	test("cat <infile -e | grep test | wc -l > outfile");
+	test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
+	test("> outfile");
+	test("cat $HOME < $HOME | grep test | wc -l >> outfile > outfile");
+	test("cat \"-e $PWD\"");
+	test("cat \'-e $OLDPWD\'");
+	test("cat \'-e $HOME\"taiyou\"\'");
+	test("cat \"-e $SHLVL\'taiyou\'\"");
+	test("cat \'taiyou\'$HOME\'sekiguchi\'");
+	test("cat $PATH");
+	test("echo \"'$PATH'\"");
+	test("echo \"'\\''$PATH'\"");
+	test("echo \"\\'$PATH'\"");
+	test("echo \"$USER '$TEST1'\"");
+	test("echo '$'");
+	test("echo '\"$PATH\"'");
+	test("echo $TEST1");
+	test("echo $TEST");
+	test("echo $1TEST");
+	test("echo $13TEST");
+	test("echo $13TEST$$");
+	test("echo $13TEST$$$");
+	test("echo $+TEST");
+	test("echo $!TEST");
+	test("echo $ TEST");
+	test("echo \'$1TEST\'");
 	test("cat <<<end");
 	test("cat <<<Makefile");
 	test("cat Makefile'");

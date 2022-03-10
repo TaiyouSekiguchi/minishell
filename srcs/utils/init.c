@@ -5,18 +5,23 @@ void	init_shlvl(void)
 	char		*env_shlvl;
 	t_boolean	is_minus;
 	int			num;
+	char		*str_num;
+	char		*save;
 
 	if (getenv("SHLVL") == NULL)
 		call_export("SHLVL", "1");
 	else
 	{
 		env_shlvl = ms_strdup(getenv("SHLVL"));
+		save = env_shlvl;
 		if (ms_strlen(env_shlvl) == 1)
 		{
 			if (*env_shlvl >= '0' && *env_shlvl <= '9')
 			{
 				num = ms_atoi(env_shlvl) + 1;
-				call_export("SHLVL", ms_itoa(num));
+				str_num = ms_itoa(num);
+				call_export("SHLVL", str_num);
+				free(str_num);
 			}
 			else
 				call_export("SHLVL", "1");
@@ -40,9 +45,12 @@ void	init_shlvl(void)
 			else
 			{
 				num = ms_atoi(env_shlvl) + 1;
-				call_export("SHLVL", ms_itoa(num));
+				str_num = ms_itoa(num);
+				call_export("SHLVL", str_num);
+				free(str_num);
 			}
 		}
+		free(save);
 	}
 }
 

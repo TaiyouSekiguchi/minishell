@@ -3,11 +3,14 @@
 void	call_export(char *env_name, char *value)
 {
 	char	**argv;
+	char	*tmp;
 
 	argv = malloc(sizeof(char *) * 3);
+	tmp = ms_strjoin(env_name, "=");
 	argv[0] = ms_strdup("export");
-	argv[1] = ms_strjoin(ms_strjoin(env_name, "="), value);
+	argv[1] = ms_strjoin(tmp, value);
 	argv[2] = NULL;
 	builtin_export(2, argv);
 	ms_split_free(argv);
+	free(tmp);
 }
