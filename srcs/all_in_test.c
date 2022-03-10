@@ -1,16 +1,5 @@
 #include "minishell.h"
 
-static void	sigint_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
-
 void	print_list(t_list *list, char *kind)
 {
 	t_list	*current;

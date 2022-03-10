@@ -1,16 +1,5 @@
 #include "minishell.h"
 
-static void	sigint_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
-
 static void	do_process_free(t_list **token_list, t_list **cmd_info_list)
 {
 	t_list		*current;
