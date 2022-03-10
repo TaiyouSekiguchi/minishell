@@ -90,6 +90,7 @@ void		call_export(char *env_name, char *value, char ***my_env);
 void		put_error_exit(char *name, int status, char *msg, t_boolean is_exit);
 int			get_g_status(void);
 void		set_g_status(long num);
+void		sigint_handler(int signum);
 //lexer
 void		lexer(t_list **list, char *cmd);
 int			is_quote(char c);
@@ -98,6 +99,7 @@ int			is_delimiter(char c);
 int			is_metachar(char c);
 int			is_redirect(char c1, char c2);
 int			is_heredoc(char *token);
+int			is_name(char c);
 t_quote		quote_set(char c, t_quote quote);
 //parser
 void		parser(t_list **cmds, t_list *tokens);
@@ -106,7 +108,7 @@ int			token_kind(char *token);
 //expander
 void		expander(t_list *cmds, char **my_env);
 char		*expand(char *token, t_boolean in_heredoc, char **my_env);
-char		*search_environ(char **my_env, char *name);
+char		*ms_getenv(char **my_env, char *key);
 char		*remove_quotation(char *token);
 //executer
 void		executer(t_list *cmds, t_dir *d_info);

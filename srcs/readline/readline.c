@@ -13,7 +13,6 @@ char	*rl_gets(void)
 	line_read = readline(">> ");
 	if (line_read == NULL)
 	{
-		//改行がきになる
 		ms_putendl_fd("exit", STDOUT);
 		exit(get_g_status());
 	}
@@ -23,14 +22,3 @@ char	*rl_gets(void)
 
 	return (line_read);
 }
-
-/*void	sig_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}*/

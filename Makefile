@@ -59,12 +59,14 @@ ERROR_TEST_OBJS			=	$(addprefix $(OBJS_DIR)/, $(ERROR_TEST_SRCS:.c=.o))
 ########### utils ############
 UTILS_SRCS				=	srcs/utils/is_func.c\
 							srcs/utils/quote_set.c\
-							srcs/utils/search_environ.c \
+							srcs/utils/ms_getenv.c \
 							srcs/utils/remove_quotation.c \
 							srcs/utils/init.c \
 							srcs/utils/call_export.c \
 							srcs/utils/put_error_exit.c\
-							srcs/utils/exit_status.c
+							srcs/utils/exit_status.c\
+							srcs/utils/sigint_handler.c
+
 UTILS_OBJS				=	$(addprefix $(OBJS_DIR)/, $(UTILS_SRCS:.c=.o))
 #####################################
 
