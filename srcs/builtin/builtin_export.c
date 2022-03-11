@@ -24,7 +24,6 @@ static int	get_index_of_key(char *key, char **environ)
 		i++;
 		ms_split_free(split);
 	}
-	//ms_split_free(split);
 	return (index);
 }
 
@@ -64,43 +63,89 @@ void	free_environ(char **environ)
 	free(environ);
 }
 
+void	put_env(char **my_env)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (my_env[i] != NULL)
+	{
+		ms_putstr_fd("declare -x ", STDOUT);
+		tmp = ms_strchr(my_env[i], '=');
+		if (tmp != NULL)
+		{
+			write(STDOUT, my_env[i], tmp - my_env[i]);
+			ms_putstr_fd("=\"", STDOUT);
+			ms_putstr_fd(tmp + 1, STDOUT);
+			ms_putstr_fd("\"\n", STDOUT);
+		}
+		else
+			ms_putendl_fd(my_env[i], STDOUT);
+		i++;
+	}
+}
+
+t_boolean	is_key_validate(char *key)
+{
+	if ((*key != '_' && ms_isalpha(*key) == FALSE))
+		return (FALSE);
+	key++;
+	while (*key)
+	{
+		if (is_name(*key) == FALSE)
+			return (FALSE);
+		key++;
+	}
+	return (TRUE);
+}
+
 int	builtin_export(int argc, char *argv[], char ***environ)
 {
-	//extern char	**environ;
 	char		*key;
 	int			index;
 	int			row;
 	char		**new_env;
 	int			i;
+	char		*tmp;
 
 	if (argc == 1)
-		return (1);
-
-	//validation
-
-	key = get_key(argv[1]);
-	index = get_index_of_key(key, *environ);
-	free(key);
-	if (index == -1)
-	{
-		row = get_environ_row(*environ);
-		new_env = (char **)ms_xmalloc(sizeof(char *) * (row + 1 + 1));
-		i = 0;
-		while ((*environ)[i] != NULL)
-		{
-			new_env[i] = ms_strdup((*environ)[i]);
-			i++;
-		}
-		new_env[i] = ms_strdup(argv[1]);
-		i++;
-		new_env[i] = NULL;
-		free_environ(*environ);
-		*environ = new_env;
-	}
+		put_env(*environ);
 	else
 	{
-		free((*environ)[index]);
-		(*environ)[index] = ms_strdup(argv[1]);
+		key = get_key(argv[1]);
+		if (is_key_validate(key) != TRUE)
+		{
+			tmp = ms_strappend(ms_strdup("`"), ms_strdup(key));
+			tmp = ms_strappend(tmp, ms_strdup("\'"));
+			tmp = ms_strappend(tmp, ms_strdup(": not a valid identifier"));
+			put_error_exit("export", 0, tmp, FALSE);
+			free(tmp);
+			return (EXIT_FAILURE);
+		}
+		index = get_index_of_key(key, *environ);
+		free(key);
+		if (index == -1)
+		{
+			row = get_environ_row(*environ);
+			new_env = (char **)ms_xmalloc(sizeof(char *) * (row + 1 + 1));
+			i = 0;
+			while ((*environ)[i] != NULL)
+			{
+				new_env[i] = ms_strdup((*environ)[i]);
+				i++;
+			}
+			new_env[i] = ms_strdup(argv[1]);
+			i++;
+			new_env[i] = NULL;
+			free_environ(*environ);
+			*environ = new_env;
+		}
+		else
+		{
+			free((*environ)[index]);
+			(*environ)[index] = ms_strdup(argv[1]);
+		}
 	}
 	return (0);
 }
