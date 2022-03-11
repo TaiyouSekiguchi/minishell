@@ -34,7 +34,10 @@ static void	do_process(char *command, t_dir *d_info)
 	cmd_info_list = NULL;
 	parser(&cmd_info_list, token_list);
 	if (cmd_info_list == NULL)
+	{
+		ms_lstclear(&token_list, free);
 		return ;
+	}
 
 	expander(cmd_info_list, d_info->my_env);
 	executer(cmd_info_list, d_info);
