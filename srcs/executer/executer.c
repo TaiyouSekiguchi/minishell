@@ -24,7 +24,10 @@ pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 			if (infile_fd != ERROR_FD && outfile_fd != ERROR_FD)
 			{
 				do_redirect(infile_fd, outfile_fd);
-				do_exec(cmd_info, d_info);
+
+				if (cmd_info->cmd != NULL)
+					do_exec(cmd_info, d_info);
+
 			}
 			close(infile_fd);
 			close(outfile_fd);
@@ -54,7 +57,10 @@ pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 			if (infile_fd != ERROR_FD && outfile_fd != ERROR_FD)
 			{
 				do_redirect(infile_fd, outfile_fd);
-				do_exec(cmd_info, d_info);
+
+				if (cmd_info->cmd != NULL)
+					do_exec(cmd_info, d_info);
+
 			}
 
 			close(infile_fd);
@@ -119,6 +125,27 @@ static int	exec_process(t_list *cmd_info_list, t_dir *d_info)
 	return (return_status(last_status));
 }
 
+static void	tty_reset(void)
+{
+	if (!isatty(0) && !isatty(1))
+	{
+		close(0);
+		close(1);
+		open("/dev/tty", O_RDONLY);
+		open("/dev/tty", O_WRONLY);
+	}
+	else if (!isatty(0))
+	{
+		close(0);
+		open("/dev/tty", O_RDONLY);
+	}
+	else
+	{
+		close(1);
+		open("/dev/tty", O_WRONLY);
+	}
+}
+
 void	executer(t_list *cmd_info_list, t_dir *d_info)
 {
 	t_cmd_info	*first_cmd_info;
@@ -128,7 +155,8 @@ void	executer(t_list *cmd_info_list, t_dir *d_info)
 	//int			status;
 
 	first_cmd_info = cmd_info_list->content;
-	if (is_builtin(first_cmd_info->cmd->content)
+	if (first_cmd_info->cmd != NULL
+		&& is_builtin(first_cmd_info->cmd->content)
 		&& ms_lstsize(cmd_info_list) == 1)
 	{
 		infile_fd = get_redirect_fd(first_cmd_info->infile, d_info->my_env);
@@ -139,24 +167,7 @@ void	executer(t_list *cmd_info_list, t_dir *d_info)
 		do_redirect(infile_fd, outfile_fd);
 
 		do_exec(first_cmd_info, d_info);
-
-		if (!isatty(0) && !isatty(1))
-		{
-			close(0);
-			close(1);
-			open("/dev/tty", O_RDONLY);
-			open("/dev/tty", O_WRONLY);
-		}
-		else if (!isatty(0))
-		{
-			close(0);
-			open("/dev/tty", O_RDONLY);
-		}
-		else
-		{
-			close(1);
-			open("/dev/tty", O_WRONLY);
-		}
+		tty_reset();
 	}
 	else
 	{

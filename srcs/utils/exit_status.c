@@ -31,3 +31,8 @@ void	set_g_status(long num)
 		}
 	}
 }
+
+void	set_g_status_exception(int num)
+{
+	g_status = num;
+}

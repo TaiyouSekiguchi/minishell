@@ -6,28 +6,31 @@ int	builtin_echo(int argc, char *argv[])
 	size_t	i;
 
 	if (argc == 1)
-		return (1);
-
-	if (ms_strcmp(argv[1], "-n") == 0)
 	{
-		flag = 1;
-		i = 2;
+		ms_putchar_fd('\n', STDOUT);
 	}
 	else
 	{
-		flag = 0;
-		i = 1;
+		if (ms_strcmp(argv[1], "-n") == 0)
+		{
+			flag = 1;
+			i = 2;
+		}
+		else
+		{
+			flag = 0;
+			i = 1;
+		}
+		while (argv[i] != NULL)
+		{
+			ms_putstr_fd(argv[i], STDOUT);
+			i++;
+			if (argv[i] != NULL)
+				ms_putstr_fd(" ", STDOUT);
+		}
+		if (flag == 0)
+			ms_putstr_fd("\n", STDOUT);
 	}
-	while (argv[i] != NULL)
-	{
-		ms_putstr_fd(argv[i], STDOUT);
-		i++;
-		if (argv[i] != NULL)
-			ms_putstr_fd(" ", STDOUT);
-	}
-	if (flag == 0)
-		ms_putstr_fd("\n", STDOUT);
-
 	return (0);
 }
 
