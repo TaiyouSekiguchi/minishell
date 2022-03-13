@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 20:51:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/07 17:57:01 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/13 16:48:05 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,12 @@ static void	add_tokens(t_list **tokens, char *cmd, size_t start, size_t *i)
 {
 	char	*tmp;
 
-	if (start < *i)
+	if (*cmd == '\0')
+	{
+		tmp = ms_strndup(&cmd[start], *i - start);
+		ms_lstadd_back(tokens, ms_lstnew(tmp));
+	}
+	else if (start < *i)
 	{
 		tmp = ms_strndup(&cmd[start], *i - start);
 		ms_lstadd_back(tokens, ms_lstnew(tmp));

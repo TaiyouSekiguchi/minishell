@@ -42,7 +42,7 @@ void	print_cmds(t_list *cmds)
 	}
 }
 
-void	test(char *command)
+void	test(char *command, t_dir *d_info)
 {
 	t_list		*token_list;
 	t_list		*cmd_info_list;
@@ -56,7 +56,7 @@ void	test(char *command)
 	cmd_info_list = NULL;
 	parser(&cmd_info_list, token_list);
 	//print_cmds(cmd_info_list);
-	expander(cmd_info_list);
+	expander(cmd_info_list, d_info->my_env);
 	print_cmds(cmd_info_list);
 
 	//free part
@@ -76,7 +76,20 @@ void	test(char *command)
 
 int main(void)
 {
-	test("echo \"\" \"\" \"\" ");
+	t_dir	info;
+
+	//init関数としてまとめたい
+	init_dir_info(&info);
+	init_my_env(&info);
+	init_shlvl(&info.my_env);
+
+	test("\"/bin/ls srcs\"", &info);
+	test("export TEST=\"-e hello\"", &info);
+	test("echo \" $\"", &info);
+	test("echo \"'\"", &info);
+
+	//test("echo \"\" \"\" \"\" ", &info);
+	//test("aaa bbb ccc      ", &info);
 	/*test("aaa");
 	test("aaa   ");
 	test("aaa bbb ccc      ");

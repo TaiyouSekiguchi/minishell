@@ -24,13 +24,18 @@ function test () {
 }
 
 commands=(
-	"echo \$HOME"
-	"pwd"
-	"ls"
-	"cat \-e \<.gitignore"
-	"cat .\/test\/big_file \| wc \-l"
-	"cat .\/test\/big_file \| cat \<.gitignore"
-	"cat .\/test\/big_file \| cat \<.gitignore \| wc \-l"
+#	"echo \$HOME"
+#	"pwd"
+#	"ls"
+#	"cat \-e \<.gitignore"
+#	"cat .\/test\/big_file \| wc \-l"
+#	"cat .\/test\/big_file \| cat \<.gitignore"
+#	"cat .\/test\/big_file \| cat \<.gitignore \| wc \-l"
+#	"echo \"\" \"\" \"\" \| cat \-e"
+#	"pwd \| wc \-l"
+	"\"/bin/ls srcs\""
+	"\"/bi\"n/ls srcs"
+	"\"\"/bin/ech\"o\" \"test\""
 )
 
 rm -rf ./test/test.log
