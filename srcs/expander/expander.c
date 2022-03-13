@@ -31,9 +31,12 @@ static void	expand_cmd_info_element(t_list **elem_list, char **my_env)
 		token = current->content;
 		if (!is_heredoc(token))
 		{
+			//token = " "" ";
 			after_token = expand(token, FALSE, my_env);
 			free(token);
+			//token = " "" ";
 			after_token = remove_quotation(after_token);
+			//token = "";
 			current->content = after_token;
 		}
 		current = current->next;

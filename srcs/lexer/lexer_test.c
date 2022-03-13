@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_test_main.c                                  :+:      :+:    :+:   */
+/*   lexer_test.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 17:12:31 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/13 15:51:44 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ int main(void)
 	test("cat < Makefile | grep OBJS | wc -l > outfile");
 	test("cat <infile -e | grep test | wc -l > outfile");
 	test("cat <infile \"-e $TEST\"");
+	test("echo \"\" \"\" \"\" ");
 	return (0);
 }

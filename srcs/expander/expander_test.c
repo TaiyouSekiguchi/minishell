@@ -76,8 +76,8 @@ void	test(char *command)
 
 int main(void)
 {
-	test("");
-	test("aaa");
+	test("echo \"\" \"\" \"\" ");
+	/*test("aaa");
 	test("aaa   ");
 	test("aaa bbb ccc      ");
 	test("    aaa bbb ccc    ");
@@ -110,7 +110,7 @@ int main(void)
 	test("echo \'$1TEST\'");
 	test("cat <<<end");
 	test("cat <<<Makefile");
-	test("cat Makefile'");
+	test("cat Makefile'");*/
 
 	return (0);
 }

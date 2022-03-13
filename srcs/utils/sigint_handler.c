@@ -8,5 +8,6 @@ void	sigint_handler(int signum)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		set_g_status(1);
 	}
 }
