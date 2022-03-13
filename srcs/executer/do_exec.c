@@ -60,7 +60,12 @@ static char	*cmd_path_search(char *cmd_name, char **my_env)
 	}
 
 	set_g_status(exit_status);
-	put_error_exit(cmd_name, get_g_status(), NULL, FALSE);
+
+	if (exit_status == COMMAND_NOT_FOUND)
+		put_error_exit(cmd_name, get_g_status(), "command not found", FALSE);
+	else
+		put_error_exit(cmd_name, get_g_status(), NULL, FALSE);
+
 	ms_split_free(split_env_path);
 	free(cmd_name);
 

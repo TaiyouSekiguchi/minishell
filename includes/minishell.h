@@ -90,6 +90,7 @@ void		call_export(char *env_name, char *value, char ***my_env);
 void		put_error_exit(char *name, int status, char *msg, t_boolean is_exit);
 int			get_g_status(void);
 void		set_g_status(long num);
+void		set_g_status_exception(int num);
 void		sigint_handler(int signum);
 //lexer
 void		lexer(t_list **list, char *cmd);

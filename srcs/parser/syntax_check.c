@@ -17,6 +17,7 @@ int		syntax_check(t_list	*token_list)
 			|| (kind == PIPE && next_kind == PIPE)
 			|| (kind != CMD && kind != PIPE && next_kind != CMD))
 		{
+			set_g_status_exception(258);
 			put_error_exit(NULL, get_g_status(), SYNTAX_ERROR_MSG, FALSE);
 			return (0);
 		}
