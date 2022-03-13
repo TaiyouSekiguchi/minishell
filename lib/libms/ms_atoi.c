@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 00:15:41 by yjimpei           #+#    #+#             */
-/*   Updated: 2022/03/11 16:25:22 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/13 15:07:03 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,14 @@ static long	make_num(const char *nptr, long minus)
 		nptr++;
 		while (*nptr && *nptr >= '0' && *nptr <= '9')
 		{
-			num *= 10;
 			if (check_flow(num, minus, *nptr - '0') != 42)
 				return (check_flow(num, minus, *nptr - '0'));
+			num *= 10;
 			num += *nptr - '0';
 			nptr++;
 		}
+		if (*nptr != '\0' && !ms_isdigit(*nptr))
+			errno = 22;
 		return ((int)(num * minus));
 	}
 	errno = 22;
