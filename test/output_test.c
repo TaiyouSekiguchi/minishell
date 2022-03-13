@@ -9,7 +9,7 @@ void	test(char *str, t_dir *d_info)
 	lexer(&tokens, str);
 	cmds = NULL;
 	parser(&cmds, tokens);
-	expander(cmds);
+	expander(cmds, d_info->my_env);
 	executer(cmds, d_info);
 }
 
@@ -32,6 +32,8 @@ int	main(int argc, char **argv)
 		i++;
 	}
 	init_dir_info(&info);
+	init_my_env(&info);
+	init_shlvl(&info.my_env);
 	test(command, &info);
-	return (g_status);
+	return (get_g_status());
 }

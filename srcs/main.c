@@ -1,11 +1,12 @@
 #include "minishell.h"
-
+/*
 void end(void)__attribute__((destructor));
 
 void end(void)
 {
 	system("leaks minishell");
 }
+*/
 
 static void	do_process_free(t_list **token_list, t_list **cmd_info_list)
 {

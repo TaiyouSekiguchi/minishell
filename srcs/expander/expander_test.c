@@ -83,8 +83,13 @@ int main(void)
 	init_my_env(&info);
 	init_shlvl(&info.my_env);
 
-	test("echo \"\" \"\" \"\" ", &info);
-	test("aaa bbb ccc      ", &info);
+	test("\"/bin/ls srcs\"", &info);
+	test("export TEST=\"-e hello\"", &info);
+	test("echo \" $\"", &info);
+	test("echo \"'\"", &info);
+
+	//test("echo \"\" \"\" \"\" ", &info);
+	//test("aaa bbb ccc      ", &info);
 	/*test("aaa");
 	test("aaa   ");
 	test("aaa bbb ccc      ");

@@ -137,7 +137,6 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 	char		*new_pwd;
 
 	input_path = set_input_path(argc, argv);
-	dprintf(STDERR, "input_path=%s\n", input_path);
 	if (input_path == NULL)
 		return (EXIT_FAILURE);
 	else
