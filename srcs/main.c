@@ -19,8 +19,9 @@ static void	do_process_free(t_list **token_list, t_list **cmd_info_list)
 	{
 		cmd_info = current->content;
 		ms_lstclear(&(cmd_info->cmd), free);
-		ms_lstclear(&(cmd_info->infile), free);
-		ms_lstclear(&(cmd_info->outfile), free);
+		ms_lstclear(&(cmd_info->redirect), free);
+		//ms_lstclear(&(cmd_info->infile), free);
+		//ms_lstclear(&(cmd_info->outfile), free);
 		current = current->next;
 	}
 	ms_lstclear(cmd_info_list, free);

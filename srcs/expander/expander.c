@@ -46,8 +46,9 @@ static void	expand_cmd_info_element(t_list **elem_list, char **my_env)
 static void	expand_cmd_info(t_cmd_info **cmd_info, char **my_env)
 {
 	expand_cmd_info_element(&(*cmd_info)->cmd, my_env);
-	expand_cmd_info_element(&(*cmd_info)->infile, my_env);
-	expand_cmd_info_element(&(*cmd_info)->outfile, my_env);
+	expand_cmd_info_element(&(*cmd_info)->redirect, my_env);
+	//expand_cmd_info_element(&(*cmd_info)->infile, my_env);
+	//expand_cmd_info_element(&(*cmd_info)->outfile, my_env);
 	(*cmd_info)->cmd = cmd_relexer((*cmd_info)->cmd);
 }
 
