@@ -3,7 +3,6 @@
 
 static int	get_index_of_key(char *key, char **environ)
 {
-	//extern char		**environ;
 	char			**split;
 	char			*env_key;
 	int				index;
@@ -91,7 +90,7 @@ t_boolean	is_key_validate(char *key)
 	if ((*key != '_' && ms_isalpha(*key) == FALSE))
 		return (FALSE);
 	key++;
-	while (*key)
+	while (*key && *key != '=')
 	{
 		if (is_name(*key) == FALSE)
 			return (FALSE);
@@ -100,52 +99,68 @@ t_boolean	is_key_validate(char *key)
 	return (TRUE);
 }
 
-int	builtin_export(int argc, char *argv[], char ***environ)
+int	register_key_value(char *key_value, char ***environ)
 {
-	char		*key;
-	int			index;
-	int			row;
-	char		**new_env;
-	int			i;
-	char		*tmp;
+	char	*key;
+	char	*tmp;
+	int		index;
+	char	**new_env;
+	int		i;
 
-	if (argc == 1)
-		put_env(*environ);
+	if (is_key_validate(key_value) != TRUE)
+	{
+		tmp = ms_strappend(ms_strdup("`"), ms_strdup(key_value));
+		tmp = ms_strappend(tmp, ms_strdup("\'"));
+		tmp = ms_strappend(tmp, ms_strdup(": not a valid identifier"));
+		put_error_exit("export", 0, tmp, FALSE);
+		free(tmp);
+		return (EXIT_FAILURE);
+	}
+	key = get_key(key_value);
+	index = get_index_of_key(key, *environ);
+	free(key);
+	if (index == -1)
+	{
+		new_env = ms_xmalloc(sizeof(char *) * (get_environ_row(*environ) + 2));
+		i = 0;
+		while ((*environ)[i] != NULL)
+		{
+			new_env[i] = ms_strdup((*environ)[i]);
+			i++;
+		}
+		new_env[i] = ms_strdup(key_value);
+		new_env[i + 1] = NULL;
+		free_environ(*environ);
+		*environ = new_env;
+	}
 	else
 	{
-		key = get_key(argv[1]);
-		if (is_key_validate(key) != TRUE)
-		{
-			tmp = ms_strappend(ms_strdup("`"), ms_strdup(key));
-			tmp = ms_strappend(tmp, ms_strdup("\'"));
-			tmp = ms_strappend(tmp, ms_strdup(": not a valid identifier"));
-			put_error_exit("export", 0, tmp, FALSE);
-			free(tmp);
-			return (EXIT_FAILURE);
-		}
-		index = get_index_of_key(key, *environ);
-		free(key);
-		if (index == -1)
-		{
-			row = get_environ_row(*environ);
-			new_env = (char **)ms_xmalloc(sizeof(char *) * (row + 1 + 1));
-			i = 0;
-			while ((*environ)[i] != NULL)
-			{
-				new_env[i] = ms_strdup((*environ)[i]);
-				i++;
-			}
-			new_env[i] = ms_strdup(argv[1]);
-			i++;
-			new_env[i] = NULL;
-			free_environ(*environ);
-			*environ = new_env;
-		}
-		else
-		{
-			free((*environ)[index]);
-			(*environ)[index] = ms_strdup(argv[1]);
-		}
+		free((*environ)[index]);
+		(*environ)[index] = ms_strdup(key_value);
 	}
-	return (0);
+	return (EXIT_SUCCESS);
+}
+
+int	builtin_export(int argc, char *argv[], char ***environ)
+{
+	int			i;
+	int			ret;
+
+	ret = EXIT_SUCCESS;
+	if (argc == 1)
+	{
+		put_env(*environ);
+		return (ret);
+	}
+	else
+	{
+		i = 1;
+		while (argv[i] != NULL)
+		{
+			if (register_key_value(argv[i], environ) == EXIT_FAILURE)
+				ret = EXIT_FAILURE;
+			i++;
+		}
+		return (ret);
+	}
 }
