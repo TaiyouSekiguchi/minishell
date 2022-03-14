@@ -107,8 +107,9 @@ void		parser(t_list **cmds, t_list *tokens);
 int			syntax_check(t_list *tokens);
 int			token_kind(char *token);
 //expander
+t_list		*expand(char *token, t_boolean in_heredoc, char **my_env);
+char		*expand_line(char *token, t_boolean in_heredoc, char **my_env);
 void		expander(t_list *cmds, char **my_env);
-char		*expand(char *token, t_boolean in_heredoc, char **my_env);
 char		*ms_getenv(char **my_env, char *key);
 char		*remove_quotation(char *token);
 //executer
