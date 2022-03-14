@@ -179,7 +179,6 @@ int	builtin_export(int argc, char *argv[], char ***environ)
 	int			i;
 	int			ret;
 
-	dprintf(STDERR, "argc=%d\n", argc);
 	ret = EXIT_SUCCESS;
 	if (argc == 1)
 	{
