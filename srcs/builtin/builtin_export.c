@@ -179,6 +179,7 @@ int	builtin_export(int argc, char *argv[], char ***environ)
 	int			i;
 	int			ret;
 
+	dprintf(STDERR, "argc=%d\n", argc);
 	ret = EXIT_SUCCESS;
 	if (argc == 1)
 	{
@@ -190,6 +191,11 @@ int	builtin_export(int argc, char *argv[], char ***environ)
 		i = 1;
 		while (argv[i] != NULL)
 		{
+			if (ms_strcmp(argv[i], "") == 0)
+			{
+				i++;
+				continue;
+			}
 			if (register_key_value(argv[i], environ) == EXIT_FAILURE)
 				ret = EXIT_FAILURE;
 			i++;
