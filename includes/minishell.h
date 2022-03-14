@@ -122,7 +122,7 @@ void		heredoc_loop(int fd, char *token, char **my_env);
 int			heredoc_open(char *token, char **my_env);
 int			outfile_open(char *token);
 int			append_open(char *token);
-void		redirect_file_open(char *token, char **my_env, int *infile_fd, int *outfile_fd);
+void		redirect_file_open(char *token, int *infile_fd, int *outfile_fd, int heredoc_fd);
 void		get_redirect_fd(t_list *token_list, char **my_env, int *infile_fd, int *outfile_fd);
 void		do_redirect(int infile_fd, int outfile_fd);
 //builtin
