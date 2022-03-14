@@ -60,15 +60,14 @@ void	init_dir_info(t_dir *d_info)
 	struct stat	now_buf;
 	char		*env_pwd;
 
+	call_unset("OLDPWD", &(d_info->my_env));
 	stat(".", &now_buf);
 	if (getenv("PWD") != NULL)
 	{
 		env_pwd = ms_strdup(getenv("PWD"));
 		stat(env_pwd, &env_buf);
 		if (now_buf.st_ino == env_buf.st_ino)
-		{
 			d_info->pwd = env_pwd;
-		}
 		else
 		{
 			d_info->pwd = getcwd(NULL, 0);
@@ -76,9 +75,7 @@ void	init_dir_info(t_dir *d_info)
 		}
 	}
 	else
-	{
 		d_info->pwd = getcwd(NULL, 0);
-	}
 	d_info->old_pwd = NULL;
 }
 

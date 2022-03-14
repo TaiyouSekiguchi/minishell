@@ -62,7 +62,7 @@ UTILS_SRCS				=	srcs/utils/is_func.c\
 							srcs/utils/ms_getenv.c \
 							srcs/utils/remove_quotation.c \
 							srcs/utils/init.c \
-							srcs/utils/call_export.c \
+							srcs/utils/call_builtin.c \
 							srcs/utils/put_error_exit.c\
 							srcs/utils/exit_status.c\
 							srcs/utils/sigint_handler.c

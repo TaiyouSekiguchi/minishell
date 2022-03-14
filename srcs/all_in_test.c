@@ -59,8 +59,9 @@ int	main(void)
 	char	*command;
 	t_dir	info;
 
+	init_my_env(&info);
 	init_dir_info(&info);
-	init_shlvl();
+	init_shlvl(&info.my_env);
 
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);

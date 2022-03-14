@@ -87,6 +87,7 @@ void		init_dir_info(t_dir *d_info);
 void		init_shlvl(char ***my_env);
 void		init_my_env(t_dir *d_info);
 void		call_export(char *env_name, char *value, char ***my_env);
+void		call_unset(char *env_name, char ***my_env);
 void		put_error_exit(char *name, int status, char *msg, t_boolean is_exit);
 int			get_g_status(void);
 void		set_g_status(long num);

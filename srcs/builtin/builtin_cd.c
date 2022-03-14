@@ -32,19 +32,22 @@ void	del_last_elem(t_list **pptr)
 	}
 }
 
-char	*set_input_path(int argc, char **argv)
+static char	*set_input_path(int argc, char **argv, char **my_env)
 {
+	char	*value;
+
 	if (argc == 1 || argv[1][0] == '~')
 	{
-		if (getenv("HOME") == NULL)
+		value = ms_getenv(my_env, "HOME");
+		if (value == NULL)
 		{
-			ms_putendl_fd("minishell:HOME not set", STDERR);
+			ms_putendl_fd("minishell: cd: HOME not set", STDERR);
 			return (NULL);
 		}
 		else if (argc == 1 || ms_strlen(argv[1]) == 1)
-			return (ms_strdup(getenv("HOME")));
+			return (value);
 		else
-			return (ms_strjoin(getenv("HOME"), argv[1] + 1));
+			return (ms_strjoin(value, argv[1] + 1));
 	}
 	else
 		return(argv[1]);
@@ -69,7 +72,7 @@ t_list	*split_lst(char *str, char c)
 	return (lst);
 }
 
-char	*lst_to_string(t_list *list)
+char	*lst_to_string(t_list *list, char *c)
 {
 	char	*str;
 
@@ -77,15 +80,15 @@ char	*lst_to_string(t_list *list)
 	while (list != NULL)
 	{
 		if (str == NULL)
-			str = ms_strdup(ms_strjoin("/", (char *)list->content));
+			str = ms_strdup(ms_strjoin(c, (char *)list->content));
 		else
-			str = ms_strjoin(str, ms_strjoin("/", (char *)list->content));
+			str = ms_strjoin(str, ms_strjoin(c, (char *)list->content));
 		list = list->next;
 	}
 	return (str);
 }
 
-char	*rewrite_absolute_path(t_list *dir_lst, char *input_path)
+static char	*rewrite_absolute_path(t_list *dir_lst, char *input_path)
 {
 	char	*new_path;
 	t_list	*new_dir_lst;
@@ -106,12 +109,12 @@ char	*rewrite_absolute_path(t_list *dir_lst, char *input_path)
 		}
 		dir_lst = dir_lst->next;
 	}
-	new_path = lst_to_string(new_dir_lst);
+	new_path = lst_to_string(new_dir_lst, "/");
 	ms_lstclear(&new_dir_lst, free);
 	return (new_path);
 }
 
-char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
+static char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
 {
 	char	*new_path;
 	t_list	*new_pwd_lst;
@@ -125,7 +128,7 @@ char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
 			ms_lstadd_back(&new_pwd_lst, ms_lstnew(dir_lst->content));
 		dir_lst = dir_lst->next;
 	}
-	new_path = lst_to_string(new_pwd_lst);
+	new_path = lst_to_string(new_pwd_lst, "/");
 	ms_lstclear(&new_pwd_lst, free);
 	return (new_path);
 }
@@ -136,7 +139,7 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 	char		*input_path;
 	char		*new_pwd;
 
-	input_path = set_input_path(argc, argv);
+	input_path = set_input_path(argc, argv, d_info->my_env);
 	if (input_path == NULL)
 		return (EXIT_FAILURE);
 	else
@@ -147,7 +150,11 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 		else
 			new_pwd = ms_strdup(rewrite_relative_path(dir_lst, d_info->pwd));
 		if (chdir(new_pwd) < 0)
-			perror("minishell");
+		{
+			perror("minishell: cd");
+			free(new_pwd);
+			return (EXIT_FAILURE);
+		}
 		else
 		{
 			if (d_info->old_pwd != NULL)
@@ -160,5 +167,5 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 		}
 		free(new_pwd);
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
