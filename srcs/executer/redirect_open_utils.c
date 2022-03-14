@@ -55,7 +55,7 @@ void	heredoc_loop(int fd, char *token, char **my_env)
 			break ;
 
 		if (quote == FALSE)
-			line = expand(line, TRUE, my_env);
+			line = expand_line(line, TRUE, my_env);
 
 		ms_putendl_fd(line, fd);
 		free(line);
