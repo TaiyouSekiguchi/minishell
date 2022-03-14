@@ -14,8 +14,7 @@ SRCS_DIR				=	$(dir $(SRCS))\
 							${dir ${EXPANDER_SRCS}}\
 							${dir ${BUILTIN_SRCS}}\
 							${dir ${EXECUTER_SRCS}}\
-							${dir ${OUTPUT_TEST_SRCS}}\
-							${dir ${ERROR_TEST_SRCS}}
+							${dir ${OUTPUT_TEST_SRCS}}
 OBJS_DIR				=	./objs
 BINDIRS					=	${addprefix ${OBJS_DIR}/, ${SRCS_DIR}}
 
@@ -50,10 +49,6 @@ EXECUTER_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_TEST_SRCS:.c=.o))
 OUTPUT_TEST				=	output_test
 OUTPUT_TEST_SRCS		=	test/output_test.c
 OUTPUT_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(OUTPUT_TEST_SRCS:.c=.o))
-
-ERROR_TEST				=	error_test
-ERROR_TEST_SRCS			=	test/error_test.c
-ERROR_TEST_OBJS			=	$(addprefix $(OBJS_DIR)/, $(ERROR_TEST_SRCS:.c=.o))
 #####################################
 
 ########### utils ############
@@ -148,22 +143,12 @@ out_test				: $(OUTPUT_TEST)
 $(ERROR_TEST)		:	$(ERROR_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
-error_msg_test		: $(ERROR_TEST)
-						bash ./test/error_test.sh
-
 $(OBJS_DIR)/%.o		:	%.c
 						@mkdir -p ${BINDIRS}
 						$(CC) -g $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 $(LIBMS)			:
 						$(MAKE) -C ./lib/libms
-
-clean				:	tclean
-						$(MAKE) fclean -C ./lib/libms
-						$(RM) -r $(OBJS_DIR)
-
-fclean				: clean tfclean
-						$(RM) $(OBJS) $(MINISHELL)
 
 re					:	fclean all
 
@@ -175,8 +160,14 @@ tclean				:
 						$(EXPANDER_TEST_OBJS)\
 						$(EXECUTER_TEST_OBJS)\
 						$(ALL_IN_TEST_OBJS) \
-						$(OUTPUT_TEST) \
-						$(ERROR_TEST)
+						$(OUTPUT_TEST_OBJS) \
 
-tfclean				:
-						$(RM) $(READLINE_TEST_OBJS) $(READLINE_TEST) $(LEXER_TEST_OBJS) $(LEXER_TEST) $(PARSER_TEST_OBJS) $(PARSER_TEST) $(EXPANDER_TEST) $(EXPANDER_TEST_OBJS) $(EXECUTER_TEST) $(EXECUTER_TEST_OBJS) $(ALL_IN_TEST) $(ALL_IN_TEST_OBJS)
+tfclean				:	tclean
+						$(RM) $(READLINE_TEST) $(LEXER_TEST) $(PARSER_TEST) $(EXPANDER_TEST) $(EXECUTER_TEST) $(ALL_IN_TEST) $(OUTPUT_TEST)
+
+clean				:	tclean
+						$(MAKE) fclean -C ./lib/libms
+						$(RM) -r $(OBJS_DIR)
+
+fclean				: clean tfclean
+						$(RM) $(OBJS) $(MINISHELL)
