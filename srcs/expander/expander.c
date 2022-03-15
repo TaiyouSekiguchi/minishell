@@ -15,13 +15,20 @@ static t_list	*expand_cmd_info_element(t_list *current, char **my_env)
 				new_lst = expand(token, FALSE, my_env);
 			else
 				ms_lstadd_back(&new_lst, expand(token, FALSE, my_env));
+
 			t_list	*tmp;
+
 			tmp = new_lst;
 			while (tmp != NULL)
 			{
-				tmp->content = remove_quotation(tmp->content);
+				if(!is_heredoc(tmp->content))
+					tmp->content = remove_quotation(tmp->content);
 				tmp = tmp->next;
 			}
+		}
+		else
+		{
+			ms_lstadd_back(&new_lst, ms_lstnew(ms_strdup(token)));
 		}
 		current = current->next;
 	}
