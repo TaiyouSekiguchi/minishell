@@ -6,7 +6,7 @@ int	builtin_exit(int argc, char *argv[])
 	int	ret;
 	char	*msg;
 
-	ms_putendl_fd("exit", STDOUT);
+	ms_putendl_fd("exit", STDERR);
 	if (argc >= 2)
 	{
 		errno = 0;

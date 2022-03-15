@@ -25,8 +25,9 @@ void	print_cmd(t_cmd_info *cmd)
 {
 	printf("\n");
 	print_list(cmd->cmd, "cmd");
-	print_list(cmd->infile, "infile");
-	print_list(cmd->outfile, "outfile");
+	print_list(cmd->redirect, "redirect");
+	//print_list(cmd->infile, "infile");
+	//print_list(cmd->outfile, "outfile");
 }
 
 void	print_cmds(t_list *cmds)
@@ -61,9 +62,10 @@ void	test(char *command)
 	while (current != NULL)
 	{
 		cmd_info = current->content;
-		ms_lstclear(&(cmd_info->infile), free);
 		ms_lstclear(&(cmd_info->cmd), free);
-		ms_lstclear(&(cmd_info->outfile), free);
+		ms_lstclear(&(cmd_info->redirect), free);
+		//ms_lstclear(&(cmd_info->infile), free);
+		//ms_lstclear(&(cmd_info->outfile), free);
 		current = current->next;
 	}
 	ms_lstclear(&(cmds), free);
@@ -72,7 +74,8 @@ void	test(char *command)
 
 int main(void)
 {
-	test("echo \"\" \"\" \"\" ");
+	//test("echo \"\" \"\" \"\" ");
+	test(">out1 > out2 <in1 << in2");
 	//test("aaa");
 	//test("aaa   ");
 	//test("aaa bbb ccc      ");

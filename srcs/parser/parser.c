@@ -4,8 +4,9 @@ static void	cmd_init(t_cmd_info **cmd_info)
 {
 	*cmd_info = (t_cmd_info *)ms_xmalloc(sizeof(t_cmd_info));
 	(*cmd_info)->cmd = NULL;
-	(*cmd_info)->infile = NULL;
-	(*cmd_info)->outfile = NULL;
+	(*cmd_info)->redirect = NULL;
+	//(*cmd_info)->infile = NULL;
+	//(*cmd_info)->outfile = NULL;
 }
 
 static void	redirect_parse(t_list **current, int kind, t_cmd_info *cmd)
@@ -16,7 +17,20 @@ static void	redirect_parse(t_list **current, int kind, t_cmd_info *cmd)
 
 	*current = (*current)->next;
 	token = (char *)((*current)->content);
-	if (kind == INFILE || kind == HEREDOC)
+
+	if (kind == INFILE)
+		prefix = "< ";
+	else if (kind == HEREDOC)
+		prefix = "<< ";
+	else if (kind == OUTFILE)
+		prefix = "> ";
+	else
+		prefix = ">> ";
+
+	tmp = ms_strjoin(prefix, token);
+	ms_lstadd_back(&cmd->redirect, ms_lstnew(tmp));
+
+	/*if (kind == INFILE || kind == HEREDOC)
 	{
 		if (kind == INFILE)
 			prefix = "< ";
@@ -33,7 +47,7 @@ static void	redirect_parse(t_list **current, int kind, t_cmd_info *cmd)
 			prefix = ">> ";
 		tmp = ms_strjoin(prefix, token);
 		ms_lstadd_back(&cmd->outfile, ms_lstnew(tmp));
-	}
+	}*/
 }
 
 static void	parse_loop(t_list **cmd_info_list, t_list *tokens)

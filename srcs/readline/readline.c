@@ -13,7 +13,7 @@ char	*rl_gets(void)
 	line_read = readline(">> ");
 	if (line_read == NULL)
 	{
-		ms_putendl_fd("exit", STDOUT);
+		ms_putendl_fd("exit", STDERR);
 		exit(get_g_status());
 	}
 

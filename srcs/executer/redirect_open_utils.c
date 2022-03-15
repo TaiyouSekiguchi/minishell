@@ -61,7 +61,8 @@ void	heredoc_loop(int fd, char *token, char **my_env)
 		free(line);
 	}
 	free(word);
-	free(line);
+	//free(line);
+	//line = NULL;
 }
 
 int	heredoc_open(char *token, char **my_env)
@@ -84,8 +85,9 @@ int	heredoc_open(char *token, char **my_env)
 	fd = open(tmp_file_name, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
 	if (fd < 0)
 	{
-		free(tmp_file_name);
 		put_error_exit(tmp_file_name, get_g_status(), NULL, FALSE);
+		free(tmp_file_name);
+		return (ERROR_FD);
 	}
 	heredoc_loop(fd, token, my_env);
 	close(fd);
@@ -93,8 +95,8 @@ int	heredoc_open(char *token, char **my_env)
 	fd = open(tmp_file_name, O_RDONLY);
 	if (fd < 0)
 	{
-		free(tmp_file_name);
 		put_error_exit(tmp_file_name, get_g_status(), NULL, FALSE);
+		free(tmp_file_name);
 	}
 
 	unlink(tmp_file_name);
