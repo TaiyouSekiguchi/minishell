@@ -22,6 +22,7 @@ void	call_unset(char *env_name, char ***my_env)
 	argv = malloc(sizeof(char *) * 3);
 	argv[0] = ms_strdup("unset");
 	argv[1] = ms_strdup(env_name);
+	argv[2] = NULL;
 	builtin_unset(2, argv, my_env);
 	ms_split_free(argv);
 }
