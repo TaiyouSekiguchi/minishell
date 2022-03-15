@@ -149,7 +149,10 @@ int	register_key_value(char *key_value, char ***environ)
 			i++;
 		}
 		tmp = ms_strdup(key);
-		tmp = ms_strjoin(ms_strjoin(tmp, "="), value);
+		tmp = ms_strappend(tmp, ms_strdup("="));
+		tmp = ms_strappend(tmp, ms_strdup(value));
+		//tmp = ms_strdup(key);
+		//tmp = ms_strjoin(ms_strjoin(tmp, "="), value);
 		new_env[i] = ms_strdup(tmp);
 		new_env[i + 1] = NULL;
 		free_environ(*environ);
@@ -165,11 +168,15 @@ int	register_key_value(char *key_value, char ***environ)
 		else
 		{
 			tmp = ms_strdup(key);
-			tmp = ms_strjoin(ms_strjoin(tmp, "="), value);
+			tmp = ms_strappend(tmp, ms_strdup("="));
+			tmp = ms_strappend(tmp, ms_strdup(value));
+			//tmp = ms_strdup(key);
+			//tmp = ms_strjoin(ms_strjoin(tmp, "="), value);
 		}
 		free((*environ)[index]);
 		(*environ)[index] = ms_strdup(tmp);
 	}
+	free(key);
 	free(tmp);
 	return (EXIT_SUCCESS);
 }
