@@ -79,8 +79,8 @@ int main(void)
 	t_dir	info;
 
 	//init関数としてまとめたい
-	init_dir_info(&info);
 	init_my_env(&info);
+	init_dir_info(&info);
 	init_shlvl(&info.my_env);
 
 	test("\"/bin/ls srcs\"", &info);

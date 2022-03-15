@@ -78,8 +78,9 @@ int main(void)
 {
 	t_dir	info;
 
+	init_my_env(&info);
 	init_dir_info(&info);
-	init_shlvl();
+	init_shlvl(&info.my_env);
 
 	test(&info, "cat");
 	test(&info, "cat < Makefile");
