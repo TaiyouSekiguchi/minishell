@@ -14,7 +14,7 @@ void	print_list(t_list *list, char *kind)
 	printf("\n");
 }
 
-void	print_cmd(t_cmd *cmd)
+void	print_cmd(t_cmd_info *cmd)
 {
 	printf("\n");
 	print_list(cmd->cmd, "cmd");
@@ -48,7 +48,7 @@ void	test(char *str, t_dir *d_info)
 	lexer(&tokens, str);
 	cmds = NULL;
 	parser(&cmds, tokens);
-	expander(cmds);
+	expander(cmds, d_info->my_env);
 	print_cmds(cmds);
 	printf("***********test************\n\n");
 	executer(cmds, d_info);
@@ -56,7 +56,7 @@ void	test(char *str, t_dir *d_info)
 
 int	main(void)
 {
-	char	*command;
+	char	*input_line;
 	t_dir	info;
 
 	init_my_env(&info);
@@ -66,15 +66,20 @@ int	main(void)
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 
+	input_line = NULL;
 	while (1)
 	{
-		command = rl_gets();
-		printf("%s\n", command);
-		test(command, &info);
-		if (ms_strcmp(command, "clear_history") == 0)
+		input_line = rl_gets();
+		test(input_line, &info);
+		//do_process(input_line, &info);
+		if (ms_strcmp(input_line, "clear_history") == 0)
 			clear_history();
-			//rl_clear_history();
 	}
-	free(command);
-	return (g_status);
+
+	//main freeとしてまとめたい
+	free(input_line);
+	free(info.pwd);
+	free(info.old_pwd);
+
+	return (get_g_status());
 }
