@@ -58,31 +58,46 @@ t_list	*split_lst(char *str, char c)
 	t_list	*lst;
 	char	**dir_pptr;
 	int		i;
+	char	*tmp;
 
 	dir_pptr = ms_split(str, c);
 	if (dir_pptr[0] == NULL)
 		return (NULL);
-	lst = ms_lstnew(dir_pptr[0]);
+	tmp = ms_strdup(dir_pptr[0]);
+	lst = ms_lstnew(tmp);
 	i = 1;
 	while (dir_pptr[i] != NULL)
 	{
-		ms_lstadd_back(&lst, ms_lstnew(dir_pptr[i]));
+		tmp = ms_strdup(dir_pptr[i]);
+		ms_lstadd_back(&lst, ms_lstnew(tmp));
 		i++;
 	}
+	ms_split_free(dir_pptr);
 	return (lst);
 }
 
 char	*lst_to_string(t_list *list, char *c)
 {
 	char	*str;
+	char	*tmp;
 
-	str = NULL;
+	if (list == NULL)
+		return (NULL);
+	//str = NULL;
+	tmp = ms_strjoin(c, (char *)list->content);
+	str = ms_strdup(tmp);
+	free(tmp);
+	list = list->next;
 	while (list != NULL)
 	{
-		if (str == NULL)
-			str = ms_strdup(ms_strjoin(c, (char *)list->content));
+		tmp = ms_strjoin(c, (char *)list->content);
+		str = ms_strappend(str, tmp);
+
+		/*if (str == NULL)
+			str = ms_strdup(tmp);
 		else
-			str = ms_strjoin(str, ms_strjoin(c, (char *)list->content));
+			str = ms_strjoin(str, tmp);*/
+
 		list = list->next;
 	}
 	return (str);
@@ -92,24 +107,28 @@ static char	*rewrite_absolute_path(t_list *dir_lst, char *input_path)
 {
 	char	*new_path;
 	t_list	*new_dir_lst;
+	t_list	*current;
 
 	new_dir_lst = NULL;
 	if (dir_lst == NULL)
 		return (input_path);
-	while (dir_lst != NULL)
+
+	current = dir_lst;
+	while (current != NULL)
 	{
-		if (ms_strcmp((char *)dir_lst->content, "..") == 0)
+		if (ms_strcmp((char *)current->content, "..") == 0)
 			del_last_elem(&new_dir_lst);
-		else if (ms_strcmp((char *)dir_lst->content, ".") != 0)
+		else if (ms_strcmp((char *)current->content, ".") != 0)
 		{
 			if (ms_lstsize(new_dir_lst) == 0)
-				new_dir_lst = ms_lstnew(dir_lst->content);
+				new_dir_lst = ms_lstnew(ms_strdup(current->content));
 			else
-				ms_lstadd_back(&new_dir_lst, ms_lstnew(dir_lst->content));
+				ms_lstadd_back(&new_dir_lst, ms_lstnew(ms_strdup(current->content)));
 		}
-		dir_lst = dir_lst->next;
+		current = current->next;
 	}
 	new_path = lst_to_string(new_dir_lst, "/");
+	ms_lstclear(&dir_lst, free);
 	ms_lstclear(&new_dir_lst, free);
 	return (new_path);
 }
@@ -118,17 +137,20 @@ static char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
 {
 	char	*new_path;
 	t_list	*new_pwd_lst;
+	t_list	*current;
 
 	new_pwd_lst = split_lst(pwd, '/');
-	while (dir_lst != NULL)
+	current = dir_lst;
+	while (current != NULL)
 	{
-		if (ms_strcmp(dir_lst->content, "..") == 0)
+		if (ms_strcmp(current->content, "..") == 0)
 			del_last_elem(&new_pwd_lst);
-		else if (ms_strcmp(dir_lst->content, ".") != 0)
-			ms_lstadd_back(&new_pwd_lst, ms_lstnew(dir_lst->content));
-		dir_lst = dir_lst->next;
+		else if (ms_strcmp(current->content, ".") != 0)
+			ms_lstadd_back(&new_pwd_lst, ms_lstnew(ms_strdup(current->content)));
+		current = current->next;
 	}
 	new_path = lst_to_string(new_pwd_lst, "/");
+	ms_lstclear(&dir_lst, free);
 	ms_lstclear(&new_pwd_lst, free);
 	return (new_path);
 }
@@ -146,9 +168,9 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 	{
 		dir_lst = split_lst(input_path, '/');
 		if (input_path[0] == '/')
-			new_pwd = ms_strdup(rewrite_absolute_path(dir_lst, input_path));
+			new_pwd = rewrite_absolute_path(dir_lst, input_path);
 		else
-			new_pwd = ms_strdup(rewrite_relative_path(dir_lst, d_info->pwd));
+			new_pwd = rewrite_relative_path(dir_lst, d_info->pwd);
 		if (chdir(new_pwd) < 0)
 		{
 			perror("minishell: cd");

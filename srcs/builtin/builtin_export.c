@@ -103,7 +103,7 @@ static char	*get_key(char *key_value, t_boolean *is_append)
 	if (tmp != NULL)
 		return (ms_substr(key_value, 0, tmp - key_value));
 	else
-		return (key_value);
+		return (ms_strdup(key_value));
 }
 
 char	*get_value(char *key_value)
