@@ -5,6 +5,7 @@ static t_list	*expand_cmd_info_element(t_list *list, char **my_env)
 	t_list	*new_lst;
 	t_list	*current;
 	char	*token;
+	t_list	*tmp;
 
 	new_lst = NULL;
 	current = list;
@@ -17,8 +18,6 @@ static t_list	*expand_cmd_info_element(t_list *list, char **my_env)
 				new_lst = expand(token, FALSE, my_env);
 			else
 				ms_lstadd_back(&new_lst, expand(token, FALSE, my_env));
-
-			t_list	*tmp;
 
 			tmp = new_lst;
 			while (tmp != NULL)
