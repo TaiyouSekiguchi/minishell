@@ -3,7 +3,6 @@
 
 static int	get_index_of_key(char *key, char **environ)
 {
-	//extern char		**environ;
 	char			**split;
 	char			*env_key;
 	int				index;
@@ -24,37 +23,40 @@ static int	get_index_of_key(char *key, char **environ)
 		i++;
 		ms_split_free(split);
 	}
-	//ms_split_free(split);
 	return (index);
 }
 
-static char	*get_key(char *argv)
+int	is_key_validate(char *key)
 {
-	char	**split;
-	char	*key;
-
-	split = ms_split(argv, '=');
-	key = ms_strdup(split[0]);
-	ms_split_free(split);
-	return (key);
+	if (*key != '_' && ms_isalpha(*key) == FALSE)
+		return (FALSE);
+	key++;
+	while (*key != '\0')
+	{
+		if (is_name(*key) == FALSE)
+			return (FALSE);
+		key++;
+	}
+	return (TRUE);
 }
 
-int	builtin_unset(int argc, char *argv[], char ***environ)
+int	unset_key(char *key, char ***environ)
 {
-	//extern char	**environ;
-	char	*key;
 	int		index;
 	int		i;
+	char	*tmp;
 
-	if (argc == 1)
-		return (1);
-
-	//validation
-
-	key = get_key(argv[1]);
+	if (is_key_validate(key) != TRUE)
+	{
+		tmp = ms_strappend(ms_strdup("`"), ms_strdup(key));
+		tmp = ms_strappend(tmp, ms_strdup("\'"));
+		tmp = ms_strappend(tmp, ms_strdup(": not a valid identifier"));
+		put_error_exit("unset", 0, tmp, FALSE);
+		free(tmp);
+		return (EXIT_FAILURE);
+	}
 	index = get_index_of_key(key, *environ);
-	free(key);
-	if (index >= 0)
+	if (index != -1)
 	{
 		free((*environ)[index]);
 		i = index;
@@ -64,5 +66,26 @@ int	builtin_unset(int argc, char *argv[], char ***environ)
 			i++;
 		}
 	}
-	return (0);
+	return (EXIT_SUCCESS);
+}
+
+int	builtin_unset(int argc, char *argv[], char ***environ)
+{
+	int	i;
+	int	ret;
+
+	ret = EXIT_SUCCESS;
+	if (argc == 1)
+		return (ret);
+	else
+	{
+		i = 1;
+		while (argv[i] != NULL)
+		{
+			if(unset_key(argv[i], environ) == EXIT_FAILURE)
+				ret = EXIT_FAILURE;
+			i++;
+		}
+	}
+	return (ret);
 }
