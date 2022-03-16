@@ -2,21 +2,27 @@
 
 char	*ms_getenv(char **my_env, char *key)
 {
-	char	**split;
-	char	*value;
+	char	*env_key;
+	char	*env_value;
+	char	*pos;
 	int		i;
 
 	i = 0;
 	while (my_env[i] != NULL)
 	{
-		split = ms_split(my_env[i], '=');
-		if (ms_strcmp(split[0], key) == 0)
+		pos = ms_strchr(my_env[i], '=');
+		if (pos != NULL)
 		{
-			value = ms_strdup(split[1]);
-			ms_split_free(split);
-			return (value);
+			env_key = ms_strndup(my_env[i], pos - my_env[i]);
+			if (ms_strcmp(env_key, key) == 0)
+			{
+				free(env_key);
+				pos++;
+				env_value = ms_strdup(pos);
+				return (env_value);
+			}
+			free(env_key);
 		}
-		ms_split_free(split);
 		i++;
 	}
 	return (NULL);
