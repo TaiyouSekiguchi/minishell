@@ -53,29 +53,6 @@ static char	*set_input_path(int argc, char **argv, char **my_env)
 		return(argv[1]);
 }
 
-t_list	*split_lst(char *str, char c)
-{
-	t_list	*lst;
-	char	**dir_pptr;
-	int		i;
-	char	*tmp;
-
-	dir_pptr = ms_split(str, c);
-	if (dir_pptr[0] == NULL)
-		return (NULL);
-	tmp = ms_strdup(dir_pptr[0]);
-	lst = ms_lstnew(tmp);
-	i = 1;
-	while (dir_pptr[i] != NULL)
-	{
-		tmp = ms_strdup(dir_pptr[i]);
-		ms_lstadd_back(&lst, ms_lstnew(tmp));
-		i++;
-	}
-	ms_split_free(dir_pptr);
-	return (lst);
-}
-
 char	*lst_to_string(t_list *list, char *c)
 {
 	char	*str;
@@ -83,7 +60,6 @@ char	*lst_to_string(t_list *list, char *c)
 
 	if (list == NULL)
 		return (NULL);
-	//str = NULL;
 	tmp = ms_strjoin(c, (char *)list->content);
 	str = ms_strdup(tmp);
 	free(tmp);
@@ -92,12 +68,6 @@ char	*lst_to_string(t_list *list, char *c)
 	{
 		tmp = ms_strjoin(c, (char *)list->content);
 		str = ms_strappend(str, tmp);
-
-		/*if (str == NULL)
-			str = ms_strdup(tmp);
-		else
-			str = ms_strjoin(str, tmp);*/
-
 		list = list->next;
 	}
 	return (str);

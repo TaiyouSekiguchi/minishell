@@ -120,7 +120,7 @@ t_list	*expand(char *token, t_boolean in_heredoc, char **my_env)
 				free(val_name);
 				if (value == NULL)
 					value = ms_strdup("");
-				lexer(&token_lst, value);
+				token_lst = split_lst(value, ' ');
 				free(value);
 				current = token_lst;
 				while (current != NULL)
