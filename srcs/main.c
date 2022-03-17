@@ -26,27 +26,22 @@ static void	do_process_free(t_list **token_list, t_list **cmd_info_list)
 	ms_lstclear(cmd_info_list, free);
 }
 
-static void	do_process(char *command, t_dir *d_info)
+static void	do_process(char *input, t_dir *d_info)
 {
 	t_list	*token_list;
 	t_list	*cmd_info_list;
 
-	if (command[0] == '\0')
+	if (input[0] == '\0')
 		return ;
-
-	token_list = NULL;
-	lexer(&token_list, command);
+	lexer(&token_list, input);
 	if (token_list == NULL)
 		return ;
-
-	cmd_info_list = NULL;
 	parser(&cmd_info_list, token_list);
 	if (cmd_info_list == NULL)
 	{
 		ms_lstclear(&token_list, free);
 		return ;
 	}
-
 	expander(cmd_info_list, d_info->my_env);
 	executer(cmd_info_list, d_info);
 	do_process_free(&token_list, &cmd_info_list);
@@ -65,9 +60,9 @@ static void	free_my_env(char **my_env)
 	free(my_env);
 }
 
-static void	main_free(char *input_line, t_dir *info)
+static void	main_free(char *input, t_dir *info)
 {
-	free(input_line);
+	free(input);
 	free(info->pwd);
 	free(info->old_pwd);
 	free_my_env(info->my_env);
@@ -75,30 +70,27 @@ static void	main_free(char *input_line, t_dir *info)
 
 int	main(void)
 {
-	char	*input_line;
+	char	*input;
 	t_dir	info;
 
 	//init関数としてまとめたい
 	init_my_env(&info);
 	init_dir_info(&info);
 	init_shlvl(&info.my_env);
-
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
-
-	input_line = NULL;
+	input = NULL;
 	while (1)
 	{
-		input_line = rl_gets();
-		if (input_line == NULL)
+		input = rl_gets();
+		if (input == NULL)
 			break ;
-		if (ms_strcmp(input_line, "history -c") == 0)
+		if (ms_strcmp(input, "history -c") == 0)
 			clear_history();
 		else
-			do_process(input_line, &info);
+			do_process(input, &info);
 	}
-
-	main_free(input_line, &info);
+	main_free(input, &info);
 	ms_putendl_fd("exit", STDERR);
 	return (get_g_status());
 }

@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 11:29:51 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/09 17:37:58 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/17 14:44:35 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,7 @@ int	is_delimiter(char c)
 
 int	is_metachar(char c)
 {
-	if (is_blank(c))
-		return (TRUE);
-	if (is_delimiter(c))
+	if (is_blank(c) || is_delimiter(c))
 		return (TRUE);
 	return (FALSE);
 }

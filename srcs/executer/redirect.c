@@ -56,27 +56,6 @@ void	get_redirect_fd(t_list *redirect, char **my_env, int *infile_fd, int *outfi
 	}
 }
 
-/*int	get_redirect_fd(t_list *file_list, char **my_env)
-{
-	int		fd;
-	char	*file_name;
-
-	if (file_list == NULL)
-		return (NONE_FD);
-
-	file_name = NULL;
-	while (file_list != NULL)
-	{
-		file_name = file_list->content;
-		fd = redirect_file_open(file_name, my_env);
-		if (fd == ERROR_FD)
-			break ;
-		file_list = file_list->next;
-	}
-
-	return (fd);
-}*/
-
 void	do_redirect(int infile_fd, int outfile_fd)
 {
 	if (infile_fd != NONE_FD)
