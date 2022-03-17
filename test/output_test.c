@@ -1,16 +1,49 @@
 #include "minishell.h"
 
-void	test(char *str, t_dir *d_info)
+static void	free_my_env(char **my_env)
 {
-	t_list	*tokens;
-	t_list	*cmds;
+	int	i;
 
-	tokens = NULL;
-	lexer(&tokens, str);
-	cmds = NULL;
-	parser(&cmds, tokens);
-	expander(cmds, d_info->my_env);
-	executer(cmds, d_info);
+	i = 0;
+	while (my_env[i] != NULL)
+	{
+		free(my_env[i]);
+		i++;
+	}
+	free(my_env);
+}
+
+static void	main_free(char *input_line, t_dir *info)
+{
+	free(input_line);
+	free(info->pwd);
+	free(info->old_pwd);
+	free_my_env(info->my_env);
+}
+
+void	test(char *command, t_dir *d_info)
+{
+	t_list	*token_list;
+	t_list	*cmd_info_list;
+
+	if (command[0] == '\0')
+		return ;
+
+	token_list = NULL;
+	lexer(&token_list, command);
+	if (token_list == NULL)
+		return ;
+
+	cmd_info_list = NULL;
+	parser(&cmd_info_list, token_list);
+	if (cmd_info_list == NULL)
+	{
+		ms_lstclear(&token_list, free);
+		return ;
+	}
+
+	expander(cmd_info_list, d_info->my_env);
+	executer(cmd_info_list, d_info);
 }
 
 int	main(int argc, char **argv)
@@ -31,9 +64,10 @@ int	main(int argc, char **argv)
 		command = ms_strjoin(command, " ");
 		i++;
 	}
-	init_dir_info(&info);
 	init_my_env(&info);
+	init_dir_info(&info);
 	init_shlvl(&info.my_env);
 	test(command, &info);
+	main_free(command, &info);
 	return (get_g_status());
 }
