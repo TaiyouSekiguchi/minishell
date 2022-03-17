@@ -11,3 +11,9 @@ void	sigint_handler(int signum)
 		set_g_status(1);
 	}
 }
+
+void	default_signal(void)
+{
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+}

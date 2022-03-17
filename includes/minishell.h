@@ -4,9 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-
 #include <fcntl.h>
-
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -16,13 +14,11 @@
 # define ERROR_FD (-1)
 # define READ (0)
 # define WRITE (1)
-
-# define COMMAND_NOT_FOUND 127
-# define PERMISSION_DENIED 126
-
-# define SYNTAX_ERROR_MSG "syntax error near unexpected token 'newline'"
-
 # define CHILD 0
+
+# define PERMISSION_DENIED 126
+# define COMMAND_NOT_FOUND 127
+# define SYNTAX_ERROR_MSG "syntax error near unexpected token 'newline'"
 
 typedef	enum e_boolean
 {
@@ -70,8 +66,6 @@ typedef	struct s_cmd_info
 {
 	t_list	*cmd;
 	t_list	*redirect;
-	//t_list	*infile;
-	//t_list	*outfile;
 }				t_cmd_info;
 
 typedef struct s_dir
@@ -94,6 +88,7 @@ int			get_g_status(void);
 void		set_g_status(long num);
 void		set_g_status_exception(int num);
 void		sigint_handler(int signum);
+void		default_signal(void);
 //lexer
 void		lexer(t_list **list, char *cmd);
 int			is_quote(char c);
