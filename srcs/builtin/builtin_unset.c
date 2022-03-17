@@ -51,7 +51,7 @@ int	unset_key(char *key, char ***environ)
 		tmp = ms_strappend(ms_strdup("`"), ms_strdup(key));
 		tmp = ms_strappend(tmp, ms_strdup("\'"));
 		tmp = ms_strappend(tmp, ms_strdup(": not a valid identifier"));
-		put_error_exit("unset", 0, tmp, FALSE);
+		put_error_exit("unset", tmp, FALSE);
 		free(tmp);
 		return (EXIT_FAILURE);
 	}

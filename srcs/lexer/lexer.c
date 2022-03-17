@@ -23,7 +23,7 @@ static void	add_tokens(t_list **token_list, char *input, size_t start, size_t *i
 
 static void	not_close_quote(t_list **token_list)
 {
-	put_error_exit(NULL, get_g_status(), SYNTAX_ERROR_MSG, FALSE);
+	put_error_exit(NULL, SYNTAX_ERROR_MSG, FALSE);
 	ms_lstclear(token_list, free);
 	*token_list = NULL;
 }

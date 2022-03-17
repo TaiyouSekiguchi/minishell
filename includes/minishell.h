@@ -83,7 +83,7 @@ void		init_shlvl(char ***my_env);
 void		init_my_env(t_dir *d_info);
 void		call_export(char *env_name, char *value, char ***my_env);
 void		call_unset(char *env_name, char ***my_env);
-void		put_error_exit(char *name, int status, char *msg, t_boolean is_exit);
+void		put_error_exit(char *name, char *msg, t_boolean is_exit);
 int			get_g_status(void);
 void		set_g_status(long num);
 void		set_g_status_exception(int num);
@@ -107,7 +107,7 @@ int			token_kind(char *token);
 //expander
 t_list		*expand(char *token, t_boolean in_heredoc, char **my_env);
 t_list		*expand_cmd_info_element(t_list *list, char **my_env);
-char		*expand_line(char *token, t_boolean in_heredoc, char **my_env);
+char		*expand_for_heredoc(char *token, char **my_env);
 void		expander(t_list *cmds, char **my_env);
 char		*ms_getenv(char **my_env, char *key);
 char		*remove_quotation(char *token);

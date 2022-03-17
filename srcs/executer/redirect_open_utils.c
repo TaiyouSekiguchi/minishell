@@ -6,7 +6,7 @@ int		infile_open(char *file_name)
 
 	fd = open(&file_name[2], O_RDONLY);
 	if (fd < 0)
-		put_error_exit(&file_name[2], get_g_status(), NULL, FALSE);
+		put_error_exit(&file_name[2], NULL, FALSE);
 	return (fd);
 }
 
@@ -33,7 +33,6 @@ static char	*rl_gets_heredoc(void)
 		free(line_read);
 		line_read = (char *)NULL;
 	}
-
 	line_read = readline("heredoc > ");
 	return (line_read);
 }
@@ -50,19 +49,13 @@ void	heredoc_loop(int fd, char *token, char **my_env)
 	while(1)
 	{
 		line = rl_gets_heredoc();
-		//line = readline("heredoc > ");
 		if (line == NULL || ms_strcmp(line, word) == 0)
 			break ;
-
 		if (quote == FALSE)
-			line = expand_line(line, TRUE, my_env);
-
+			line = expand_for_heredoc(line, my_env);
 		ms_putendl_fd(line, fd);
-		free(line);
 	}
 	free(word);
-	//free(line);
-	//line = NULL;
 }
 
 int	heredoc_open(char *token, char **my_env)
@@ -85,7 +78,7 @@ int	heredoc_open(char *token, char **my_env)
 	fd = open(tmp_file_name, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
 	if (fd < 0)
 	{
-		put_error_exit(tmp_file_name, get_g_status(), NULL, FALSE);
+		put_error_exit(tmp_file_name, NULL, FALSE);
 		free(tmp_file_name);
 		return (ERROR_FD);
 	}
@@ -95,7 +88,7 @@ int	heredoc_open(char *token, char **my_env)
 	fd = open(tmp_file_name, O_RDONLY);
 	if (fd < 0)
 	{
-		put_error_exit(tmp_file_name, get_g_status(), NULL, FALSE);
+		put_error_exit(tmp_file_name, NULL, FALSE);
 		free(tmp_file_name);
 	}
 
@@ -111,7 +104,7 @@ outfile_open(char *token)
 
 	fd = open(&token[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		put_error_exit(&token[2], get_g_status(), NULL, FALSE);
+		put_error_exit(&token[2], NULL, FALSE);
 	return (fd);
 }
 
@@ -122,7 +115,7 @@ append_open(char *token)
 
 	fd = open(&token[3], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-		put_error_exit(&token[3], get_g_status(), NULL, FALSE);
+		put_error_exit(&token[3], NULL, FALSE);
 		//ms_error("open failed");
 
 	return (fd);

@@ -132,7 +132,7 @@ int	register_key_value(char *key_value, char ***environ)
 		tmp = ms_strappend(ms_strdup("`"), ms_strdup(key_value));
 		tmp = ms_strappend(tmp, ms_strdup("\'"));
 		tmp = ms_strappend(tmp, ms_strdup(": not a valid identifier"));
-		put_error_exit("export", 0, tmp, FALSE);
+		put_error_exit("export", tmp, FALSE);
 		free(tmp);
 		return (EXIT_FAILURE);
 	}
