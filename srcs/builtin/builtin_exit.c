@@ -17,11 +17,11 @@ int	builtin_exit(int argc, char *argv[])
 			//msg = ms_strappend(ms_strdup(""), ms_strdup("exit: "));
 			msg = ms_strappend(ms_strdup(""), ms_strdup(argv[1]));
 			msg = ms_strappend(msg, ms_strdup(": numeric argment required"));
-			put_error_exit("exit", get_g_status(), msg, TRUE);
+			put_error_exit("exit", msg, TRUE);
 		}
 		if (argc > 2)
 		{
-			put_error_exit("exit", get_g_status(), "exit: too many arguments", FALSE);
+			put_error_exit("exit", "exit: too many arguments", FALSE);
 			return (1);
 		}
 		set_g_status(ret);

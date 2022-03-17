@@ -62,9 +62,9 @@ static char	*cmd_path_search(char *cmd_name, char **my_env)
 	set_g_status(exit_status);
 
 	if (exit_status == COMMAND_NOT_FOUND)
-		put_error_exit(cmd_name, get_g_status(), "command not found", FALSE);
+		put_error_exit(cmd_name, "command not found", FALSE);
 	else
-		put_error_exit(cmd_name, get_g_status(), NULL, FALSE);
+		put_error_exit(cmd_name, NULL, FALSE);
 
 	ms_split_free(split_env_path);
 	free(cmd_name);
@@ -100,16 +100,18 @@ void	do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 		//relate absolute_PATHから探す
 		if (access(argv[0], F_OK) != 0)
 		{
-			put_error_exit(argv[0], COMMAND_NOT_FOUND, NULL, TRUE);
+			set_g_status(COMMAND_NOT_FOUND);
+			put_error_exit(argv[0], NULL, TRUE);
 		}
 		if (access(argv[0], X_OK) != 0)
 		{
-			put_error_exit(argv[0], PERMISSION_DENIED, NULL, TRUE);
+			set_g_status(PERMISSION_DENIED);
+			put_error_exit(argv[0], NULL, TRUE);
 		}
 	}
 	if (execve(argv[0], argv, d_info->my_env) < 0)
 	{
 		ms_split_free(argv);
-		put_error_exit(argv[0], get_g_status(), NULL, TRUE);
+		put_error_exit(argv[0], NULL, TRUE);
 	}
 }

@@ -35,7 +35,6 @@ void	expander(t_list *cmd_info_list, char **my_env)
 	{
 		cmd_info = current->content;
 		cmd_info->cmd = expand_cmd_info_element(cmd_info->cmd, my_env);
-		//cmd_info->redirect = expand_cmd_info_element(cmd_info->redirect, my_env);
 		current = current->next;
 	}
 }

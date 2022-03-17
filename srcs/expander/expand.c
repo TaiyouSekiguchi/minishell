@@ -90,14 +90,12 @@ t_list	*expand(char *token, t_boolean in_heredoc, char **my_env)
 			token++;
 			if (*token == '?')
 			{
-				value = ms_itoa(get_g_status());
-				ret = ms_strappend(ret, value);
+				ret = ms_strappend(ret, ms_itoa(get_g_status()));
 				token++;
 			}
 			else if (ms_isdigit(*token))
 			{
-				value = ms_strdup("");
-				ret = ms_strappend(ret, value);
+				ret = ms_strappend(ret, ms_strdup(""));
 				token++;
 			}
 			else
@@ -107,8 +105,10 @@ t_list	*expand(char *token, t_boolean in_heredoc, char **my_env)
 				free(val_name);
 				if (value == NULL)
 					value = ms_strdup("");
+
 				token_lst = split_lst(value, ' ');
 				free(value);
+
 				current = token_lst;
 				while (current != NULL)
 				{
@@ -117,6 +117,7 @@ t_list	*expand(char *token, t_boolean in_heredoc, char **my_env)
 					ret = ms_strdup("");
 					current = current->next;
 				}
+
 				ms_lstclear(&token_lst, free);
 				while (*token != '\0' && is_name(*token))
 					token++;

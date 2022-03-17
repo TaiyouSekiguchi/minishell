@@ -6,7 +6,7 @@ int		infile_open(char *file_name)
 
 	fd = open(&file_name[2], O_RDONLY);
 	if (fd < 0)
-		put_error_exit(&file_name[2], get_g_status(), NULL, FALSE);
+		put_error_exit(&file_name[2], NULL, FALSE);
 	return (fd);
 }
 
@@ -78,7 +78,7 @@ int	heredoc_open(char *token, char **my_env)
 	fd = open(tmp_file_name, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
 	if (fd < 0)
 	{
-		put_error_exit(tmp_file_name, get_g_status(), NULL, FALSE);
+		put_error_exit(tmp_file_name, NULL, FALSE);
 		free(tmp_file_name);
 		return (ERROR_FD);
 	}
@@ -88,7 +88,7 @@ int	heredoc_open(char *token, char **my_env)
 	fd = open(tmp_file_name, O_RDONLY);
 	if (fd < 0)
 	{
-		put_error_exit(tmp_file_name, get_g_status(), NULL, FALSE);
+		put_error_exit(tmp_file_name, NULL, FALSE);
 		free(tmp_file_name);
 	}
 
@@ -104,7 +104,7 @@ outfile_open(char *token)
 
 	fd = open(&token[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		put_error_exit(&token[2], get_g_status(), NULL, FALSE);
+		put_error_exit(&token[2], NULL, FALSE);
 	return (fd);
 }
 
@@ -115,7 +115,7 @@ append_open(char *token)
 
 	fd = open(&token[3], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-		put_error_exit(&token[3], get_g_status(), NULL, FALSE);
+		put_error_exit(&token[3], NULL, FALSE);
 		//ms_error("open failed");
 
 	return (fd);

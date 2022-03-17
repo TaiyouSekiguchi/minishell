@@ -59,7 +59,7 @@ void	get_redirect_fd(t_list *redirect, char **my_env, int *infile_fd, int *outfi
 				tmp_list = expand_cmd_info_element(ms_lstnew(ms_strdup(file_name + 2)), my_env);
 			if (ms_lstsize(tmp_list) != 1 || ms_strcmp(tmp_list->content, "") == 0)
 			{
-				put_error_exit(ms_strchr(file_name, '$'), get_g_status(), "ambiguous redirect", FALSE);
+				put_error_exit(ms_strchr(file_name, '$'),"ambiguous redirect", FALSE);
 				*infile_fd = ERROR_FD;
 				*outfile_fd = ERROR_FD;
 				ms_lstclear(&tmp_list, free);
