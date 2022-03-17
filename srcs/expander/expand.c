@@ -89,6 +89,7 @@ t_list	*expand(char *token, t_boolean in_heredoc, char **my_env)
 
 	t_list	*new_lst;
 	t_list	*token_lst;
+	t_list	*current;
 
 	new_lst = NULL;
 
@@ -113,6 +114,7 @@ t_list	*expand(char *token, t_boolean in_heredoc, char **my_env)
 			}
 			ret = ms_strappend(ret, ms_strndup(start, token - start));
 			token++;
+
 			if (*token == '?')
 			{
 				value = ms_itoa(get_g_status());
@@ -132,18 +134,24 @@ t_list	*expand(char *token, t_boolean in_heredoc, char **my_env)
 				free(val_name);
 				if (value == NULL)
 					value = ms_strdup("");
+
 				token_lst = NULL;
 				lexer(&token_lst, value);
-				while (token_lst != NULL)
+				free(value);
+
+				current = token_lst;
+				while (current != NULL)
 				{
-					ret = ms_strappend(ret, token_lst->content);
+					ret = ms_strappend(ret, ms_strdup(current->content));
 					if (new_lst == NULL)
 						new_lst = ms_lstnew(ret);
 					else
 						ms_lstadd_back(&new_lst, ms_lstnew(ret));
 					ret = ms_strdup("");
-					token_lst = token_lst->next;
+
+					current = current->next;
 				}
+
 				ms_lstclear(&token_lst, free);
 				while (*token != '\0' && is_name(*token))
 					token++;
@@ -152,9 +160,13 @@ t_list	*expand(char *token, t_boolean in_heredoc, char **my_env)
 		}
 	}
 	ret = ms_strappend(ret, ms_strndup(start, token - start));
+
 	if (ms_strlen(ret) != 0 && new_lst == NULL)
 		new_lst = ms_lstnew(ret);
 	else if (ms_strlen(ret) != 0 && new_lst != NULL)
 		ms_lstadd_back(&new_lst, ms_lstnew(ret));
+	else
+		free(ret);
+
 	return (new_lst);
 }

@@ -14,8 +14,8 @@ int	builtin_exit(int argc, char *argv[])
 		if (errno == 22 || errno == 34)
 		{
 			set_g_status(255);
-			msg = ms_strappend(ms_strdup(""), ms_strdup("exit: "));
-			msg = ms_strappend(msg, ms_strdup(argv[1]));
+			//msg = ms_strappend(ms_strdup(""), ms_strdup("exit: "));
+			msg = ms_strappend(ms_strdup(""), ms_strdup(argv[1]));
 			msg = ms_strappend(msg, ms_strdup(": numeric argment required"));
 			put_error_exit("exit", get_g_status(), msg, TRUE);
 		}
