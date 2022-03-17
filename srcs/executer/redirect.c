@@ -22,6 +22,7 @@ void	get_redirect_fd(t_list *redirect, char **my_env, int *infile_fd, int *outfi
 	int		heredoc_fd;
 	char	*file_name;
 	t_list	*current;
+	t_list	*tmp;
 
 	*infile_fd = NONE_FD;
 	*outfile_fd = NONE_FD;
@@ -49,10 +50,40 @@ void	get_redirect_fd(t_list *redirect, char **my_env, int *infile_fd, int *outfi
 	while (current != NULL)
 	{
 		file_name = current->content;
-		// もし、ひあどきゅではないならば、expanderをして、スペースで
-		redirect_file_open(file_name, infile_fd, outfile_fd, heredoc_fd);
-		if (*infile_fd == ERROR_FD || *outfile_fd == ERROR_FD)
-			break ;
+		if (file_name[0] != '<' || file_name[1] != '<')
+		{
+			if (ms_strncmp(file_name, ">>", 2) == 0)
+				tmp = expand_cmd_info_element(ms_lstnew(ms_strdup(file_name + 3)), my_env);
+			else
+				tmp = expand_cmd_info_element(ms_lstnew(ms_strdup(file_name + 2)), my_env);
+			if (ms_lstsize(tmp) != 1 || ms_strcmp(tmp->content, "") == 0)
+			{
+				put_error_exit(ms_strchr(file_name, '$'), get_g_status(), "ambiguous redirect", FALSE);
+				*infile_fd = ERROR_FD;
+				*outfile_fd = ERROR_FD;
+				ms_lstclear(&tmp, free);
+				return ;
+			}
+			else
+			{
+				if (ms_strncmp(file_name, ">>", 2) == 0)
+					redirect_file_open(ms_strappend(ms_strdup(">> "), ms_strdup(tmp->content)),
+										infile_fd, outfile_fd, heredoc_fd);
+				else if (ms_strncmp(file_name, "<", 1) == 0)
+					redirect_file_open(ms_strappend(ms_strdup("< "), ms_strdup(tmp->content)),
+										infile_fd, outfile_fd, heredoc_fd);
+				else
+					redirect_file_open(ms_strappend(ms_strdup("> "), ms_strdup(tmp->content)),
+										infile_fd, outfile_fd, heredoc_fd);
+			}
+			ms_lstclear(&tmp, free);
+		}
+		else
+		{
+			redirect_file_open(file_name, infile_fd, outfile_fd, heredoc_fd);
+			if (*infile_fd == ERROR_FD || *outfile_fd == ERROR_FD)
+				break ;
+		}
 		current = current->next;
 	}
 }

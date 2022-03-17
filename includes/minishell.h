@@ -89,6 +89,7 @@ void		set_g_status(long num);
 void		set_g_status_exception(int num);
 void		sigint_handler(int signum);
 void		default_signal(void);
+t_list		*split_lst(char *str, char c);
 //lexer
 void		lexer(t_list **list, char *cmd);
 int			is_quote(char c);
@@ -105,6 +106,7 @@ int			syntax_check(t_list *tokens);
 int			token_kind(char *token);
 //expander
 t_list		*expand(char *token, t_boolean in_heredoc, char **my_env);
+t_list		*expand_cmd_info_element(t_list *list, char **my_env);
 char		*expand_line(char *token, t_boolean in_heredoc, char **my_env);
 void		expander(t_list *cmds, char **my_env);
 char		*ms_getenv(char **my_env, char *key);
