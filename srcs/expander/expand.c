@@ -12,27 +12,19 @@ char	*get_val_name(char *token)
 	return (val_name);
 }
 
-char	*expand_line(char *token, t_boolean in_heredoc, char **my_env)
+char	*expand_for_heredoc(char *token, char **my_env)
 {
 	char	*value;
 	char	*ret;
 	char	*start;
 	char	*val_name;
-	t_quote	quote;
-	t_list	*token_lst;
 
-	quote = NONE;
 	ret = ms_strdup("");
 	start = token;
 	while (*token != '\0')
 	{
-		if (in_heredoc == FALSE && is_quote(*token))
-		{
-			quote = quote_set(*token, quote);
-			token++;
-		}
-		else if ((quote == SINGLE || *token != '$')
-				|| (*(token + 1) != '?' && !is_name(*(token + 1))))
+		if ((*token != '$')
+			|| (*(token + 1) != '?' && !is_name(*(token + 1))))
 			token++;
 		else
 		{
@@ -55,12 +47,7 @@ char	*expand_line(char *token, t_boolean in_heredoc, char **my_env)
 				free(val_name);
 				if (value == NULL)
 					value = ms_strdup("");
-				lexer(&token_lst, value);
-				while (token_lst != NULL)
-				{
-					dprintf(STDERR, "token_lst->content=%s\n", (char*)token_lst->content);
-					token_lst = token_lst->next;
-				}
+
 				while (*token != '\0' && is_name(*token))
 					token++;
 			}

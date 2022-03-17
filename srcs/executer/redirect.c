@@ -22,7 +22,8 @@ void	get_redirect_fd(t_list *redirect, char **my_env, int *infile_fd, int *outfi
 	int		heredoc_fd;
 	char	*file_name;
 	t_list	*current;
-	t_list	*tmp;
+	t_list	*tmp_list;
+	char	*tmp;
 
 	*infile_fd = NONE_FD;
 	*outfile_fd = NONE_FD;
@@ -53,30 +54,29 @@ void	get_redirect_fd(t_list *redirect, char **my_env, int *infile_fd, int *outfi
 		if (file_name[0] != '<' || file_name[1] != '<')
 		{
 			if (ms_strncmp(file_name, ">>", 2) == 0)
-				tmp = expand_cmd_info_element(ms_lstnew(ms_strdup(file_name + 3)), my_env);
+				tmp_list = expand_cmd_info_element(ms_lstnew(ms_strdup(file_name + 3)), my_env);
 			else
-				tmp = expand_cmd_info_element(ms_lstnew(ms_strdup(file_name + 2)), my_env);
-			if (ms_lstsize(tmp) != 1 || ms_strcmp(tmp->content, "") == 0)
+				tmp_list = expand_cmd_info_element(ms_lstnew(ms_strdup(file_name + 2)), my_env);
+			if (ms_lstsize(tmp_list) != 1 || ms_strcmp(tmp_list->content, "") == 0)
 			{
 				put_error_exit(ms_strchr(file_name, '$'), get_g_status(), "ambiguous redirect", FALSE);
 				*infile_fd = ERROR_FD;
 				*outfile_fd = ERROR_FD;
-				ms_lstclear(&tmp, free);
+				ms_lstclear(&tmp_list, free);
 				return ;
 			}
 			else
 			{
 				if (ms_strncmp(file_name, ">>", 2) == 0)
-					redirect_file_open(ms_strappend(ms_strdup(">> "), ms_strdup(tmp->content)),
-										infile_fd, outfile_fd, heredoc_fd);
+					tmp = ms_strappend(ms_strdup(">> "), ms_strdup(tmp_list->content));
 				else if (ms_strncmp(file_name, "<", 1) == 0)
-					redirect_file_open(ms_strappend(ms_strdup("< "), ms_strdup(tmp->content)),
-										infile_fd, outfile_fd, heredoc_fd);
+					tmp = ms_strappend(ms_strdup("< "), ms_strdup(tmp_list->content));
 				else
-					redirect_file_open(ms_strappend(ms_strdup("> "), ms_strdup(tmp->content)),
-										infile_fd, outfile_fd, heredoc_fd);
+					tmp = ms_strappend(ms_strdup("> "), ms_strdup(tmp_list->content));
+				redirect_file_open(tmp,infile_fd, outfile_fd, heredoc_fd);
+				free(tmp);
 			}
-			ms_lstclear(&tmp, free);
+			ms_lstclear(&tmp_list, free);
 		}
 		else
 		{

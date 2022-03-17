@@ -33,7 +33,6 @@ static char	*rl_gets_heredoc(void)
 		free(line_read);
 		line_read = (char *)NULL;
 	}
-
 	line_read = readline("heredoc > ");
 	return (line_read);
 }
@@ -50,19 +49,13 @@ void	heredoc_loop(int fd, char *token, char **my_env)
 	while(1)
 	{
 		line = rl_gets_heredoc();
-		//line = readline("heredoc > ");
 		if (line == NULL || ms_strcmp(line, word) == 0)
 			break ;
-
 		if (quote == FALSE)
-			line = expand_line(line, TRUE, my_env);
-
+			line = expand_for_heredoc(line, my_env);
 		ms_putendl_fd(line, fd);
-		free(line);
 	}
 	free(word);
-	//free(line);
-	//line = NULL;
 }
 
 int	heredoc_open(char *token, char **my_env)
