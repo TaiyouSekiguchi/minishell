@@ -49,6 +49,7 @@ void	get_redirect_fd(t_list *redirect, char **my_env, int *infile_fd, int *outfi
 	while (current != NULL)
 	{
 		file_name = current->content;
+		// もし、ひあどきゅではないならば、expanderをして、スペースで
 		redirect_file_open(file_name, infile_fd, outfile_fd, heredoc_fd);
 		if (*infile_fd == ERROR_FD || *outfile_fd == ERROR_FD)
 			break ;
