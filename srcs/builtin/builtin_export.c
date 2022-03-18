@@ -1,5 +1,27 @@
-
 #include "minishell.h"
+
+static void	export_put_env(char **my_env)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (my_env[i] != NULL)
+	{
+		ms_putstr_fd("declare -x ", STDOUT);
+		tmp = ms_strchr(my_env[i], '=');
+		if (tmp != NULL)
+		{
+			write(STDOUT, my_env[i], tmp - my_env[i]);
+			ms_putstr_fd("=\"", STDOUT);
+			ms_putstr_fd(tmp + 1, STDOUT);
+			ms_putstr_fd("\"\n", STDOUT);
+		}
+		else
+			ms_putendl_fd(my_env[i], STDOUT);
+		i++;
+	}
+}
 
 static int	get_index_of_key(char *key, char **environ)
 {
@@ -26,52 +48,6 @@ static int	get_index_of_key(char *key, char **environ)
 	return (index);
 }
 
-static int	get_environ_row(char **environ)
-{
-	int		row;
-
-	row = 0;
-	while (environ[row] != NULL)
-		row++;
-	return (row);
-}
-
-void	free_environ(char **environ)
-{
-	int		i;
-
-	i = 0;
-	while (environ[i] != NULL)
-	{
-		free(environ[i]);
-		i++;
-	}
-	free(environ);
-}
-
-static void	put_env(char **my_env)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	while (my_env[i] != NULL)
-	{
-		ms_putstr_fd("declare -x ", STDOUT);
-		tmp = ms_strchr(my_env[i], '=');
-		if (tmp != NULL)
-		{
-			write(STDOUT, my_env[i], tmp - my_env[i]);
-			ms_putstr_fd("=\"", STDOUT);
-			ms_putstr_fd(tmp + 1, STDOUT);
-			ms_putstr_fd("\"\n", STDOUT);
-		}
-		else
-			ms_putendl_fd(my_env[i], STDOUT);
-		i++;
-	}
-}
-
 static t_boolean	is_key_value_validate(char *key_value)
 {
 	if ((*key_value != '_' && ms_isalpha(*key_value) == FALSE))
@@ -88,43 +64,11 @@ static t_boolean	is_key_value_validate(char *key_value)
 	return (TRUE);
 }
 
-static char	*get_key(char *key_value, t_boolean *is_append)
+static int	register_key_value(char *key_value, char ***environ)
 {
-	char	*tmp;
-
-	tmp = ms_strchr(key_value, '+');
-	if (tmp != NULL && ms_strncmp(tmp, "+=", 2) == 0)
-	{
-		*is_append = TRUE;
-		return (ms_substr(key_value, 0, tmp - key_value));
-	}
-	*is_append = FALSE;
-	tmp = ms_strchr(key_value, '=');
-	if (tmp != NULL)
-		return (ms_substr(key_value, 0, tmp - key_value));
-	else
-		return (ms_strdup(key_value));
-}
-
-char	*get_value(char *key_value)
-{
-	char	*tmp;
-
-	tmp = ms_strchr(key_value, '=');
-	if (tmp == NULL)
-		return (NULL);
-	else
-		return (tmp + 1);
-}
-
-int	register_key_value(char *key_value, char ***environ)
-{
-	char	*key;
-	char	*value;
-	char	*tmp;
-	int		index;
-	char	**new_env;
-	int		i;
+	char		*key;
+	char		*tmp;
+	int			index;
 	t_boolean	is_append;
 
 	if (is_key_value_validate(key_value) != TRUE)
@@ -137,47 +81,12 @@ int	register_key_value(char *key_value, char ***environ)
 		return (EXIT_FAILURE);
 	}
 	key = get_key(key_value, &is_append);
-	value = get_value(key_value);
 	index = get_index_of_key(key, *environ);
 	if (index == -1)
-	{
-		new_env = ms_xmalloc(sizeof(char *) * (get_environ_row(*environ) + 2));
-		i = 0;
-		while ((*environ)[i] != NULL)
-		{
-			new_env[i] = ms_strdup((*environ)[i]);
-			i++;
-		}
-		tmp = ms_strdup(key);
-		tmp = ms_strappend(tmp, ms_strdup("="));
-		tmp = ms_strappend(tmp, ms_strdup(value));
-		//tmp = ms_strdup(key);
-		//tmp = ms_strjoin(ms_strjoin(tmp, "="), value);
-		new_env[i] = ms_strdup(tmp);
-		new_env[i + 1] = NULL;
-		free_environ(*environ);
-		*environ = new_env;
-	}
+		export_new_word(environ, key_value, is_append);
 	else
-	{
-		if (is_append == TRUE)
-		{
-			tmp = ms_strdup((*environ)[index]);
-			tmp = ms_strjoin(tmp, value);
-		}
-		else
-		{
-			tmp = ms_strdup(key);
-			tmp = ms_strappend(tmp, ms_strdup("="));
-			tmp = ms_strappend(tmp, ms_strdup(value));
-			//tmp = ms_strdup(key);
-			//tmp = ms_strjoin(ms_strjoin(tmp, "="), value);
-		}
-		free((*environ)[index]);
-		(*environ)[index] = ms_strdup(tmp);
-	}
+		export_exist_word(environ, index, key_value);
 	free(key);
-	free(tmp);
 	return (EXIT_SUCCESS);
 }
 
@@ -189,7 +98,7 @@ int	builtin_export(int argc, char *argv[], char ***environ)
 	ret = EXIT_SUCCESS;
 	if (argc == 1)
 	{
-		put_env(*environ);
+		export_put_env(*environ);
 		return (ret);
 	}
 	else
@@ -200,7 +109,7 @@ int	builtin_export(int argc, char *argv[], char ***environ)
 			if (ms_strcmp(argv[i], "") == 0)
 			{
 				i++;
-				continue;
+				continue ;
 			}
 			if (register_key_value(argv[i], environ) == EXIT_FAILURE)
 				ret = EXIT_FAILURE;

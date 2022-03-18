@@ -1,5 +1,5 @@
-#CC						=	gcc
-CC						=	clang
+CC						=	gcc
+#CC						=	clang
 CFLAGS					=	-Wall -Wextra -Werror
 #CFLAGS					+=	-fsanitize=leak
 CFLAGS					+=	-fsanitize=address
@@ -94,9 +94,11 @@ EXPANDER_OBJS			=	$(addprefix $(OBJS_DIR)/, $(EXPANDER_SRCS:.c=.o))
 BUILTIN_SRCS			=	srcs/builtin/builtin.c\
 							srcs/builtin/builtin_echo.c\
 							srcs/builtin/builtin_cd.c\
+							srcs/builtin/builtin_cd_utils.c\
 							srcs/builtin/builtin_pwd.c\
 							srcs/builtin/builtin_env.c\
 							srcs/builtin/builtin_export.c\
+							srcs/builtin/builtin_export_utils.c\
 							srcs/builtin/builtin_unset.c\
 							srcs/builtin/builtin_exit.c
 BUILTIN_OBJS			=	$(addprefix $(OBJS_DIR)/, $(BUILTIN_SRCS:.c=.o))

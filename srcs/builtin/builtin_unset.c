@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 static int	get_index_of_key(char *key, char **environ)
@@ -82,7 +81,7 @@ int	builtin_unset(int argc, char *argv[], char ***environ)
 		i = 1;
 		while (argv[i] != NULL)
 		{
-			if(unset_key(argv[i], environ) == EXIT_FAILURE)
+			if (unset_key(argv[i], environ) == EXIT_FAILURE)
 				ret = EXIT_FAILURE;
 			i++;
 		}

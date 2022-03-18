@@ -1,7 +1,6 @@
 #include "minishell.h"
 
-int
-is_builtin(char *cmd_name)
+int	is_builtin(char *cmd_name)
 {
 	if (ms_strcmp(cmd_name, "echo") == 0
 		|| ms_strcmp(cmd_name, "cd") == 0
@@ -14,8 +13,7 @@ is_builtin(char *cmd_name)
 	return (FALSE);
 }
 
-int
-do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info)
+int	do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info)
 {
 	int	ret;
 
