@@ -88,7 +88,7 @@ PARSER_OBJS				=	$(addprefix $(OBJS_DIR)/, $(PARSER_SRCS:.c=.o))
 EXPANDER_SRCS			=	srcs/expander/expander.c\
 							srcs/expander/expand.c\
 							srcs/expander/expand_for_heredoc.c\
-							srcs/expander/get_val_name.c
+							srcs/expander/expand_utils.c
 
 EXPANDER_OBJS			=	$(addprefix $(OBJS_DIR)/, $(EXPANDER_SRCS:.c=.o))
 ########################################

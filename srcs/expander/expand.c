@@ -1,70 +1,75 @@
 #include "minishell.h"
 
-t_list	*expand(char *token, t_boolean in_heredoc, char **my_env)
+static void	expand_to_lst(t_list **new_lst, char *value, char **ret)
 {
-	char	*value;
-	char	*ret;
-	t_quote	quote;
-	char	*start;
-	char	*val_name;
-	t_list	*new_lst;
 	t_list	*token_lst;
 	t_list	*current;
 
+	token_lst = split_lst(value, ' ');
+	free(value);
+	current = token_lst;
+	while (current != NULL)
+	{
+		*ret = ms_strappend(*ret, ms_strdup(current->content));
+		ms_lstadd_back(new_lst, ms_lstnew(*ret));
+		*ret = ms_strdup("");
+		current = current->next;
+	}
+	ms_lstclear(&token_lst, free);
+}
+
+static t_list	*expand_part(char **token, char **ret, char **start, char **my_env)
+{
+	t_list *new_lst;
+	char	*value;
+
 	new_lst = NULL;
-	quote = NONE;
-	ret = ms_strdup("");
+	*ret = ms_strappend(*ret, ms_strndup(*start, *token - *start));
+	*token += 1;
+	if (**token == '?')
+		*ret = expand_g_status(token);
+	else if (ms_isdigit(**token))
+		*ret = expand_num(token);
+	else
+	{
+		value = expand_from_env(token, my_env);
+		expand_to_lst(&new_lst, value, ret);
+	}
+	*start = *token;
+	return (new_lst);
+}
+
+static void	expand_init(t_list **new_lst, t_quote *quote, char **ret)
+{
+	*new_lst = NULL;
+	*quote = NONE;
+	*ret = ms_strdup("");
+}
+
+static void	quote_part(char **token, t_quote *quote)
+{
+	*quote = quote_set(**token, *quote);
+	*token += 1;
+}
+
+t_list	*expand(char *token, char **my_env)
+{
+	t_list	*new_lst;
+	t_quote	quote;
+	char	*ret;
+	char	*start;
+
+	expand_init(&new_lst, &quote, &ret);
 	start = token;
 	while (*token != '\0')
 	{
-		if (in_heredoc == FALSE && is_quote(*token))
-		{
-			quote = quote_set(*token, quote);
-			token++;
-		}
+		if (is_quote(*token))
+			quote_part(&token, &quote);
 		else if ((quote == SINGLE || *token != '$')
 				|| (*(token + 1) != '?' && !is_name(*(token + 1))))
 			token++;
 		else
-		{
-			ret = ms_strappend(ret, ms_strndup(start, token - start));
-			token++;
-			if (*token == '?')
-			{
-				ret = ms_strappend(ret, ms_itoa(get_g_status()));
-				token++;
-			}
-			else if (ms_isdigit(*token))
-			{
-				ret = ms_strappend(ret, ms_strdup(""));
-				token++;
-			}
-			else
-			{
-				val_name = get_val_name(token);
-				value = ms_getenv(my_env, val_name);
-				free(val_name);
-				if (value == NULL)
-					value = ms_strdup("");
-
-				token_lst = split_lst(value, ' ');
-				free(value);
-
-				current = token_lst;
-				while (current != NULL)
-				{
-					ret = ms_strappend(ret, ms_strdup(current->content));
-					ms_lstadd_back(&new_lst, ms_lstnew(ret));
-					ret = ms_strdup("");
-					current = current->next;
-				}
-
-				ms_lstclear(&token_lst, free);
-				while (*token != '\0' && is_name(*token))
-					token++;
-			}
-			start = token;
-		}
+			ms_lstadd_back(&new_lst, expand_part(&token, &ret, &start, my_env));
 	}
 	ret = ms_strappend(ret, ms_strndup(start, token - start));
 	if (ms_strlen(ret) != 0)

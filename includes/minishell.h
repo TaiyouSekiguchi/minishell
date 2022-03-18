@@ -107,11 +107,14 @@ int			token_kind(char *token);
 //expander
 void		expander(t_list *cmds, char **my_env);
 t_list		*expand_cmd_info_element(t_list *list, char **my_env);
-t_list		*expand(char *token, t_boolean in_heredoc, char **my_env);
+t_list		*expand(char *token, char **my_env);
 char		*expand_for_heredoc(char *token, char **my_env);
 char		*ms_getenv(char **my_env, char *key);
 char		*remove_quotation(char *token);
 char		*get_val_name(char *token);
+char		*expand_g_status(char **token);
+char		*expand_num(char **token);
+char		*expand_from_env(char **token, char **my_env);
 
 
 //executer
