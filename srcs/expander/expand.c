@@ -27,9 +27,9 @@ static t_list	*expand_part(char **token, char **ret, char **start, char **my_env
 	*ret = ms_strappend(*ret, ms_strndup(*start, *token - *start));
 	*token += 1;
 	if (**token == '?')
-		*ret = expand_g_status(token);
+		*ret = ms_strappend(*ret, expand_g_status(token));
 	else if (ms_isdigit(**token))
-		*ret = expand_num(token);
+		*ret = ms_strappend(*ret, expand_num(token));
 	else
 	{
 		value = expand_from_env(token, my_env);
