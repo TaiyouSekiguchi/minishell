@@ -1,8 +1,8 @@
 #CC						=	gcc
 CC						=	clang
 CFLAGS					=	-Wall -Wextra -Werror
-#CFLAGS					+=	-fsanitize=leak
-CFLAGS					+=	-fsanitize=address
+CFLAGS					+=	-fsanitize=leak
+#CFLAGS					+=	-fsanitize=address
 INCLUDE					=	-I includes -I ${shell brew --prefix readline}/include
 READLINE_LIB			=	-l readline -L ${shell brew --prefix readline}/lib
 LIBMS					=	./lib/libms/libms.a
@@ -86,7 +86,10 @@ PARSER_OBJS				=	$(addprefix $(OBJS_DIR)/, $(PARSER_SRCS:.c=.o))
 
 ############ expander #############
 EXPANDER_SRCS			=	srcs/expander/expander.c\
-							srcs/expander/expand.c
+							srcs/expander/expand.c\
+							srcs/expander/expand_for_heredoc.c\
+							srcs/expander/get_val_name.c
+
 EXPANDER_OBJS			=	$(addprefix $(OBJS_DIR)/, $(EXPANDER_SRCS:.c=.o))
 ########################################
 

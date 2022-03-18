@@ -105,12 +105,15 @@ void		parser(t_list **cmds, t_list *tokens);
 int			syntax_check(t_list *tokens);
 int			token_kind(char *token);
 //expander
-t_list		*expand(char *token, t_boolean in_heredoc, char **my_env);
-t_list		*expand_cmd_info_element(t_list *list, char **my_env);
-char		*expand_for_heredoc(char *token, char **my_env);
 void		expander(t_list *cmds, char **my_env);
+t_list		*expand_cmd_info_element(t_list *list, char **my_env);
+t_list		*expand(char *token, t_boolean in_heredoc, char **my_env);
+char		*expand_for_heredoc(char *token, char **my_env);
 char		*ms_getenv(char **my_env, char *key);
 char		*remove_quotation(char *token);
+char		*get_val_name(char *token);
+
+
 //executer
 void		executer(t_list *cmds, t_dir *d_info);
 void		do_exec(t_cmd_info *cmd_info, t_dir *d_info);
