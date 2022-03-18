@@ -11,44 +11,47 @@ static void	shlvl_increment(char *env_shlvl, char ***my_env)
 	free(str_num);
 }
 
+void	update_shlvl(char ***my_env, char *tmp)
+{
+	t_boolean	is_minus;
+
+	is_minus = FALSE;
+	if (*tmp == '+' || *tmp == '-')
+	{
+		if (*tmp == '-')
+			is_minus = TRUE;
+		tmp++;
+	}
+	if (ms_isnum_string(tmp) == FALSE)
+		call_export("SHLVL", "1", my_env);
+	else if (is_minus == TRUE)
+		call_export("SHLVL", "0", my_env);
+	else
+		shlvl_increment(tmp, my_env);
+}
+
 void	init_shlvl(char ***my_env)
 {
 	char		*env_shlvl;
-	char		*save;
-	t_boolean	is_minus;
+	char		*tmp;
 
 	env_shlvl = ms_getenv(*my_env, "SHLVL");
 	if (env_shlvl == NULL)
 		call_export("SHLVL", "1", my_env);
 	else
 	{
-		save = env_shlvl;
-		if (ms_strlen(env_shlvl) == 1)
+		tmp = env_shlvl;
+		if (ms_strlen(tmp) == 1)
 		{
-			if (ms_isdigit(*env_shlvl))
-				shlvl_increment(env_shlvl, my_env);
+			if (ms_isdigit(*tmp))
+				shlvl_increment(tmp, my_env);
 			else
 				call_export("SHLVL", "1", my_env);
 		}
 		else
-		{
-			if (*env_shlvl == '+' || *env_shlvl == '-')
-			{
-				if (*env_shlvl == '-')
-					is_minus = TRUE;
-				else
-					is_minus = FALSE;
-				env_shlvl++;
-			}
-			if (ms_isnum_string(env_shlvl) == FALSE)
-				call_export("SHLVL", "1", my_env);
-			else if (is_minus == TRUE)
-				call_export("SHLVL", "0", my_env);
-			else
-				shlvl_increment(env_shlvl, my_env);
-		}
-		free(save);
+			update_shlvl(my_env, tmp);
 	}
+	free(env_shlvl);
 }
 
 void	init_dir_info(t_dir *d_info)
@@ -76,22 +79,12 @@ void	init_dir_info(t_dir *d_info)
 	d_info->old_pwd = NULL;
 }
 
-static int	get_environ_row(char **environ)
-{
-	int	row;
-
-	row = 0;
-	while (environ[row] != NULL)
-		row++;
-	return (row);
-}
-
 void	init_my_env(t_dir *d_info)
 {
 	extern char	**environ;
 	int			row;
 	int			i;
-	
+
 	row = get_environ_row(environ);
 	d_info->my_env = (char **)ms_xmalloc(sizeof(char *) * (row + 1));
 	i = 0;

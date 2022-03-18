@@ -18,16 +18,6 @@ char	*get_key(char *key_value, t_boolean *is_append)
 		return (ms_strdup(key_value));
 }
 
-static int	get_environ_row(char **environ)
-{
-	int		row;
-
-	row = 0;
-	while (environ[row] != NULL)
-		row++;
-	return (row);
-}
-
 static char	*get_value(char *key_value)
 {
 	char	*tmp;

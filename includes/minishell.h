@@ -78,6 +78,7 @@ typedef struct s_dir
 //readline
 char		*rl_gets(void);
 //utils
+int			get_environ_row(char **environ);
 void		init_dir_info(t_dir *d_info);
 void		init_shlvl(char ***my_env);
 void		init_my_env(t_dir *d_info);

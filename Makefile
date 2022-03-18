@@ -53,6 +53,8 @@ OUTPUT_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(OUTPUT_TEST_SRCS:.c=.o))
 
 ########### utils ############
 UTILS_SRCS				=	srcs/utils/is_func.c\
+							srcs/utils/is_func2.c\
+							srcs/utils/get_environ_row.c\
 							srcs/utils/quote_set.c\
 							srcs/utils/ms_getenv.c \
 							srcs/utils/remove_quotation.c \
