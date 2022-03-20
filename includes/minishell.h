@@ -75,6 +75,13 @@ typedef struct s_dir
 	char	**my_env;
 }				t_dir;
 
+typedef struct s_fd
+{
+	int	infile;
+	int	outfile;
+	int	heredoc;
+}				t_fd;
+
 //readline
 char		*rl_gets(void);
 //utils
@@ -117,24 +124,23 @@ char		*expand_g_status(char **token);
 char		*expand_num(char **token);
 char		*expand_from_env(char **token, char **my_env);
 
-
 //executer
 void		executer(t_list *cmds, t_dir *d_info);
 pid_t		do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info);
 void		do_exec(t_cmd_info *cmd_info, t_dir *d_info);
-void		do_redirect(int infile_fd, int outfile_fd);
-void		do_pipe(t_list *cmds, int fd);
 int			infile_open(char *token);
-void		heredoc_loop(int fd, char *token, char **my_env);
 int			heredoc_open(char *token, char **my_env);
 int			outfile_open(char *token);
 int			append_open(char *token);
-void		redirect_file_open(char *token, int *infile_fd, int *outfile_fd, int heredoc_fd);
-void		get_redirect_fd(t_list *token_list, char **my_env, int *infile_fd, int *outfile_fd);
-void		tty_reset(void);
+void		get_redirect_fd(t_list *token_list, char **my_env, t_fd *redirect_fd);
 char		*cmd_path_search(char *cmd_name, char **my_env);
+void		stdin_reset(void);
+char		*set_tmp_file_name(void);
+int			tmp_file_create(char *tmp_file_name);
+int			tmp_file_open(char *tmp_file_name);
+void		tty_reset(void);
+void		do_redirect(t_fd *redirect_fd);
 
-void		do_redirect(int infile_fd, int outfile_fd);
 //builtin
 int			is_builtin(char *cmd_name);
 int			do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info);

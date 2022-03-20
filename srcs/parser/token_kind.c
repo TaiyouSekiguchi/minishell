@@ -6,13 +6,13 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 17:30:00 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 18:12:36 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/20 17:28:12 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		token_kind(char *token)
+int	token_kind(char *token)
 {
 	if (ms_strcmp(token, "|") == 0)
 		return (PIPE);

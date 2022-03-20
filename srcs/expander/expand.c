@@ -18,9 +18,9 @@ static void	expand_to_lst(t_list **new_lst, char *value, char **ret)
 	ms_lstclear(&token_lst, free);
 }
 
-static t_list	*expand_part(char **token, char **ret, char **start, char **my_env)
+static t_list	*expand_part(char **token, char **ret, char **start, char **env)
 {
-	t_list *new_lst;
+	t_list	*new_lst;
 	char	*value;
 
 	new_lst = NULL;
@@ -32,7 +32,7 @@ static t_list	*expand_part(char **token, char **ret, char **start, char **my_env
 		*ret = ms_strappend(*ret, expand_num(token));
 	else
 	{
-		value = expand_from_env(token, my_env);
+		value = expand_from_env(token, env);
 		expand_to_lst(&new_lst, value, ret);
 	}
 	*start = *token;
@@ -66,7 +66,7 @@ t_list	*expand(char *token, char **my_env)
 		if (is_quote(*token))
 			quote_part(&token, &quote);
 		else if ((quote == SINGLE || *token != '$')
-				|| (*(token + 1) != '?' && !is_name(*(token + 1))))
+			|| (*(token + 1) != '?' && !is_name(*(token + 1))))
 			token++;
 		else
 			ms_lstadd_back(&new_lst, expand_part(&token, &ret, &start, my_env));

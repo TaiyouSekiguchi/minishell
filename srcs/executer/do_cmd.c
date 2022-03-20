@@ -1,14 +1,19 @@
 #include "minishell.h"
 
-static void	close_redirect_fd(int infile_fd, int outfile_fd, t_boolean last)
+static void	close_redirect_fd(t_fd *redirect_fd, t_boolean last)
 {
+	int	infile_fd;
+	int	outfile_fd;
+
+	infile_fd = redirect_fd->infile;
+	outfile_fd = redirect_fd->outfile;
 	close(infile_fd);
 	close(outfile_fd);
 	if (last == TRUE)
 		tty_reset();
 }
 
-static void pipe_set(int src, int dst, int not_use)
+static void	pipe_set(int src, int dst, int not_use)
 {
 	close(not_use);
 	close(dst);
@@ -16,7 +21,7 @@ static void pipe_set(int src, int dst, int not_use)
 	close(src);
 }
 
-static pid_t	last_cmd(t_cmd_info *cmd_info, t_dir *d_info, int infile_fd, int outfile_fd)
+static pid_t	last_cmd(t_cmd_info *cmd_info, t_dir *info, t_fd *redirect_fd)
 {
 	pid_t		pid;
 
@@ -24,20 +29,21 @@ static pid_t	last_cmd(t_cmd_info *cmd_info, t_dir *d_info, int infile_fd, int ou
 	if (pid == CHILD)
 	{
 		default_signal();
-		if (infile_fd != ERROR_FD && outfile_fd != ERROR_FD)
+		if (redirect_fd->infile != ERROR_FD && redirect_fd->outfile != ERROR_FD)
 		{
-			do_redirect(infile_fd, outfile_fd);
+			do_redirect(redirect_fd);
 			if (cmd_info->cmd != NULL)
-				do_exec(cmd_info, d_info);
+				do_exec(cmd_info, info);
 		}
 		exit(get_g_status());
 	}
 	else
-		close_redirect_fd(infile_fd, outfile_fd, TRUE);
+		close_redirect_fd(redirect_fd, TRUE);
 	return (pid);
 }
 
-static pid_t	not_last_cmd(t_cmd_info *cmd_info, t_dir *d_info, int infile_fd, int outfile_fd)
+static pid_t
+	not_last_cmd(t_cmd_info *cmd_info, t_dir *d_info, t_fd *redirect_fd)
 {
 	int			pipe_fd[2];
 	pid_t		pid;
@@ -49,9 +55,9 @@ static pid_t	not_last_cmd(t_cmd_info *cmd_info, t_dir *d_info, int infile_fd, in
 	{
 		default_signal();
 		pipe_set(pipe_fd[WRITE], STDOUT, pipe_fd[READ]);
-		if (infile_fd != ERROR_FD && outfile_fd != ERROR_FD)
+		if (redirect_fd->infile != ERROR_FD && redirect_fd->outfile != ERROR_FD)
 		{
-			do_redirect(infile_fd, outfile_fd);
+			do_redirect(redirect_fd);
 			if (cmd_info->cmd != NULL)
 				do_exec(cmd_info, d_info);
 		}
@@ -60,21 +66,20 @@ static pid_t	not_last_cmd(t_cmd_info *cmd_info, t_dir *d_info, int infile_fd, in
 	else
 	{
 		pipe_set(pipe_fd[READ], STDIN, pipe_fd[WRITE]);
-		close_redirect_fd(infile_fd, outfile_fd, FALSE);
+		close_redirect_fd(redirect_fd, FALSE);
 	}
 	return (pid);
 }
 
 pid_t	do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info)
 {
-	int	pid;
-	int	infile_fd;
-	int	outfile_fd;
+	int		pid;
+	t_fd	redirect_fd;
 
-	get_redirect_fd(cmd_info->redirect, d_info->my_env, &infile_fd, &outfile_fd);
+	get_redirect_fd(cmd_info->redirect, d_info->my_env, &redirect_fd);
 	if (is_last == TRUE)
-		pid = last_cmd(cmd_info, d_info, infile_fd, outfile_fd);
+		pid = last_cmd(cmd_info, d_info, &redirect_fd);
 	else
-		pid = not_last_cmd(cmd_info, d_info, infile_fd, outfile_fd);
+		pid = not_last_cmd(cmd_info, d_info, &redirect_fd);
 	return (pid);
 }

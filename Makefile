@@ -1,7 +1,7 @@
 CC						=	gcc
 #CC						=	clang
 CFLAGS					=	-Wall -Wextra -Werror
-CFLAGS					+=	-fsanitize=leak
+#CFLAGS					+=	-fsanitize=leak
 #CFLAGS					+=	-fsanitize=address
 INCLUDE					=	-I includes -I ${shell brew --prefix readline}/include
 READLINE_LIB			=	-l readline -L ${shell brew --prefix readline}/lib
@@ -111,8 +111,10 @@ BUILTIN_OBJS			=	$(addprefix $(OBJS_DIR)/, $(BUILTIN_SRCS:.c=.o))
 
 ############ executer #############
 EXECUTER_SRCS			=	srcs/executer/executer.c\
-							srcs/executer/redirect_open_utils.c\
-							srcs/executer/redirect.c\
+							srcs/executer/get_redirect_fd.c\
+							srcs/executer/redirect_file_open.c\
+							srcs/executer/heredoc_open.c\
+							srcs/executer/heredoc_open_utils.c\
 							srcs/executer/do_exec.c\
 							srcs/executer/do_cmd.c\
 							srcs/executer/cmd_path_search.c\
