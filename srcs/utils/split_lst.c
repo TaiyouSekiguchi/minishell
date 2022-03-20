@@ -10,7 +10,6 @@ t_list	*split_lst(char *str, char c)
 	dir_pptr = ms_split(str, c);
 	if (dir_pptr == NULL)
 		return (NULL);
-
 	lst = NULL;
 	i = 0;
 	while (dir_pptr[i] != NULL)
