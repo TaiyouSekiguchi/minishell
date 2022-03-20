@@ -105,14 +105,21 @@ void		parser(t_list **cmds, t_list *tokens);
 int			syntax_check(t_list *tokens);
 int			token_kind(char *token);
 //expander
-t_list		*expand(char *token, t_boolean in_heredoc, char **my_env);
-t_list		*expand_cmd_info_element(t_list *list, char **my_env);
-char		*expand_for_heredoc(char *token, char **my_env);
 void		expander(t_list *cmds, char **my_env);
+t_list		*expand_cmd_info_element(t_list *list, char **my_env);
+t_list		*expand(char *token, char **my_env);
+char		*expand_for_heredoc(char *token, char **my_env);
 char		*ms_getenv(char **my_env, char *key);
 char		*remove_quotation(char *token);
+char		*get_val_name(char *token);
+char		*expand_g_status(char **token);
+char		*expand_num(char **token);
+char		*expand_from_env(char **token, char **my_env);
+
+
 //executer
 void		executer(t_list *cmds, t_dir *d_info);
+pid_t		do_cmd(t_cmd_info *cmd_info, t_boolean is_last, t_dir *d_info);
 void		do_exec(t_cmd_info *cmd_info, t_dir *d_info);
 void		do_redirect(int infile_fd, int outfile_fd);
 void		do_pipe(t_list *cmds, int fd);
@@ -123,6 +130,9 @@ int			outfile_open(char *token);
 int			append_open(char *token);
 void		redirect_file_open(char *token, int *infile_fd, int *outfile_fd, int heredoc_fd);
 void		get_redirect_fd(t_list *token_list, char **my_env, int *infile_fd, int *outfile_fd);
+void		tty_reset(void);
+char		*cmd_path_search(char *cmd_name, char **my_env);
+
 void		do_redirect(int infile_fd, int outfile_fd);
 //builtin
 int			is_builtin(char *cmd_name);

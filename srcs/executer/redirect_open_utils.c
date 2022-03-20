@@ -43,11 +43,14 @@ void	heredoc_loop(int fd, char *token, char **my_env)
 	char		*line;
 	t_boolean	quote;
 
+	line = NULL;
 	word = ms_strdup(&token[3]);
 	quote = exist_quote(word);
 	word = remove_quotation(word);
 	while(1)
 	{
+		if (line != NULL)
+			free(line);
 		line = rl_gets_heredoc();
 		if (line == NULL || ms_strcmp(line, word) == 0)
 			break ;

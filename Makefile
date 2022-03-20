@@ -1,8 +1,8 @@
 #CC						=	gcc
 CC						=	clang
 CFLAGS					=	-Wall -Wextra -Werror
-#CFLAGS					+=	-fsanitize=leak
-CFLAGS					+=	-fsanitize=address
+CFLAGS					+=	-fsanitize=leak
+#CFLAGS					+=	-fsanitize=address
 INCLUDE					=	-I includes -I ${shell brew --prefix readline}/include
 READLINE_LIB			=	-l readline -L ${shell brew --prefix readline}/lib
 LIBMS					=	./lib/libms/libms.a
@@ -86,7 +86,10 @@ PARSER_OBJS				=	$(addprefix $(OBJS_DIR)/, $(PARSER_SRCS:.c=.o))
 
 ############ expander #############
 EXPANDER_SRCS			=	srcs/expander/expander.c\
-							srcs/expander/expand.c
+							srcs/expander/expand.c\
+							srcs/expander/expand_for_heredoc.c\
+							srcs/expander/expand_utils.c
+
 EXPANDER_OBJS			=	$(addprefix $(OBJS_DIR)/, $(EXPANDER_SRCS:.c=.o))
 ########################################
 
@@ -106,7 +109,11 @@ BUILTIN_OBJS			=	$(addprefix $(OBJS_DIR)/, $(BUILTIN_SRCS:.c=.o))
 EXECUTER_SRCS			=	srcs/executer/executer.c\
 							srcs/executer/redirect_open_utils.c\
 							srcs/executer/redirect.c\
-							srcs/executer/do_exec.c
+							srcs/executer/do_exec.c\
+							srcs/executer/do_cmd.c\
+							srcs/executer/cmd_path_search.c\
+							srcs/executer/executer_utils.c
+
 EXECUTER_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_SRCS:.c=.o))
 ########################################
 

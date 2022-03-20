@@ -12,7 +12,7 @@ t_list	*expand_cmd_info_element(t_list *list, char **my_env)
 	while (current != NULL)
 	{
 		token = current->content;
-		ms_lstadd_back(&new_lst, expand(token, FALSE, my_env));
+		ms_lstadd_back(&new_lst, expand(token, my_env));
 		tmp = new_lst;
 		while (tmp != NULL)
 		{
