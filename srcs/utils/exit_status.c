@@ -2,7 +2,7 @@
 
 static int	g_status;
 
-int		get_g_status(void)
+int	get_g_status(void)
 {
 	return (g_status);
 }

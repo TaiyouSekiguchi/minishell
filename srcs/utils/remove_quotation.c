@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   remove_quotation.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/25 15:28:32 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/04 17:34:32 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 t_boolean	is_last_quote(char c, t_quote quote)
@@ -38,7 +26,7 @@ char	*remove_quotation(char *token)
 	while (token[i] != '\0')
 	{
 		if (is_quote(token[i]) && is_last_quote(token[i], quote))
-				quote = quote_set(token[i++], quote);
+			quote = quote_set(token[i++], quote);
 		else
 			ret[j++] = token[i++];
 	}

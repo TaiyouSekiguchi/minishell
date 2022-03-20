@@ -78,6 +78,7 @@ typedef struct s_dir
 //readline
 char		*rl_gets(void);
 //utils
+int			get_environ_row(char **environ);
 void		init_dir_info(t_dir *d_info);
 void		init_shlvl(char ***my_env);
 void		init_my_env(t_dir *d_info);
@@ -139,7 +140,12 @@ int			is_builtin(char *cmd_name);
 int			do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info);
 int			builtin_echo(int argc, char *argv[]);
 int			builtin_cd(int argc, char *argv[], t_dir *d_info);
+char		*rewrite_absolute_path(t_list *dir_lst, char *input_path);
+char		*rewrite_relative_path(t_list *dir_lst, char *pwd);
 int			builtin_export(int argc, char *argv[], char ***environ);
+char		*get_key(char *key_value, t_boolean *is_append);
+void		export_new_word(char ***environ, char *key_value, t_boolean is_append);
+void		export_exist_word(char ***environ, int index, char *key_value);
 int			builtin_unset(int argc, char *argv[], char ***environ);
 int			builtin_pwd(t_dir *d_info);
 int			builtin_env(char **environ);

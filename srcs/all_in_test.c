@@ -18,8 +18,7 @@ void	print_cmd(t_cmd_info *cmd)
 {
 	printf("\n");
 	print_list(cmd->cmd, "cmd");
-	print_list(cmd->infile, "infile");
-	print_list(cmd->outfile, "outfile");
+	print_list(cmd->redirect, "redirect");
 	printf("\n\n");
 }
 

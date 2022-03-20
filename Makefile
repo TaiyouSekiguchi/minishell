@@ -1,5 +1,5 @@
-#CC						=	gcc
-CC						=	clang
+CC						=	gcc
+#CC						=	clang
 CFLAGS					=	-Wall -Wextra -Werror
 CFLAGS					+=	-fsanitize=leak
 #CFLAGS					+=	-fsanitize=address
@@ -53,6 +53,8 @@ OUTPUT_TEST_OBJS		=	$(addprefix $(OBJS_DIR)/, $(OUTPUT_TEST_SRCS:.c=.o))
 
 ########### utils ############
 UTILS_SRCS				=	srcs/utils/is_func.c\
+							srcs/utils/is_func2.c\
+							srcs/utils/get_environ_row.c\
 							srcs/utils/quote_set.c\
 							srcs/utils/ms_getenv.c \
 							srcs/utils/remove_quotation.c \
@@ -97,9 +99,11 @@ EXPANDER_OBJS			=	$(addprefix $(OBJS_DIR)/, $(EXPANDER_SRCS:.c=.o))
 BUILTIN_SRCS			=	srcs/builtin/builtin.c\
 							srcs/builtin/builtin_echo.c\
 							srcs/builtin/builtin_cd.c\
+							srcs/builtin/builtin_cd_utils.c\
 							srcs/builtin/builtin_pwd.c\
 							srcs/builtin/builtin_env.c\
 							srcs/builtin/builtin_export.c\
+							srcs/builtin/builtin_export_utils.c\
 							srcs/builtin/builtin_unset.c\
 							srcs/builtin/builtin_exit.c
 BUILTIN_OBJS			=	$(addprefix $(OBJS_DIR)/, $(BUILTIN_SRCS:.c=.o))

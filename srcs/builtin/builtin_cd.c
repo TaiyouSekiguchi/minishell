@@ -1,36 +1,4 @@
-
 #include "minishell.h"
-
-void	del_last_elem(t_list **pptr)
-{
-	int		len;
-	t_list	*tmp;
-	t_list	*tmp2;
-
-	tmp = *pptr;
-	len = ms_lstsize(*pptr);
-	if (len == 1)
-	{
-		free((*pptr)->content);
-		free(*pptr);
-	}
-	else if (len == 2)
-	{
-		tmp2 = tmp->next;
-		tmp->next = NULL;
-		free(tmp2->content);
-		free(tmp2);
-	}
-	else if (len > 2)
-	{
-		while (tmp->next->next)
-			tmp = tmp->next;
-		tmp2 = tmp->next;
-		tmp->next = NULL;
-		free(tmp2->content);
-		free(tmp2);
-	}
-}
 
 static char	*set_input_path(int argc, char **argv, char **my_env)
 {
@@ -50,84 +18,38 @@ static char	*set_input_path(int argc, char **argv, char **my_env)
 			return (ms_strjoin(value, argv[1] + 1));
 	}
 	else
-		return(argv[1]);
+		return (argv[1]);
 }
 
-char	*lst_to_string(t_list *list, char *c)
+char	*rewrite_path(char *input_path, t_dir *d_info)
 {
-	char	*str;
-	char	*tmp;
+	char	*new_pwd;
+	t_list	*dir_lst;
 
-	if (list == NULL)
-		return (NULL);
-	tmp = ms_strjoin(c, (char *)list->content);
-	str = ms_strdup(tmp);
-	free(tmp);
-	list = list->next;
-	while (list != NULL)
-	{
-		tmp = ms_strjoin(c, (char *)list->content);
-		str = ms_strappend(str, tmp);
-		list = list->next;
-	}
-	return (str);
+	dir_lst = split_lst(input_path, '/');
+	if (input_path[0] == '/')
+		new_pwd = rewrite_absolute_path(dir_lst, input_path);
+	else
+		new_pwd = rewrite_relative_path(dir_lst, d_info->pwd);
+	return (new_pwd);
 }
 
-static char	*rewrite_absolute_path(t_list *dir_lst, char *input_path)
+void	update_pwd(t_dir *d_info, char *new_pwd)
 {
-	char	*new_path;
-	t_list	*new_dir_lst;
-	t_list	*current;
-
-	new_dir_lst = NULL;
-	if (dir_lst == NULL)
-		return (input_path);
-
-	current = dir_lst;
-	while (current != NULL)
-	{
-		if (ms_strcmp((char *)current->content, "..") == 0)
-			del_last_elem(&new_dir_lst);
-		else if (ms_strcmp((char *)current->content, ".") != 0)
-		{
-			if (ms_lstsize(new_dir_lst) == 0)
-				new_dir_lst = ms_lstnew(ms_strdup(current->content));
-			else
-				ms_lstadd_back(&new_dir_lst, ms_lstnew(ms_strdup(current->content)));
-		}
-		current = current->next;
-	}
-	new_path = lst_to_string(new_dir_lst, "/");
-	ms_lstclear(&dir_lst, free);
-	ms_lstclear(&new_dir_lst, free);
-	return (new_path);
-}
-
-static char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
-{
-	char	*new_path;
-	t_list	*new_pwd_lst;
-	t_list	*current;
-
-	new_pwd_lst = split_lst(pwd, '/');
-	current = dir_lst;
-	while (current != NULL)
-	{
-		if (ms_strcmp(current->content, "..") == 0)
-			del_last_elem(&new_pwd_lst);
-		else if (ms_strcmp(current->content, ".") != 0)
-			ms_lstadd_back(&new_pwd_lst, ms_lstnew(ms_strdup(current->content)));
-		current = current->next;
-	}
-	new_path = lst_to_string(new_pwd_lst, "/");
-	ms_lstclear(&dir_lst, free);
-	ms_lstclear(&new_pwd_lst, free);
-	return (new_path);
+	if (d_info->old_pwd != NULL)
+		free(d_info->old_pwd);
+	d_info->old_pwd = ms_strdup(d_info->pwd);
+	free(d_info->pwd);
+	if (ms_strncmp(new_pwd, "///", 3) == 0)
+		d_info->pwd = ms_strdup("/");
+	else
+		d_info->pwd = ms_strdup(new_pwd);
+	call_export("PWD", d_info->pwd, &d_info->my_env);
+	call_export("OLDPWD", d_info->old_pwd, &d_info->my_env);
 }
 
 int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 {
-	t_list		*dir_lst;
 	char		*input_path;
 	char		*new_pwd;
 
@@ -136,11 +58,7 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 		return (EXIT_FAILURE);
 	else
 	{
-		dir_lst = split_lst(input_path, '/');
-		if (input_path[0] == '/')
-			new_pwd = rewrite_absolute_path(dir_lst, input_path);
-		else
-			new_pwd = rewrite_relative_path(dir_lst, d_info->pwd);
+		new_pwd = rewrite_path(input_path, d_info);
 		if (chdir(new_pwd) < 0)
 		{
 			perror("minishell: cd");
@@ -148,16 +66,7 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 			return (EXIT_FAILURE);
 		}
 		else
-		{
-			if (d_info->old_pwd != NULL)
-				free(d_info->old_pwd);
-			d_info->old_pwd = ms_strdup(d_info->pwd);
-			free(d_info->pwd);
-			d_info->pwd = ms_strdup(new_pwd);
-			call_export("PWD", d_info->pwd, &d_info->my_env);
-			call_export("OLDPWD", d_info->old_pwd, &d_info->my_env);
-		}
-		free(new_pwd);
+			update_pwd(d_info, new_pwd);
 	}
 	return (EXIT_SUCCESS);
 }
