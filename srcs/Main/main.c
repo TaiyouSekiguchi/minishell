@@ -1,12 +1,12 @@
 #include "minishell.h"
 
-void end(void)__attribute__((destructor));
+/*void end(void)__attribute__((destructor));
 
 void end(void)
 {
     system("leaks minishell");
 }
-
+*/
 
 int	main(void)
 {
