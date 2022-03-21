@@ -18,7 +18,7 @@ static char	*set_input_path(int argc, char **argv, char **my_env)
 			return (ms_strjoin(value, argv[1] + 1));
 	}
 	else
-		return (argv[1]);
+		return (ms_strdup(argv[1]));
 }
 
 char	*rewrite_path(char *input_path, t_dir *d_info)
@@ -59,6 +59,7 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 	else
 	{
 		new_pwd = rewrite_path(input_path, d_info);
+		free(input_path);
 		if (chdir(new_pwd) < 0)
 		{
 			perror("minishell: cd");
@@ -68,5 +69,6 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 		else
 			update_pwd(d_info, new_pwd);
 	}
+	free(new_pwd);
 	return (EXIT_SUCCESS);
 }
