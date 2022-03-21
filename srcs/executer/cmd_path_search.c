@@ -50,7 +50,12 @@ char	*cmd_path_search(char *cmd_name, char **my_env)
 
 	split_env_path = get_split_env_path(my_env);
 	if (split_env_path == NULL)
+	{
+		set_g_status(127);
+		put_error_exit(cmd_name, "No such file or directory", FALSE);
+		free(cmd_name);
 		return (NULL);
+	}
 	full_path = search_part(cmd_name, split_env_path, &exit_status);
 	if (full_path != NULL)
 	{
