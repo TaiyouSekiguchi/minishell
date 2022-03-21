@@ -75,13 +75,15 @@ typedef struct s_dir
 	char	**my_env;
 }				t_dir;
 
+//Main
+void		init(t_dir *d_info);
+void		main_free(char *input, t_dir *info);
+void		do_process_free(t_list **token_list, t_list **cmd_info_list);
+void		do_process(char *input, t_dir *d_info);
 //readline
 char		*rl_gets(void);
 //utils
 int			get_environ_row(char **environ);
-void		init_dir_info(t_dir *d_info);
-void		init_shlvl(char ***my_env);
-void		init_my_env(t_dir *d_info);
 void		call_export(char *env_name, char *value, char ***my_env);
 void		call_unset(char *env_name, char ***my_env);
 void		put_error_exit(char *name, char *msg, t_boolean is_exit);
