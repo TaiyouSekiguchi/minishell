@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 15:19:42 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/04 18:13:18 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/21 13:22:47 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	ms_error(char *msg)
 {
-	//ms_putendl_fd(msg, STDERR_FILENO);
 	perror(msg);
 	exit(EXIT_FAILURE);
 }

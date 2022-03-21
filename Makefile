@@ -1,5 +1,5 @@
-#CC						=	gcc
-CC						=	clang
+CC						=	gcc
+#CC						=	clang
 CFLAGS					=	-Wall -Wextra -Werror
 #CFLAGS					+=	-fsanitize=leak
 CFLAGS					+=	-fsanitize=address

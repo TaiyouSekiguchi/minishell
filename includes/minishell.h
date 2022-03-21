@@ -1,14 +1,14 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-#include "libms.h"
+# include "libms.h"
 
 # define NONE_FD (-2)
 # define ERROR_FD (-1)
@@ -20,7 +20,7 @@
 # define COMMAND_NOT_FOUND 127
 # define SYNTAX_ERROR_MSG "syntax error near unexpected token 'newline'"
 
-typedef	enum e_boolean
+typedef enum e_boolean
 {
 	TRUE = 1,
 	FALSE = 0,
@@ -45,7 +45,7 @@ typedef enum e_builtin
 	NOT_BUILTIN,
 }			t_builtin;
 
-typedef	enum e_quote
+typedef enum e_quote
 {
 	SINGLE,
 	DOUBLE,
@@ -62,7 +62,7 @@ typedef enum e_kind
 	APPEND,
 }			t_kind;
 
-typedef	struct s_cmd_info
+typedef struct s_cmd_info
 {
 	t_list	*cmd;
 	t_list	*redirect;
@@ -134,7 +134,7 @@ int			infile_open(char *token);
 int			heredoc_open(char *token, char **my_env);
 int			outfile_open(char *token);
 int			append_open(char *token);
-void		get_redirect_fd(t_list *token_list, char **my_env, t_fd *redirect_fd);
+void		get_redirect_fd(t_list *redirect, char **my_env, t_fd *redirect_fd);
 char		*cmd_path_search(char *cmd_name, char **my_env);
 void		stdin_reset(void);
 char		*set_tmp_file_name(void);
@@ -152,7 +152,8 @@ char		*rewrite_absolute_path(t_list *dir_lst, char *input_path);
 char		*rewrite_relative_path(t_list *dir_lst, char *pwd);
 int			builtin_export(int argc, char *argv[], char ***environ);
 char		*get_key(char *key_value, t_boolean *is_append);
-void		export_new_word(char ***environ, char *key_value, t_boolean is_append);
+void		export_new_word(char ***environ, char *key_value,
+				t_boolean is_append);
 void		export_exist_word(char ***environ, int index, char *key_value);
 int			builtin_unset(int argc, char *argv[], char ***environ);
 int			builtin_pwd(t_dir *d_info);

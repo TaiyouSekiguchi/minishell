@@ -1,26 +1,5 @@
 #include "minishell.h"
 
-static void	free_my_env(char **my_env)
-{
-	int	i;
-
-	i = 0;
-	while (my_env[i] != NULL)
-	{
-		free(my_env[i]);
-		i++;
-	}
-	free(my_env);
-}
-
-static void	main_free(char *input_line, t_dir *info)
-{
-	free(input_line);
-	free(info->pwd);
-	free(info->old_pwd);
-	free_my_env(info->my_env);
-}
-
 void	test(char *command, t_dir *d_info)
 {
 	t_list	*token_list;
@@ -28,12 +7,10 @@ void	test(char *command, t_dir *d_info)
 
 	if (command[0] == '\0')
 		return ;
-
 	token_list = NULL;
 	lexer(&token_list, command);
 	if (token_list == NULL)
 		return ;
-
 	cmd_info_list = NULL;
 	parser(&cmd_info_list, token_list);
 	if (cmd_info_list == NULL)
@@ -41,7 +18,6 @@ void	test(char *command, t_dir *d_info)
 		ms_lstclear(&token_list, free);
 		return ;
 	}
-
 	expander(cmd_info_list, d_info->my_env);
 	executer(cmd_info_list, d_info);
 }

@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 00:15:41 by yjimpei           #+#    #+#             */
-/*   Updated: 2022/03/13 15:07:03 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/21 13:25:47 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,21 @@ static int	check_flow(long num, int minus, long next)
 		errno = 34;
 		return ((int)LONG_MAX);
 	}
-
 	if ((num * minus) == (LONG_MAX / 10) && next > (LONG_MAX % 10))
 	{
 		errno = 34;
 		return ((int)LONG_MAX);
 	}
-
 	if ((num * minus) < (LONG_MIN / 10))
 	{
 		errno = 34;
 		return ((int)LONG_MIN);
 	}
-
 	if ((num * minus) == (LONG_MIN / 10) && (next * -1) < (LONG_MIN % 10))
 	{
 		errno = 34;
 		return ((int)LONG_MIN);
 	}
-
 	return (42);
 }
 
