@@ -33,7 +33,6 @@ static int	exec_process(t_list *cmd_info_list, t_dir *d_info)
 		cmd_info_list = cmd_info_list->next;
 	}
 	last_pid = do_cmd(cmd_info_list->content, TRUE, d_info);
-
 	ret_pid = 0;
 	while (ret_pid >= 0)
 	{
@@ -47,16 +46,15 @@ static int	exec_process(t_list *cmd_info_list, t_dir *d_info)
 void	executer(t_list *cmd_info_list, t_dir *d_info)
 {
 	t_cmd_info	*first_cmd_info;
-	int			infile_fd;
-	int			outfile_fd;
+	t_fd		redirect_fd;
 
 	first_cmd_info = cmd_info_list->content;
 	if (first_cmd_info->cmd != NULL
 		&& is_builtin(first_cmd_info->cmd->content)
 		&& ms_lstsize(cmd_info_list) == 1)
 	{
-		get_redirect_fd(first_cmd_info->redirect, d_info->my_env, &infile_fd, &outfile_fd);
-		do_redirect(infile_fd, outfile_fd);
+		get_redirect_fd(first_cmd_info->redirect, d_info->my_env, &redirect_fd);
+		do_redirect(&redirect_fd);
 		do_exec(first_cmd_info, d_info);
 		tty_reset();
 	}

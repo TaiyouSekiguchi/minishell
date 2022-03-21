@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		syntax_check(t_list	*token_list)
+int	syntax_check(t_list	*token_list)
 {
 	t_list	*current;
 	t_kind	kind;

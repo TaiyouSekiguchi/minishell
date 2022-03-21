@@ -59,29 +59,25 @@ void	test(t_dir *info, char *command)
 	print_cmds(cmd_info_list);
 	executer(cmd_info_list, info);
 	printf("***********test************\n\n");
-
-	//free part
 	ms_lstclear(&token_list, free);
 	current = cmd_info_list;
 	while (current != NULL)
 	{
 		cmd_info = current->content;
-		ms_lstclear(&(cmd_info->infile), free);
 		ms_lstclear(&(cmd_info->cmd), free);
-		ms_lstclear(&(cmd_info->outfile), free);
+		ms_lstclear(&(cmd_info->redirect), free);
 		current = current->next;
 	}
 	ms_lstclear(&(cmd_info_list), free);
 }
 
-int main(void)
+int	main(void)
 {
 	t_dir	info;
 
 	init_my_env(&info);
 	init_dir_info(&info);
 	init_shlvl(&info.my_env);
-
 	test(&info, "cat");
 	test(&info, "cat < Makefile");
 	test(&info, "cat << END");
@@ -90,18 +86,7 @@ int main(void)
 	test(&info, "cat < Makefile | wc -l >> outfile1");
 	test(&info, "cat < Makefile | grep a | wc -l >> outfile2");
 	test(&info, "cat < Makefile < .gitignore | grep a | wc -l >> outfile2");
-	//test(&info, "cat < Makefile < .gitignore | grep a | wc -l >> outfile2");
-	//test(&info, "cat < Makefile < .gitignore << END | grep a | wc -l >> outfile3");
-	//test(&info, "cat < Makefile < .gitignore << END | grep a | wc -l >> outfile3");
-	//test(&info, "cat < Makefile < .gitignore << END | grep a | wc -l >> outfile3");
-	//test(&info, "cat < Makefile < .gitignore << END | grep a | wc -l >> outfile3");
-	//test(&info, "cat < Makefile << END < .gitignore | grep a | wc -l >> outfile3");
-	//test(&info, "cat < Makefile << END | grep a < .gitignore | wc -l >> outfile4");
-	//test(&info, "cat < Makefile << END | grep a < .gitignore | wc -l >> outfile4");
-	//test(&info, "cat < Makefile > outfile5 | cat -e");
-	
 	free(info.pwd);
 	free(info.old_pwd);
-	//system("leaks executer_test");
 	return (0);
 }

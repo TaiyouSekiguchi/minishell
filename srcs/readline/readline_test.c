@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:08:47 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/02/11 17:46:15 by yjimpei          ###   ########.fr       */
+/*   Updated: 2022/03/20 23:12:09 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	main(void)
 {
 	char	*command;
 
-	//signal(SIGINT, sig_handler);
 	while (1)
 	{
 		command = rl_gets();

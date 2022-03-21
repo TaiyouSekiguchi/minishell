@@ -26,8 +26,6 @@ void	print_cmd(t_cmd_info *cmd)
 	printf("\n");
 	print_list(cmd->cmd, "cmd");
 	print_list(cmd->redirect, "redirect");
-	//print_list(cmd->infile, "infile");
-	//print_list(cmd->outfile, "outfile");
 }
 
 void	print_cmds(t_list *cmds)
@@ -44,10 +42,11 @@ void	print_cmds(t_list *cmds)
 
 void	test(char *command)
 {
-	t_list	*tokens;
-	t_list	*cmds;
-
+	t_list		*tokens;
+	t_list		*cmds;
+	t_list		*current;
 	t_cmd_info	*cmd_info;
+
 	printf("***********test start************\n");
 	printf("[command] : %s\n", command);
 	tokens = NULL;
@@ -55,38 +54,33 @@ void	test(char *command)
 	cmds = NULL;
 	parser(&cmds, tokens);
 	print_cmds(cmds);
-
-	//tokens, cmds, free
 	ms_lstclear(&tokens, free);
-	t_list	*current = cmds;
+	current = cmds;
 	while (current != NULL)
 	{
 		cmd_info = current->content;
 		ms_lstclear(&(cmd_info->cmd), free);
 		ms_lstclear(&(cmd_info->redirect), free);
-		//ms_lstclear(&(cmd_info->infile), free);
-		//ms_lstclear(&(cmd_info->outfile), free);
 		current = current->next;
 	}
 	ms_lstclear(&(cmds), free);
 	printf("***********test finish***********\n\n\n");
 }
 
-int main(void)
+int	main(void)
 {
-	//test("echo \"\" \"\" \"\" ");
+	test("echo \"\" \"\" \"\" ");
 	test(">out1 > out2 <in1 << in2");
-	//test("aaa");
-	//test("aaa   ");
-	//test("aaa bbb ccc      ");
-	//test("    aaa bbb ccc    ");
-	//test("echo taiyou");
-	//test("cat <infile -e | grep test | wc -l > outfile");
-	//test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
-	//test("> outfile");
-	//test("cat < $TEST | grep test | wc -l >> outfile > outfile");
-	//test("cat Makefile | wc -l");
-	//test("cat <");
-	//test("> outfile |");
+	test("aaa");
+	test("aaa   ");
+	test("aaa bbb ccc      ");
+	test("    aaa bbb ccc    ");
+	test("echo taiyou");
+	test("cat <infile -e | grep test | wc -l > outfile");
+	test("> outfile");
+	test("cat < $TEST | grep test | wc -l >> outfile > outfile");
+	test("cat Makefile | wc -l");
+	test("cat <");
+	test("> outfile |");
 	return (0);
 }

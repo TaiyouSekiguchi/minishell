@@ -61,24 +61,18 @@ int	main(void)
 	init_my_env(&info);
 	init_dir_info(&info);
 	init_shlvl(&info.my_env);
-
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
-
 	input_line = NULL;
 	while (1)
 	{
 		input_line = rl_gets();
 		test(input_line, &info);
-		//do_process(input_line, &info);
 		if (ms_strcmp(input_line, "clear_history") == 0)
 			clear_history();
 	}
-
-	//main freeとしてまとめたい
 	free(input_line);
 	free(info.pwd);
 	free(info.old_pwd);
-
 	return (get_g_status());
 }

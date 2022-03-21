@@ -55,75 +55,68 @@ void	test(char *command, t_dir *d_info)
 	lexer(&token_list, command);
 	cmd_info_list = NULL;
 	parser(&cmd_info_list, token_list);
-	//print_cmds(cmd_info_list);
 	expander(cmd_info_list, d_info->my_env);
 	print_cmds(cmd_info_list);
-
-	//free part
 	ms_lstclear(&token_list, free);
 	current = cmd_info_list;
 	while (current != NULL)
 	{
 		cmd_info = current->content;
-		ms_lstclear(&(cmd_info->infile), free);
 		ms_lstclear(&(cmd_info->cmd), free);
-		ms_lstclear(&(cmd_info->outfile), free);
+		ms_lstclear(&(cmd_info->redirect), free);
 		current = current->next;
 	}
 	ms_lstclear(&(cmd_info_list), free);
 	printf("***********test************\n\n");
 }
 
-int main(void)
+int	main(void)
 {
 	t_dir	info;
 
-	//init関数としてまとめたい
 	init_my_env(&info);
 	init_dir_info(&info);
 	init_shlvl(&info.my_env);
-
 	test("\"/bin/ls srcs\"", &info);
 	test("export TEST=\"-e hello\"", &info);
 	test("echo \" $\"", &info);
 	test("echo \"'\"", &info);
-
-	//test("echo \"\" \"\" \"\" ", &info);
-	//test("aaa bbb ccc      ", &info);
-	/*test("aaa");
-	test("aaa   ");
-	test("aaa bbb ccc      ");
-	test("    aaa bbb ccc    ");
-	test("echo taiyou");
-	test("cat <infile -e | grep test | wc -l > outfile");
-	test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
-	test("> outfile");
-	test("cat $HOME < $HOME | grep test | wc -l >> outfile > outfile");
-	test("cat \"-e $PWD\"");
-	test("cat \'-e $OLDPWD\'");
-	test("cat \'-e $HOME\"taiyou\"\'");
-	test("cat \"-e $SHLVL\'taiyou\'\"");
-	test("cat \'taiyou\'$HOME\'sekiguchi\'");
-	test("cat $PATH");
-	test("echo \"'$PATH'\"");
-	test("echo \"'\\''$PATH'\"");
-	test("echo \"\\'$PATH'\"");
-	test("echo \"$USER '$TEST1'\"");
-	test("echo '$'");
-	test("echo '\"$PATH\"'");
-	test("echo $TEST1");
-	test("echo $TEST");
-	test("echo $1TEST");
-	test("echo $13TEST");
-	test("echo $13TEST$$");
-	test("echo $13TEST$$$");
-	test("echo $+TEST");
-	test("echo $!TEST");
-	test("echo $ TEST");
-	test("echo \'$1TEST\'");
-	test("cat <<<end");
-	test("cat <<<Makefile");
-	test("cat Makefile'");*/
-
 	return (0);
 }
+
+//test("echo \"\" \"\" \"\" ", &info);
+//test("aaa bbb ccc      ", &info);
+/*test("aaa");
+test("aaa   ");
+test("aaa bbb ccc      ");
+test("    aaa bbb ccc    ");
+test("echo taiyou");
+test("cat <infile -e | grep test | wc -l > outfile");
+test("cat <infile <<infile2 -e | grep test | wc -l > outfile -e >> outfile2");
+test("> outfile");
+test("cat $HOME < $HOME | grep test | wc -l >> outfile > outfile");
+test("cat \"-e $PWD\"");
+test("cat \'-e $OLDPWD\'");
+test("cat \'-e $HOME\"taiyou\"\'");
+test("cat \"-e $SHLVL\'taiyou\'\"");
+test("cat \'taiyou\'$HOME\'sekiguchi\'");
+test("cat $PATH");
+test("echo \"'$PATH'\"");
+test("echo \"'\\''$PATH'\"");
+test("echo \"\\'$PATH'\"");
+test("echo \"$USER '$TEST1'\"");
+test("echo '$'");
+test("echo '\"$PATH\"'");
+test("echo $TEST1");
+test("echo $TEST");
+test("echo $1TEST");
+test("echo $13TEST");
+test("echo $13TEST$$");
+test("echo $13TEST$$$");
+test("echo $+TEST");
+test("echo $!TEST");
+test("echo $ TEST");
+test("echo \'$1TEST\'");
+test("cat <<<end");
+test("cat <<<Makefile");
+test("cat Makefile'");*/

@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-static void	add_tokens(t_list **token_list, char *input, size_t start, size_t *i)
+static void
+	add_tokens(t_list **token_list, char *input, size_t start, size_t *i)
 {
 	char	*tmp;
 
