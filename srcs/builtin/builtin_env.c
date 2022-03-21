@@ -7,7 +7,8 @@ int	builtin_env(char **environ)
 	i = 0;
 	while (environ[i] != NULL)
 	{
-		ms_putendl_fd(environ[i], STDOUT);
+		if (ms_strchr(environ[i], '=') != NULL)
+			ms_putendl_fd(environ[i], STDOUT);
 		i++;
 	}
 	return (0);

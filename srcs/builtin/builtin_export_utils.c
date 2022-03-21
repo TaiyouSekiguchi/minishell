@@ -31,13 +31,11 @@ static char	*get_value(char *key_value)
 
 void	export_new_word(char ***environ, char *key_value, t_boolean is_append)
 {
-	char	*key;
 	char	*value;
 	char	**new_env;
 	char	*tmp;
 	int		i;
 
-	key = get_key(key_value, &is_append);
 	value = get_value(key_value);
 	new_env = ms_xmalloc(sizeof(char *) * (get_environ_row(*environ) + 2));
 	i = 0;
@@ -46,14 +44,16 @@ void	export_new_word(char ***environ, char *key_value, t_boolean is_append)
 		new_env[i] = ms_strdup((*environ)[i]);
 		i++;
 	}
-	tmp = ms_strdup(key);
-	tmp = ms_strappend(tmp, ms_strdup("="));
-	tmp = ms_strappend(tmp, ms_strdup(value));
-	new_env[i] = ms_strdup(tmp);
+	tmp = get_key(key_value, &is_append);
+	if (value != NULL)
+	{
+		tmp = ms_strappend(tmp, ms_strdup("="));
+		tmp = ms_strappend(tmp, ms_strdup(value));
+	}
+	new_env[i] = tmp;
 	new_env[i + 1] = NULL;
 	ms_split_free(*environ);
 	*environ = new_env;
-	free(key);
 }
 
 void	export_exist_word(char ***environ, int index, char *key_value)
@@ -65,18 +65,20 @@ void	export_exist_word(char ***environ, int index, char *key_value)
 
 	key = get_key(key_value, &is_append);
 	value = get_value(key_value);
-	if (is_append == TRUE)
+	if (value != NULL)
 	{
-		tmp = ms_strdup((*environ)[index]);
-		tmp = ms_strjoin(tmp, value);
+		if (is_append == TRUE)
+		{
+			tmp = ms_strdup((*environ)[index]);
+			tmp = ms_strappend(tmp, ms_strdup(value));
+		}
+		else
+		{
+			tmp = ms_strappend(ms_strdup(key), ms_strdup("="));
+			tmp = ms_strappend(tmp, ms_strdup(value));
+		}
+		free((*environ)[index]);
+		(*environ)[index] = tmp;
 	}
-	else
-	{
-		tmp = ms_strdup(key);
-		tmp = ms_strappend(tmp, ms_strdup("="));
-		tmp = ms_strappend(tmp, ms_strdup(value));
-	}
-	free((*environ)[index]);
-	(*environ)[index] = tmp;
 	free(key);
 }

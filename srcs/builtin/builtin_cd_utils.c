@@ -32,16 +32,17 @@ static void	del_last_elem(t_list **pptr)
 static char	*lst_to_string(t_list *list, char *c)
 {
 	char	*str;
+	t_list	*current;
 
 	if (list == NULL)
 		return (NULL);
 	str = ms_strappend(ms_strdup(c), ms_strdup((char *)list->content));
-	list = list->next;
-	while (list != NULL)
+	current = list->next;
+	while (current != NULL)
 	{
 		str = ms_strappend(str, ms_strdup(c));
-		str = ms_strappend(str, ms_strdup((char *)list->content));
-		list = list->next;
+		str = ms_strappend(str, ms_strdup((char *)current->content));
+		current = current->next;
 	}
 	ms_lstclear(&list, free);
 	return (str);
@@ -55,7 +56,7 @@ char	*rewrite_absolute_path(t_list *dir_lst, char *input_path)
 
 	new_dir_lst = NULL;
 	if (dir_lst == NULL)
-		return (input_path);
+		return (ms_strdup(input_path));
 	current = dir_lst;
 	while (current != NULL)
 	{

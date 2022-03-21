@@ -59,7 +59,9 @@ void	do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 		direct_path_part(argv);
 	if (execve(argv[0], argv, d_info->my_env) < 0)
 	{
+		put_error_exit(argv[0], NULL, FALSE);
 		ms_split_free(argv);
-		put_error_exit(argv[0], NULL, TRUE);
+		set_g_status(126);
+		exit(get_g_status());
 	}
 }

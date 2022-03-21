@@ -8,6 +8,7 @@ int	builtin_exit(int argc, char *argv[])
 	if (argc >= 2)
 	{
 		errno = 0;
+		set_g_status(ms_atoi(argv[1]));
 		if (errno == 22 || errno == 34)
 		{
 			set_g_status(255);
@@ -20,7 +21,6 @@ int	builtin_exit(int argc, char *argv[])
 			put_error_exit("exit", "exit: too many arguments", FALSE);
 			return (EXIT_FAILURE);
 		}
-		set_g_status(ms_atoi(argv[1]));
 		exit(get_g_status());
 	}
 	else
