@@ -64,9 +64,7 @@ int	main(int argc, char **argv)
 		command = ms_strjoin(command, " ");
 		i++;
 	}
-	init_my_env(&info);
-	init_dir_info(&info);
-	init_shlvl(&info.my_env);
+	init(&info);
 	test(command, &info);
 	main_free(command, &info);
 	return (get_g_status());

@@ -79,7 +79,7 @@ void	init_dir_info(t_dir *d_info)
 	d_info->old_pwd = NULL;
 }
 
-void	init_my_env(t_dir *d_info)
+void	init(t_dir *d_info)
 {
 	extern char	**environ;
 	int			row;
@@ -94,4 +94,6 @@ void	init_my_env(t_dir *d_info)
 		i++;
 	}
 	d_info->my_env[i] = NULL;
+	init_dir_info(d_info);
+	init_shlvl(&(d_info->my_env));
 }

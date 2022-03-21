@@ -1,12 +1,14 @@
 #CC						=	gcc
 CC						=	clang
 CFLAGS					=	-Wall -Wextra -Werror
-CFLAGS					+=	-fsanitize=leak
-#CFLAGS					+=	-fsanitize=address
+#CFLAGS					+=	-fsanitize=leak
+CFLAGS					+=	-fsanitize=address
 INCLUDE					=	-I includes -I ${shell brew --prefix readline}/include
 READLINE_LIB			=	-l readline -L ${shell brew --prefix readline}/lib
 LIBMS					=	./lib/libms/libms.a
-SRCS_DIR				=	$(dir $(SRCS))\
+
+SRCS_DIR				=	${dir ${MAINMAIN_SRCS}}\
+							${dir ${MAIN_SRCS}}\
 							${dir ${UTILS_SRCS}}\
 							${dir ${READLINE_SRCS}}\
 							${dir ${LEXER_SRCS}}\
@@ -20,8 +22,15 @@ BINDIRS					=	${addprefix ${OBJS_DIR}/, ${SRCS_DIR}}
 
 ############ minishell #############
 MINISHELL				=	minishell
-SRCS					=	srcs/main.c
-OBJS					=	$(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
+
+MAINMAIN_SRCS			=	srcs/Main/main.c
+MAINMAIN_OBJS				=	$(addprefix $(OBJS_DIR)/, $(MAINMAIN_SRCS:.c=.o))
+
+MAIN_SRCS				=	srcs/Main/sigint_handler.c\
+							srcs/Main/init.c\
+							srcs/Main/main_free.c\
+							srcs/Main/do_process.c
+MAIN_OBJS				=	$(addprefix $(OBJS_DIR)/, $(MAIN_SRCS:.c=.o))
 #####################################
 
 ############### test  ###############
@@ -58,11 +67,9 @@ UTILS_SRCS				=	srcs/utils/is_func.c\
 							srcs/utils/quote_set.c\
 							srcs/utils/ms_getenv.c \
 							srcs/utils/remove_quotation.c \
-							srcs/utils/init.c \
 							srcs/utils/call_builtin.c \
 							srcs/utils/put_error_exit.c\
 							srcs/utils/exit_status.c\
-							srcs/utils/sigint_handler.c\
 							srcs/utils/split_lst.c
 
 
@@ -127,36 +134,37 @@ EXECUTER_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_SRCS:.c=.o))
 
 all					:	$(MINISHELL)
 
-$(MINISHELL)		:	$(OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
+$(MINISHELL)		:	$(MAINMAIN_OBJS) $(MAIN_OBJS)\
+						$(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS)\
+						$(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS)\
+						$(EXPANDER_OBJS) $(EXECUTER_OBJS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
-$(READLINE_TEST)	:	$(READLINE_TEST_OBJS) $(READLINE_OBJS) $(LIBMS)
+$(READLINE_TEST)	:	$(READLINE_TEST_OBJS) $(MAIN_OBJS) $(READLINE_OBJS) $(LIBMS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
-$(LEXER_TEST)		:	$(LEXER_TEST_OBJS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(UTILS_OBJS) $(LIBMS)
+$(LEXER_TEST)		:	$(LEXER_TEST_OBJS) $(MAIN_OBJS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(UTILS_OBJS) $(LIBMS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
-$(PARSER_TEST)		:	$(PARSER_TEST_OBJS) $(PARSER_OBJS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(UTILS_OBJS) $(LIBMS)
+$(PARSER_TEST)		:	$(PARSER_TEST_OBJS) $(MAIN_OBJS) $(PARSER_OBJS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(UTILS_OBJS) $(LIBMS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
-$(EXPANDER_TEST)	:	$(EXPANDER_TEST_OBJS) $(BUILTIN_OBJS) $(EXPANDER_OBJS) $(PARSER_OBJS) $(LEXER_OBJS) $(UTILS_OBJS) $(LIBMS)
+$(EXPANDER_TEST)	:	$(EXPANDER_TEST_OBJS) $(MAIN_OBJS) $(BUILTIN_OBJS) $(EXPANDER_OBJS) $(PARSER_OBJS) $(LEXER_OBJS) $(UTILS_OBJS) $(LIBMS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
-$(EXECUTER_TEST)	:	$(EXECUTER_TEST_OBJS) $(EXECUTER_OBJS) $(BUILTIN_OBJS)\
+$(EXECUTER_TEST)	:	$(EXECUTER_TEST_OBJS) $(MAIN_OBJS) $(EXECUTER_OBJS) $(BUILTIN_OBJS)\
 						$(EXPANDER_OBJS) $(PARSER_OBJS) $(LEXER_OBJS) $(UTILS_OBJS) $(LIBMS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
-$(ALL_IN_TEST)		:	$(ALL_IN_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
+$(ALL_IN_TEST)		:	$(ALL_IN_TEST_OBJS) $(MAIN_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
-$(OUTPUT_TEST)		:	$(OUTPUT_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
+$(OUTPUT_TEST)		:	$(OUTPUT_TEST_OBJS) $(MAIN_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
 						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
 out_test				: $(OUTPUT_TEST)
 						bash ./test/output_test.sh
 
-$(ERROR_TEST)		:	$(ERROR_TEST_OBJS) $(READLINE_OBJS) $(UTILS_OBJS) $(LIBMS) $(LEXER_OBJS) $(BUILTIN_OBJS) $(PARSER_OBJS) $(EXPANDER_OBJS) $(EXECUTER_OBJS)
-						$(CC) -g $(CFLAGS) $^ $(INCLUDE) -o $@ $(READLINE_LIB)
 
 $(OBJS_DIR)/%.o		:	%.c
 						@mkdir -p ${BINDIRS}
