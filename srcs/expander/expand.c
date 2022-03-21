@@ -1,95 +1,80 @@
 #include "minishell.h"
 
-extern int g_status;
-
-static int	is_name(char c)
+static void	expand_to_lst(t_list **new_lst, char *value, char **ret)
 {
-	if (ms_isdigit(c) || ms_isalpha(c) || c == '_')
-		return (TRUE);
-	return (FALSE);
-}
+	t_list	*token_lst;
+	t_list	*current;
 
-static char	*get_val_name(char *token)
-{
-	char	*val_name;
-	int		i;
-
-	i = 0;
-	while (token[i] != '\0' && is_name(token[i]))
-		i++;
-	val_name = ms_strndup(token, i);
-	return (val_name);
-}
-
-void	expand(char **token, int type)
-{
-	char	*val_name;
-	char	*new_word;
-	char	*ret;
-	char	*tmp;
-	int		start;
-	int		i;
-	t_quote	quote;
-
-	quote = NONE;
-	start = 0;
-	i = 0;
-	ret = ms_strdup("");
-	while ((*token)[i] != '\0')
+	token_lst = split_lst(value, ' ');
+	free(value);
+	current = token_lst;
+	while (current != NULL)
 	{
-		if (type == 0 && is_quote((*token)[i]))
-			quote_set((*token)[i++], &quote);
-		else if (quote == SINGLE || (*token)[i] != '$')
-			i++;
-		else
-		{
-			//＄より前をtmpにいれる。
-			tmp = ms_substr(*token, start, i - start);
-			//printf("tmp is %s\n", tmp);
-
-			//上で作ったtmpを, retにくっつける。
-			ret = ms_strappend(ret, tmp);
-			//printf("ret is %s\n", ret);
-
-			//$の次へいく
-			i++;
-
-			// $? のとき終了ステータスをいれる
-			if ((*token)[i] == '?')
-			{
-				new_word = ms_itoa(g_status);
-				ret = ms_strappend(ret, new_word);
-				i++;
-				start = i;
-			}
-			else
-			{
-				//tokenにある$後の変数名を取得
-				val_name = get_val_name(&(*token)[i]);
-				//printf("val_name is %s\n", val_name);
-
-				//変数名から環境変数にある右辺を取得する
-				new_word = search_environ(val_name);
-				//printf("new_word is %s\n", new_word);
-
-				//取得した右辺の値をretにくっつける（展開）
-				ret = ms_strappend(ret, new_word);
-				//printf("ret is %s\n", ret);
-
-				//tokenのインデックスを変数名の大きさだけ進める
-				while ((*token)[i] != '\0' && is_name((*token)[i]))
-					i++;
-				start = i;
-			}
-		}
+		*ret = ms_strappend(*ret, ms_strdup(current->content));
+		ms_lstadd_back(new_lst, ms_lstnew(*ret));
+		*ret = ms_strdup("");
+		current = current->next;
 	}
+	ms_lstclear(&token_lst, free);
+}
 
-	tmp = ms_substr(*token, start, i);
-	//printf("tmp is %s\n", tmp);
+static t_list	*expand_part(char **token, char **ret, char **start, char **env)
+{
+	t_list	*new_lst;
+	char	*value;
 
-	ret = ms_strappend(ret, tmp);
-	//printf("ret is %s\n", ret);
+	new_lst = NULL;
+	*ret = ms_strappend(*ret, ms_strndup(*start, *token - *start));
+	*token += 1;
+	if (**token == '?')
+		*ret = ms_strappend(*ret, expand_g_status(token));
+	else if (ms_isdigit(**token))
+		*ret = ms_strappend(*ret, expand_num(token));
+	else
+	{
+		value = expand_from_env(token, env);
+		expand_to_lst(&new_lst, value, ret);
+	}
+	*start = *token;
+	return (new_lst);
+}
 
-	free(*token);
-	*token = ret;
+static void	expand_init(t_list **new_lst, t_quote *quote, char **ret)
+{
+	*new_lst = NULL;
+	*quote = NONE;
+	*ret = ms_strdup("");
+}
+
+static void	quote_part(char **token, t_quote *quote)
+{
+	*quote = quote_set(**token, *quote);
+	*token += 1;
+}
+
+t_list	*expand(char *token, char **my_env)
+{
+	t_list	*new_lst;
+	t_quote	quote;
+	char	*ret;
+	char	*start;
+
+	expand_init(&new_lst, &quote, &ret);
+	start = token;
+	while (*token != '\0')
+	{
+		if (is_quote(*token))
+			quote_part(&token, &quote);
+		else if ((quote == SINGLE || *token != '$')
+			|| (*(token + 1) != '?' && !is_name(*(token + 1))))
+			token++;
+		else
+			ms_lstadd_back(&new_lst, expand_part(&token, &ret, &start, my_env));
+	}
+	ret = ms_strappend(ret, ms_strndup(start, token - start));
+	if (ms_strlen(ret) != 0)
+		ms_lstadd_back(&new_lst, ms_lstnew(ret));
+	else
+		free(ret);
+	return (new_lst);
 }

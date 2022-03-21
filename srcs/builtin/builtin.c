@@ -1,7 +1,6 @@
 #include "minishell.h"
 
-int
-is_builtin(char *cmd_name)
+int	is_builtin(char *cmd_name)
 {
 	if (ms_strcmp(cmd_name, "echo") == 0
 		|| ms_strcmp(cmd_name, "cd") == 0
@@ -14,8 +13,7 @@ is_builtin(char *cmd_name)
 	return (FALSE);
 }
 
-int
-do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info)
+int	do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info)
 {
 	int	ret;
 
@@ -27,11 +25,11 @@ do_builtin(char *cmd, int argc, char *argv[], t_dir *d_info)
 	else if (ms_strcmp(cmd, "pwd") == 0)
 		ret = builtin_pwd(d_info);
 	else if (ms_strcmp(cmd, "export") == 0)
-		ret = builtin_export(argc, argv);
+		ret = builtin_export(argc, argv, &d_info->my_env);
 	else if (ms_strcmp(cmd, "unset") == 0)
-		ret = builtin_unset(argc, argv);
+		ret = builtin_unset(argc, argv, &d_info->my_env);
 	else if (ms_strcmp(cmd, "env") == 0)
-		ret = builtin_env();
+		ret = builtin_env(d_info->my_env);
 	else if (ms_strcmp(cmd, "exit") == 0)
 		ret = builtin_exit(argc, argv);
 	else

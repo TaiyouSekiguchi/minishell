@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 18:00:00 by yjimpei           #+#    #+#             */
-/*   Updated: 2022/03/01 18:00:03 by yjimpei          ###   ########.fr       */
+/*   Updated: 2022/03/19 03:28:08 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	ms_isnum_string(char *str)
 {
+	if (*str == '\0')
+		return (0);
 	while (*str)
 	{
 		if (*str >= '0' && *str <= '9')

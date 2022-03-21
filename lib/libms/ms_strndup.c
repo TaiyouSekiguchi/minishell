@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 15:17:06 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 15:28:13 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/06 14:06:24 by tsekiguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ms_strndup(const char *s1, size_t n)
 	size_t	len;
 	size_t	i;
 
-	if (s1 == NULL || n == 0)
+	if (s1 == NULL)
 		return (NULL);
 	len = ms_strlen(s1);
 	if (len > n)

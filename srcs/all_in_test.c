@@ -1,38 +1,5 @@
 #include "minishell.h"
 
-//int	g_status;
-
-/*
-char	*rl_gets(void)
-{
-	static char *line_read = (char *)NULL;
-
-	if (line_read)
-	{
-		free(line_read);
-		line_read = (char *)NULL;
-	}
-
-	line_read = readline(">> ");
-
-	if (line_read && *line_read)
-		add_history(line_read);
-
-	return (line_read);
-}
-*/
-
-static void	sigint_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
-
 void	print_list(t_list *list, char *kind)
 {
 	t_list	*current;
@@ -47,12 +14,11 @@ void	print_list(t_list *list, char *kind)
 	printf("\n");
 }
 
-void	print_cmd(t_cmd *cmd)
+void	print_cmd(t_cmd_info *cmd)
 {
 	printf("\n");
 	print_list(cmd->cmd, "cmd");
-	print_list(cmd->infile, "infile");
-	print_list(cmd->outfile, "outfile");
+	print_list(cmd->redirect, "redirect");
 	printf("\n\n");
 }
 
@@ -81,7 +47,7 @@ void	test(char *str, t_dir *d_info)
 	lexer(&tokens, str);
 	cmds = NULL;
 	parser(&cmds, tokens);
-	expander(cmds);
+	expander(cmds, d_info->my_env);
 	print_cmds(cmds);
 	printf("***********test************\n\n");
 	executer(cmds, d_info);
@@ -89,24 +55,24 @@ void	test(char *str, t_dir *d_info)
 
 int	main(void)
 {
-	char	*command;
+	char	*input_line;
 	t_dir	info;
 
+	init_my_env(&info);
 	init_dir_info(&info);
-	init_shlvl();
-
+	init_shlvl(&info.my_env);
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
-
+	input_line = NULL;
 	while (1)
 	{
-		command = rl_gets();
-		printf("%s\n", command);
-		test(command, &info);
-		if (ms_strcmp(command, "clear_history") == 0)
+		input_line = rl_gets();
+		test(input_line, &info);
+		if (ms_strcmp(input_line, "clear_history") == 0)
 			clear_history();
-			//rl_clear_history();
 	}
-	free(command);
-	return (g_status);
+	free(input_line);
+	free(info.pwd);
+	free(info.old_pwd);
+	return (get_g_status());
 }

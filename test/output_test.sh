@@ -28,9 +28,15 @@ commands=(
 	"pwd"
 	"ls"
 	"cat \-e \<.gitignore"
-	"cat \| wc \-l"
 	"cat .\/test\/big_file \| wc \-l"
 	"cat .\/test\/big_file \| cat \<.gitignore"
+	"cat .\/test\/big_file \| cat \<.gitignore \| wc \-l"
+	"cat .\/test\/big_file \| cat \<.gitignore \| wc \-l \| cat \-e"
+	#"echo \"\" \"\" \"\" \| cat \-e"
+	"pwd \| wc \-l"
+	#"\"/bin/ls srcs\""
+	#"\"/bi\"n/ls srcs"
+	"\"\"/bin/ech\"o\" \"test\""
 )
 
 rm -rf ./test/test.log

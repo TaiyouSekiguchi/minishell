@@ -1,16 +1,25 @@
 #include "minishell.h"
 
-void	test(char *str, t_dir *d_info)
+void	test(char *command, t_dir *d_info)
 {
-	t_list	*tokens;
-	t_list	*cmds;
+	t_list	*token_list;
+	t_list	*cmd_info_list;
 
-	tokens = NULL;
-	lexer(&tokens, str);
-	cmds = NULL;
-	parser(&cmds, tokens);
-	expander(cmds);
-	executer(cmds, d_info);
+	if (command[0] == '\0')
+		return ;
+	token_list = NULL;
+	lexer(&token_list, command);
+	if (token_list == NULL)
+		return ;
+	cmd_info_list = NULL;
+	parser(&cmd_info_list, token_list);
+	if (cmd_info_list == NULL)
+	{
+		ms_lstclear(&token_list, free);
+		return ;
+	}
+	expander(cmd_info_list, d_info->my_env);
+	executer(cmd_info_list, d_info);
 }
 
 int	main(int argc, char **argv)
@@ -31,7 +40,8 @@ int	main(int argc, char **argv)
 		command = ms_strjoin(command, " ");
 		i++;
 	}
-	init_dir_info(&info);
+	init(&info);
 	test(command, &info);
-	return (g_status);
+	main_free(command, &info);
+	return (get_g_status());
 }

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer_test_main.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/08 11:31:08 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 17:12:31 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 void	test(char *str)
@@ -22,7 +10,6 @@ void	test(char *str)
 	printf("[command] : %s\n", str);
 	tokens = NULL;
 	lexer(&tokens, str);
-	
 	i = 0;
 	current = tokens;
 	while (current != NULL)
@@ -35,7 +22,7 @@ void	test(char *str)
 	printf("***********test finish***********\n");
 }
 
-int main(void)
+int	main(void)
 {
 	test("");
 	test("aaa");
@@ -59,5 +46,7 @@ int main(void)
 	test("cat < Makefile | grep OBJS | wc -l > outfile");
 	test("cat <infile -e | grep test | wc -l > outfile");
 	test("cat <infile \"-e $TEST\"");
+	test("echo \"\" \"\" \"\" ");
+	test(">out1 > out2");
 	return (0);
 }

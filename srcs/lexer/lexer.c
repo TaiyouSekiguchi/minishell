@@ -1,63 +1,58 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/29 20:51:38 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/25 14:42:42 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-static void	add_tokens(t_list **tokens, char *cmd, size_t start, size_t *i)
+static void
+	add_tokens(t_list **token_list, char *input, size_t start, size_t *i)
 {
 	char	*tmp;
 
-	if (start < *i)
+	if (*input == '\0' || start < *i)
 	{
-		tmp = ms_strndup(&cmd[start], *i - start);
-		ms_lstadd_back(tokens, ms_lstnew(tmp));
+		tmp = ms_strndup(&input[start], *i - start);
+		ms_lstadd_back(token_list, ms_lstnew(tmp));
 	}
-	if (is_delimiter(cmd[*i]))
+	if (is_delimiter(input[*i]))
 	{
-		if (is_redirect(cmd[*i], cmd[*i + 1]))
+		if (is_redirect(input[*i], input[*i + 1]))
 		{
-			ms_lstadd_back(tokens, ms_lstnew(ms_strndup(&cmd[*i], 2)));
+			ms_lstadd_back(token_list, ms_lstnew(ms_strndup(&input[*i], 2)));
 			*i += 1;
 		}
 		else
-			ms_lstadd_back(tokens, ms_lstnew(ms_strndup(&cmd[*i], 1)));
+			ms_lstadd_back(token_list, ms_lstnew(ms_strndup(&input[*i], 1)));
 	}
 }
 
-void	lexer(t_list **tokens, char *cmd)
+static void	not_close_quote(t_list **token_list)
+{
+	put_error_exit(NULL, SYNTAX_ERROR_MSG, FALSE);
+	ms_lstclear(token_list, free);
+	*token_list = NULL;
+}
+
+void	lexer(t_list **token_list, char *input)
 {
 	t_quote		quote;
 	size_t		start;
 	size_t		i;
 
+	*token_list = NULL;
 	quote = NONE;
 	start = 0;
 	i = 0;
-	while (cmd[i] != '\0' )
+	while (input[i] != '\0' )
 	{
-		if (is_quote(cmd[i]))
-			quote_set(cmd[i++], &quote);
-		else if (quote != NONE || !is_metachar(cmd[i]))
+		if (is_quote(input[i]))
+			quote = quote_set(input[i++], quote);
+		else if (quote != NONE || !is_metachar(input[i]))
 			i++;
 		else
 		{
-			add_tokens(tokens, cmd, start, &i);
+			add_tokens(token_list, input, start, &i);
 			start = ++i;
 		}
 	}
 	if (quote != NONE)
-	{
-		printf("quote is not close\n");
-		exit(1);
-	}
-	add_tokens(tokens, cmd, start, &i);
+		not_close_quote(token_list);
+	else
+		add_tokens(token_list, input, start, &i);
 }
