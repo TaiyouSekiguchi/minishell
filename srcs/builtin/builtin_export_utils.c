@@ -49,7 +49,7 @@ void	export_new_word(char ***environ, char *key_value, t_boolean is_append)
 	tmp = ms_strdup(key);
 	tmp = ms_strappend(tmp, ms_strdup("="));
 	tmp = ms_strappend(tmp, ms_strdup(value));
-	new_env[i] = ms_strdup(tmp);
+	new_env[i] = tmp;
 	new_env[i + 1] = NULL;
 	ms_split_free(*environ);
 	*environ = new_env;
