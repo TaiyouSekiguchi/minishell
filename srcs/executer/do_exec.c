@@ -61,6 +61,7 @@ void	do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 	{
 		put_error_exit(argv[0], NULL, FALSE);
 		ms_split_free(argv);
+		set_g_status(126);
 		exit(get_g_status());
 	}
 }
