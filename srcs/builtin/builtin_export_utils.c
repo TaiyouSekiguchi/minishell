@@ -77,6 +77,6 @@ void	export_exist_word(char ***environ, int index, char *key_value)
 		tmp = ms_strappend(tmp, ms_strdup(value));
 	}
 	free((*environ)[index]);
-	(*environ)[index] = ms_strdup(tmp);
+	(*environ)[index] = tmp;
 	free(key);
 }

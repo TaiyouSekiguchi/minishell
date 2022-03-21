@@ -6,7 +6,7 @@
 /*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 15:17:02 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 15:34:52 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/21 13:23:34 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ms_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	cp1 = (char *)s1;
 	cp2 = (char *)s2;
-	len = ms_strlen(cp1) + ms_strlen(cp2); 
+	len = ms_strlen(cp1) + ms_strlen(cp2);
 	ret = (char *)ms_xmalloc(sizeof(char) * (len + 1));
 	tmp = ret;
 	while (*cp1 != '\0')

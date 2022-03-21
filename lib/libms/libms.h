@@ -6,7 +6,7 @@
 /*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 15:17:56 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/11 16:37:25 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/21 13:45:40 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 # define LIBMS_H
 
 # include <stdlib.h>
+# include <stdio.h>
 # include <unistd.h>
 # include <limits.h>
 # include <errno.h>
-
-# include <stdio.h>
-
 
 typedef struct s_list
 {
