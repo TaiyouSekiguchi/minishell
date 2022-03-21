@@ -13,19 +13,19 @@ static char	**get_split_env_path(char **my_env)
 	return (split_env_path);
 }
 
-static char	*search_part(char *cmd, char **split_env_path, int *exit_status)
+static char	*search_part(char *cmd, char **split_env_path)
 {
 	char	*full_path;
 	char	*tmp;
+	int		exit_status;
 	int		i;
 
-	*exit_status = COMMAND_NOT_FOUND;
-	i = 0;
-	while (split_env_path[i] != NULL)
+	exit_status = COMMAND_NOT_FOUND;
+	i = -1;
+	while (split_env_path[++i] != NULL)
 	{
 		tmp = ms_strjoin(split_env_path[i], "/");
-		full_path = ms_strjoin(tmp, cmd);
-		free(tmp);
+		full_path = ms_strappend(tmp, ms_strdup(cmd));
 		if (access(full_path, F_OK) == 0)
 		{
 			if (access(full_path, X_OK) == 0)
@@ -34,18 +34,17 @@ static char	*search_part(char *cmd, char **split_env_path, int *exit_status)
 				return (full_path);
 			}
 			else
-				*exit_status = PERMISSION_DENIED;
+				exit_status = PERMISSION_DENIED;
 		}
 		free(full_path);
-		i++;
 	}
+	set_g_status(exit_status);
 	return (NULL);
 }
 
 char	*cmd_path_search(char *cmd_name, char **my_env)
 {
 	char	**split_env_path;
-	int		exit_status;
 	char	*full_path;
 
 	split_env_path = get_split_env_path(my_env);
@@ -56,14 +55,13 @@ char	*cmd_path_search(char *cmd_name, char **my_env)
 		free(cmd_name);
 		return (NULL);
 	}
-	full_path = search_part(cmd_name, split_env_path, &exit_status);
+	full_path = search_part(cmd_name, split_env_path);
 	if (full_path != NULL)
 	{
 		free(cmd_name);
 		return (full_path);
 	}
-	set_g_status(exit_status);
-	if (exit_status == COMMAND_NOT_FOUND)
+	if (get_g_status() == COMMAND_NOT_FOUND)
 		put_error_exit(cmd_name, "command not found", FALSE);
 	else
 		put_error_exit(cmd_name, NULL, FALSE);

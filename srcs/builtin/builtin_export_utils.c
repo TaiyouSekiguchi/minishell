@@ -65,23 +65,20 @@ void	export_exist_word(char ***environ, int index, char *key_value)
 
 	key = get_key(key_value, &is_append);
 	value = get_value(key_value);
-	if (value == NULL)
+	if (value != NULL)
 	{
-		free(key);
-		return ;
+		if (is_append == TRUE)
+		{
+			tmp = ms_strdup((*environ)[index]);
+			tmp = ms_strappend(tmp, ms_strdup(value));
+		}
+		else
+		{
+			tmp = ms_strappend(ms_strdup(key), ms_strdup("="));
+			tmp = ms_strappend(tmp, ms_strdup(value));
+		}
+		free((*environ)[index]);
+		(*environ)[index] = tmp;
 	}
-	if (is_append == TRUE)
-	{
-		tmp = ms_strdup((*environ)[index]);
-		tmp = ms_strappend(tmp, ms_strdup(value));
-	}
-	else
-	{
-		tmp = ms_strdup(key);
-		tmp = ms_strappend(tmp, ms_strdup("="));
-		tmp = ms_strappend(tmp, ms_strdup(value));
-	}
-	free((*environ)[index]);
-	(*environ)[index] = tmp;
 	free(key);
 }
