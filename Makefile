@@ -1,8 +1,5 @@
 CC						=	gcc
-#CC						=	clang
 CFLAGS					=	-Wall -Wextra -Werror
-#CFLAGS					+=	-fsanitize=leak
-#CFLAGS					+=	-fsanitize=address
 INCLUDE					=	-I includes -I ${shell brew --prefix readline}/include
 READLINE_LIB			=	-l readline -L ${shell brew --prefix readline}/lib
 LIBMS					=	./lib/libms/libms.a
@@ -130,7 +127,7 @@ EXECUTER_SRCS			=	srcs/executer/executer.c\
 EXECUTER_OBJS		=	$(addprefix $(OBJS_DIR)/, $(EXECUTER_SRCS:.c=.o))
 ########################################
 
-.PHONY			:	all clean fclean re tclean tfclean
+.PHONY			:	all clean fclean re tclean tfclean out_test
 
 all					:	$(MINISHELL)
 

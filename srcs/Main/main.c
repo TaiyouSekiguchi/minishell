@@ -1,13 +1,5 @@
 #include "minishell.h"
 
-/*void end(void)__attribute__((destructor));
-
-void end(void)
-{
-    system("leaks minishell");
-}
-*/
-
 int	main(void)
 {
 	char	*input;
@@ -19,13 +11,12 @@ int	main(void)
 	input = NULL;
 	while (1)
 	{
-		input = rl_gets();
+		input = ms_rl_gets();
 		if (input == NULL)
 			break ;
-		if (ms_strcmp(input, "history -c") == 0)
-			clear_history();
-		else
-			do_process(input, &info);
+		do_process(input, &info);
+		free(input);
+		input = NULL;
 	}
 	main_free(input, &info);
 	ms_putendl_fd("exit", STDERR);

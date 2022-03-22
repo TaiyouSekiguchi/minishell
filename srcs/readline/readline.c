@@ -1,14 +1,10 @@
 #include "minishell.h"
 
-char	*rl_gets(void)
+char	*ms_rl_gets(void)
 {
-	static char	*line_read = (char *) NULL;
+	char	*line_read;
 
-	if (line_read)
-	{
-		free(line_read);
-		line_read = (char *) NULL;
-	}
+	line_read = NULL;
 	line_read = readline(">> ");
 	if (line_read == NULL)
 		return (NULL);
