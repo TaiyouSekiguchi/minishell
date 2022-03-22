@@ -88,7 +88,7 @@ void		main_free(char *input, t_dir *info);
 void		do_process_free(t_list **token_list, t_list **cmd_info_list);
 void		do_process(char *input, t_dir *d_info);
 //readline
-char		*rl_gets(void);
+char		*ms_rl_gets(void);
 //utils
 int			get_environ_row(char **environ);
 void		call_export(char *env_name, char *value, char ***my_env);
