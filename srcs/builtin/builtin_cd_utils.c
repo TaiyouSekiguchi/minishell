@@ -12,8 +12,11 @@ static void	del_last_elem(t_list **pptr)
 		return ;
 	else if (len == 1)
 	{
-		free((*pptr)->content);
-		free(*pptr);
+		ms_free((*pptr)->content);
+		ms_free((*pptr)->next);
+		ms_free(*pptr);
+		*pptr = NULL;
+		pptr = NULL;
 		return ;
 	}
 	else if (len == 2)
@@ -25,8 +28,8 @@ static void	del_last_elem(t_list **pptr)
 		tmp2 = tmp->next;
 	}
 	tmp->next = NULL;
-	free(tmp2->content);
-	free(tmp2);
+	ms_free(tmp2->content);
+	ms_free(tmp2);
 }
 
 static char	*lst_to_string(t_list *list, char *c)
@@ -35,7 +38,7 @@ static char	*lst_to_string(t_list *list, char *c)
 	t_list	*current;
 
 	if (list == NULL)
-		return (NULL);
+		return (ms_strdup("/"));
 	str = ms_strappend(ms_strdup(c), ms_strdup((char *)list->content));
 	current = list->next;
 	while (current != NULL)
@@ -44,7 +47,7 @@ static char	*lst_to_string(t_list *list, char *c)
 		str = ms_strappend(str, ms_strdup((char *)current->content));
 		current = current->next;
 	}
-	ms_lstclear(&list, free);
+	ms_lstclear(&list, ms_free);
 	return (str);
 }
 
@@ -72,7 +75,7 @@ char	*rewrite_absolute_path(t_list *dir_lst, char *input_path)
 		}
 		current = current->next;
 	}
-	ms_lstclear(&dir_lst, free);
+	ms_lstclear(&dir_lst, ms_free);
 	return (lst_to_string(new_dir_lst, "/"));
 }
 
@@ -83,6 +86,22 @@ char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
 	t_list	*current;
 
 	new_pwd_lst = split_lst(pwd, '/');
+
+
+
+	t_list	*tmpp;
+	tmpp = dir_lst;
+	dprintf(STDERR, "==new_pwd_lst==\n");
+	while (tmpp != NULL)
+	{
+		dprintf(STDERR, "dir_lst->content=%s\n", (char*)tmpp->content);
+		tmpp = tmpp->next;
+	}
+	dprintf(STDERR, "================\n");
+
+
+	int i = 0;
+
 	current = dir_lst;
 	while (current != NULL)
 	{
@@ -93,8 +112,21 @@ char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
 			tmp = ms_strdup(current->content);
 			ms_lstadd_back(&new_pwd_lst, ms_lstnew(tmp));
 		}
+		dprintf(STDERR, "i=%d\n", i);
 		current = current->next;
+		i++;
 	}
-	ms_lstclear(&dir_lst, free);
+	ms_lstclear(&dir_lst, ms_free);
+
+
+	tmpp = new_pwd_lst;
+	dprintf(STDERR, "==after_new_pwd_lst==\n");
+	while (tmpp != NULL)
+	{
+		dprintf(STDERR, "dir_lst->content=%s\n", (char*)tmpp->content);
+		tmpp = tmpp->next;
+	}
+	dprintf(STDERR, "======================\n");
+
 	return (lst_to_string(new_pwd_lst, "/"));
 }

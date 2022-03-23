@@ -27,6 +27,15 @@ char	*rewrite_path(char *input_path, t_dir *d_info)
 	t_list	*dir_lst;
 
 	dir_lst = split_lst(input_path, '/');
+	t_list	*tmp;
+	tmp = dir_lst;
+	dprintf(STDERR, "==split_lst_outcome==\n");
+	while (tmp != NULL)
+	{
+		dprintf(STDERR, "dir_lst->content=%s\n", (char *)tmp->content);
+		tmp = tmp->next;
+	}
+	dprintf(STDERR, "=====================\n");
 	if (input_path[0] == '/')
 		new_pwd = rewrite_absolute_path(dir_lst, input_path);
 	else
@@ -58,7 +67,9 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 		return (EXIT_FAILURE);
 	else
 	{
+		dprintf(STDERR, "input_path=%s\n", input_path);
 		new_pwd = rewrite_path(input_path, d_info);
+		dprintf(STDERR, "new_pwd=%s\n", new_pwd);
 		free(input_path);
 		if (chdir(new_pwd) < 0)
 		{
