@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_quote	quote_part(char **token, t_quote quote)
+static t_quote	quote_part(char **token, t_quote quote)
 {
 	t_quote	ret;
 
@@ -9,7 +9,7 @@ t_quote	quote_part(char **token, t_quote quote)
 	return (ret);
 }
 
-t_list	*split_to_lst(char **split)
+static t_list	*split_to_lst(char **split)
 {
 	t_list	*new_lst;
 	char	*tmp;
@@ -26,7 +26,7 @@ t_list	*split_to_lst(char **split)
 	return (new_lst);
 }
 
-void	standard_expand(char **token, char **my_env, t_list *new_lst)
+static void	standard_expand(char **token, char **my_env, t_list *new_lst)
 {
 	t_list	*lst_last;
 	t_list	*split_lst;
@@ -50,7 +50,7 @@ void	standard_expand(char **token, char **my_env, t_list *new_lst)
 	free(value);
 }
 
-void	expand_part(char **token, char **start, char **my_env, t_list *new_lst)
+static void	expand_part(char **token, char **start, char **my_env, t_list *new_lst)
 {
 	t_list	*lst_last;
 	char	*tmp;
