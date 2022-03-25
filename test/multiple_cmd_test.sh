@@ -13,3 +13,6 @@ function result () {
 result "ls -al"
 result "cd .." "pwd"
 result "export TEST=taiyou" "export" "unset TEST" "env"
+result "cd" "cd .." "cd /" "cd //" "cd .." "cd ."
+result "cd /../../..////../..//./..//" 
+result "cd /tmp/.." 
