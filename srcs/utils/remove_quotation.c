@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_boolean	is_last_quote(char c, t_quote quote)
+static t_boolean	is_last_quote(char c, t_quote quote)
 {
 	if ((quote == NONE)
 		|| (quote == SINGLE && c == '\'')

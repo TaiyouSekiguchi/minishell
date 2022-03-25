@@ -5,7 +5,7 @@ function test () {
 	echo "TEST COMMAND :" "${1}"
 	echo ""
 
-	MINI=`./minishell -c "${1}" 2>&1`
+	MINI=`../minishell -c "${1}" 2>&1`
 	MINI_STATUS=`echo $?`
 
 	REAL=`bash -c "${1}" 2>&1`
@@ -42,8 +42,8 @@ commands=(
 	'/bin/ls'
 	#'/bin/cat'
 	'/bin/ls -l'
-	'/usr/bin/file minishell'
-	'/usr/bin/wc -l minishell'
+	'/usr/bin/file ./minishell'
+	'/usr/bin/wc -l ./minishell'
 	'echo'
 	'echo hello'
 	'echo -n-n-n 42'

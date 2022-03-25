@@ -4,6 +4,7 @@ int	main(int argc, char *argv[])
 {
 	char	*input;
 	t_dir	info;
+	int		i;
 
 	init(&info);
 	signal(SIGINT, sigint_handler);
@@ -23,14 +24,20 @@ int	main(int argc, char *argv[])
 		}
 		ms_putendl_fd("exit", STDERR);
 	}
-	else if (argc == 3 && ms_strcmp("-c", argv[1]) == 0)
+	else if (argc >= 2 && ms_strcmp("-c", argv[1]) == 0)
 	{
-		input = ms_strdup(argv[2]);
-		if (input != NULL)
+		i = 2;
+		while (argv[i] != NULL)
 		{
-			do_process(input, &info);
-			free(input);
-			input = NULL;
+			input = ms_strdup(argv[i]);
+			if (input != NULL)
+			{
+				do_process(input, &info);
+				free(input);
+				input = NULL;
+			}
+			//ms_putchar_fd('\n', STDOUT);
+			i++;
 		}
 	}
 	main_free(&info);

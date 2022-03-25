@@ -22,7 +22,7 @@ static char	*search_part(char *cmd, char **split_env_path)
 
 	exit_status = COMMAND_NOT_FOUND;
 	i = -1;
-	while (split_env_path[++i] != NULL)
+	while (ms_strcmp(cmd, "") != 0 &&split_env_path[++i] != NULL)
 	{
 		tmp = ms_strjoin(split_env_path[i], "/");
 		full_path = ms_strappend(tmp, ms_strdup(cmd));

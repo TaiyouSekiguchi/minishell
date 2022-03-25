@@ -54,8 +54,11 @@ void	executer(t_list *cmd_info_list, t_dir *d_info)
 		&& ms_lstsize(cmd_info_list) == 1)
 	{
 		get_redirect_fd(first_cmd_info->redirect, d_info->my_env, &redirect_fd);
-		do_redirect(&redirect_fd);
-		do_exec(first_cmd_info, d_info);
+		if (redirect_fd.infile != ERROR_FD && redirect_fd.outfile != ERROR_FD)
+		{
+			do_redirect(&redirect_fd);
+			do_exec(first_cmd_info, d_info);
+		}
 		tty_reset();
 	}
 	else
