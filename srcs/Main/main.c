@@ -16,7 +16,6 @@ static void	exec_argv(char **argv, t_dir *info)
 				free(input);
 				break ;
 			}
-			//printf("[COMMAND] : [%s]\n\n", input);
 			do_process(input, info);
 			free(input);
 			input = NULL;
