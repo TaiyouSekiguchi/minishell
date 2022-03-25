@@ -48,6 +48,14 @@ static void	direct_path_part(char **argv)
 	}
 }
 
+static void	dot_only(char *argv)
+{
+	set_g_status(2);
+	put_error_exit(argv, " filename argument required", FALSE);
+	ms_putendl_fd(".: usage: . filename [arguments]", STDERR);
+	exit(get_g_status());
+}
+
 void	do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 {
 	int		argc;
@@ -62,12 +70,7 @@ void	do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 		return ;
 	}
 	else if (ms_strcmp(argv[0], ".") == 0)
-	{
-		set_g_status(2);
-		put_error_exit(argv[0], " filename argument required", FALSE);
-		ms_putendl_fd(".: usage: . filename [arguments]", STDERR);
-		exit(get_g_status());
-	}
+		dot_only(argv[0]);
 	else if (ms_strchr(argv[0], '/') == NULL)
 		env_path_part(argv, d_info->my_env);
 	else

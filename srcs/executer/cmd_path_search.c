@@ -13,7 +13,7 @@ static char	**get_split_env_path(char **my_env)
 	return (split_env_path);
 }
 
-static t_boolean cmd_and_path_check(char *cmd, char *split_env_path)
+static t_boolean	cmd_and_path_check(char *cmd, char *split_env_path)
 {
 	if (ms_strcmp(cmd, "") != 0
 		&& ms_strcmp(cmd, "..") != 0

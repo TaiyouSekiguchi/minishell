@@ -50,12 +50,12 @@ static void	standard_expand(char **token, char **my_env, t_list *new_lst)
 	free(value);
 }
 
-static void	expand_part(char **token, char **start, char **my_env, t_list *new_lst)
+static void	expand_part(char **token, char **start, char **my_env, t_list *lst)
 {
 	t_list	*lst_last;
 	char	*tmp;
 
-	lst_last = ms_lstlast(new_lst);
+	lst_last = ms_lstlast(lst);
 	tmp = ms_strndup(*start, *token - *start);
 	lst_last->content = ms_strappend(lst_last->content, tmp);
 	*token += 1;
@@ -70,7 +70,7 @@ static void	expand_part(char **token, char **start, char **my_env, t_list *new_l
 		lst_last->content = ms_strappend(lst_last->content, tmp);
 	}
 	else
-		standard_expand(token, my_env, new_lst);
+		standard_expand(token, my_env, lst);
 	*start = *token;
 }
 

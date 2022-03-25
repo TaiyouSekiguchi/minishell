@@ -125,7 +125,7 @@ commands=(
 	"echo \"'hoge-\$USER-hoge'\""
 )
 
-echo -n>simple_log
+echo -n>simple.log
 for (( i = 0; i < ${#commands[@]}; ++i))
 do
 	test "${commands[$i]}" >> simple.log
