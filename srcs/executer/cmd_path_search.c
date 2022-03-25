@@ -13,6 +13,15 @@ static char	**get_split_env_path(char **my_env)
 	return (split_env_path);
 }
 
+static t_boolean	cmd_and_path_check(char *cmd, char *split_env_path)
+{
+	if (ms_strcmp(cmd, "") != 0
+		&& ms_strcmp(cmd, "..") != 0
+		&& split_env_path != NULL)
+		return (TRUE);
+	return (FALSE);
+}
+
 static char	*search_part(char *cmd, char **split_env_path)
 {
 	char	*full_path;
@@ -22,7 +31,7 @@ static char	*search_part(char *cmd, char **split_env_path)
 
 	exit_status = COMMAND_NOT_FOUND;
 	i = -1;
-	while (split_env_path[++i] != NULL)
+	while (cmd_and_path_check(cmd, split_env_path[++i]))
 	{
 		tmp = ms_strjoin(split_env_path[i], "/");
 		full_path = ms_strappend(tmp, ms_strdup(cmd));

@@ -13,9 +13,8 @@ static void	free_my_env(char **my_env)
 	free(my_env);
 }
 
-void	main_free(char *input, t_dir *info)
+void	main_free(t_dir *info)
 {
-	free(input);
 	free(info->pwd);
 	free(info->old_pwd);
 	free_my_env(info->my_env);

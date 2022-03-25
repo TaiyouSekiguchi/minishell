@@ -84,7 +84,7 @@ typedef struct s_fd
 
 //Main
 void		init(t_dir *d_info);
-void		main_free(char *input, t_dir *info);
+void		main_free(t_dir *info);
 void		do_process_free(t_list **token_list, t_list **cmd_info_list);
 void		do_process(char *input, t_dir *d_info);
 //readline
