@@ -1,5 +1,14 @@
 #include "minishell.h"
 
+static void	del_one_elem(t_list **pptr)
+{
+	ms_free((*pptr)->content);
+	ms_free((*pptr)->next);
+	ms_free(*pptr);
+	*pptr = NULL;
+	pptr = NULL;
+}
+
 static void	del_last_elem(t_list **pptr)
 {
 	int		len;
@@ -12,11 +21,7 @@ static void	del_last_elem(t_list **pptr)
 		return ;
 	else if (len == 1)
 	{
-		ms_free((*pptr)->content);
-		ms_free((*pptr)->next);
-		ms_free(*pptr);
-		*pptr = NULL;
-		pptr = NULL;
+		del_one_elem(pptr);
 		return ;
 	}
 	else if (len == 2)
@@ -86,22 +91,6 @@ char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
 	t_list	*current;
 
 	new_pwd_lst = split_lst(pwd, '/');
-
-
-
-	t_list	*tmpp;
-	tmpp = dir_lst;
-	dprintf(STDERR, "==new_pwd_lst==\n");
-	while (tmpp != NULL)
-	{
-		dprintf(STDERR, "dir_lst->content=%s\n", (char*)tmpp->content);
-		tmpp = tmpp->next;
-	}
-	dprintf(STDERR, "================\n");
-
-
-	int i = 0;
-
 	current = dir_lst;
 	while (current != NULL)
 	{
@@ -112,21 +101,8 @@ char	*rewrite_relative_path(t_list *dir_lst, char *pwd)
 			tmp = ms_strdup(current->content);
 			ms_lstadd_back(&new_pwd_lst, ms_lstnew(tmp));
 		}
-		dprintf(STDERR, "i=%d\n", i);
 		current = current->next;
-		i++;
 	}
 	ms_lstclear(&dir_lst, ms_free);
-
-
-	tmpp = new_pwd_lst;
-	dprintf(STDERR, "==after_new_pwd_lst==\n");
-	while (tmpp != NULL)
-	{
-		dprintf(STDERR, "dir_lst->content=%s\n", (char*)tmpp->content);
-		tmpp = tmpp->next;
-	}
-	dprintf(STDERR, "======================\n");
-
 	return (lst_to_string(new_pwd_lst, "/"));
 }
