@@ -11,9 +11,16 @@ static void	exec_argv(char **argv, t_dir *info)
 		input = ms_strdup(argv[i]);
 		if (input != NULL)
 		{
+			if (input[0] == '\0')
+			{
+				free(input);
+				break ;
+			}
+			printf("[COMMAND] : [%s]\n\n", input);
 			do_process(input, info);
 			free(input);
 			input = NULL;
+			ms_putstr_fd("\n", STDOUT);
 		}
 		i++;
 	}
