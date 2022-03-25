@@ -113,9 +113,10 @@ commands=(
 	'echo $$'
 	'echo " $"'
 	'echo "\$"'
-	'echo "$USER" @'
-	"echo '"\$USER"' @"
-	'echo "'\$USER'" @'
+	'echo "$USER"'
+	"echo '\$USER'"
+	"echo \"'\$USER'\""
+	"echo \"'hoge-\$USER-hoge'\""
 )
 
 for (( i = 0; i < ${#commands[@]}; ++i))
