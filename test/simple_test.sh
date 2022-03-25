@@ -1,8 +1,8 @@
 #!/bin/bash
 
 function test () {
-	echo "==============================================="
-	echo "TEST COMMAND :" "${1}"
+	echo "================================================"
+	echo "TEST COMMAND :" ["${1}"]
 	echo ""
 
 	MINI=`../minishell -c "${1}" 2>&1`
@@ -12,14 +12,13 @@ function test () {
 	REAL_STATUS=`echo $?`
 
 	if [ "$MINI" == "$REAL" ]; then
-		echo "[ OUTPUT is EQUAL ]."
+		echo "[ OUTPUT is EQUAL. ]"
 		echo $MINI
 	else
 		echo "[ OUTPUT is DIFFERENT. ]"
 		echo "<<< minishell output >>>"
 		echo $MINI
 		echo ""
-
 		echo "<<< bash output >>>"
 		echo $REAL
 	fi
@@ -36,11 +35,18 @@ function test () {
 	echo "==============================================="
 	echo ""
 	echo ""
+	echo ""
 }
 
 commands=(
+	'""'
+	"''"
+	'.'
+	'..'
+	'/'
+	'/Users'
+	'/no_exist_dir'
 	'/bin/ls'
-	#'/bin/cat'
 	'/bin/ls -l'
 	'/usr/bin/file ./minishell'
 	'/usr/bin/wc -l ./minishell'
@@ -119,9 +125,10 @@ commands=(
 	"echo \"'hoge-\$USER-hoge'\""
 )
 
+echo -n>simple_log
 for (( i = 0; i < ${#commands[@]}; ++i))
 do
-	test "${commands[$i]}"
+	test "${commands[$i]}" >> simple.log
 done
 
 echo 'test finished.'

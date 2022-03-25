@@ -28,6 +28,8 @@ static void	env_path_part(char **argv, char **my_env)
 
 static void	direct_path_part(char **argv)
 {
+	struct stat	buf;
+
 	if (access(argv[0], F_OK) != 0)
 	{
 		set_g_status(COMMAND_NOT_FOUND);
@@ -37,6 +39,12 @@ static void	direct_path_part(char **argv)
 	{
 		set_g_status(PERMISSION_DENIED);
 		put_error_exit(argv[0], NULL, TRUE);
+	}
+	stat(argv[0], &buf);
+	if (S_ISDIR(buf.st_mode))
+	{
+		set_g_status(PERMISSION_DENIED);
+		put_error_exit(argv[0], " is a directory", TRUE);
 	}
 }
 
@@ -52,6 +60,13 @@ void	do_exec(t_cmd_info *cmd_group, t_dir *d_info)
 		set_g_status(do_builtin(argv[0], argc, argv, d_info));
 		ms_split_free(argv);
 		return ;
+	}
+	else if (ms_strcmp(argv[0], ".") == 0)
+	{
+		set_g_status(2);
+		put_error_exit(argv[0], " filename argument required", FALSE);
+		ms_putendl_fd(".: usage: . filename [arguments]", STDERR);
+		exit(get_g_status());
 	}
 	else if (ms_strchr(argv[0], '/') == NULL)
 		env_path_part(argv, d_info->my_env);
