@@ -62,7 +62,8 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 		free(input_path);
 		if (chdir(new_pwd) < 0)
 		{
-			perror("minishell: cd");
+			ms_putstr_fd("minishell: cd: ", STDERR);
+			perror(argv[1]);
 			free(new_pwd);
 			return (EXIT_FAILURE);
 		}

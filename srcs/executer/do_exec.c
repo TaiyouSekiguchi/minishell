@@ -30,21 +30,24 @@ static void	direct_path_part(char **argv)
 {
 	struct stat	buf;
 
+	stat(argv[0], &buf);
+	if (S_ISDIR(buf.st_mode))
+	{
+		set_g_status(PERMISSION_DENIED);
+		put_error_exit(argv[0], " is a directory", TRUE);
+	}
 	if (access(argv[0], F_OK) != 0)
 	{
-		set_g_status(COMMAND_NOT_FOUND);
+		if (errno == 2)
+			set_g_status(COMMAND_NOT_FOUND);
+		else if (errno == 20)
+			set_g_status(PERMISSION_DENIED);
 		put_error_exit(argv[0], NULL, TRUE);
 	}
 	if (access(argv[0], X_OK) != 0)
 	{
 		set_g_status(PERMISSION_DENIED);
 		put_error_exit(argv[0], NULL, TRUE);
-	}
-	stat(argv[0], &buf);
-	if (S_ISDIR(buf.st_mode))
-	{
-		set_g_status(PERMISSION_DENIED);
-		put_error_exit(argv[0], " is a directory", TRUE);
 	}
 }
 
