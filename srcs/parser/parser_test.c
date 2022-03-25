@@ -54,16 +54,16 @@ void	test(char *command)
 	cmds = NULL;
 	parser(&cmds, tokens);
 	print_cmds(cmds);
-	ms_lstclear(&tokens, free);
+	ms_lstclear(&tokens, ms_free);
 	current = cmds;
 	while (current != NULL)
 	{
 		cmd_info = current->content;
-		ms_lstclear(&(cmd_info->cmd), free);
-		ms_lstclear(&(cmd_info->redirect), free);
+		ms_lstclear(&(cmd_info->cmd), ms_free);
+		ms_lstclear(&(cmd_info->redirect), ms_free);
 		current = current->next;
 	}
-	ms_lstclear(&(cmds), free);
+	ms_lstclear(&(cmds), ms_free);
 	printf("***********test finish***********\n\n\n");
 }
 

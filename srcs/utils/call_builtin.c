@@ -12,7 +12,7 @@ void	call_export(char *env_name, char *value, char ***my_env)
 	argv[2] = NULL;
 	builtin_export(2, argv, my_env);
 	ms_split_free(argv);
-	free(tmp);
+	ms_free(tmp);
 }
 
 void	call_unset(char *env_name, char ***my_env)

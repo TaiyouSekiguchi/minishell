@@ -37,9 +37,9 @@ char	*rewrite_path(char *input_path, t_dir *d_info)
 void	update_pwd(t_dir *d_info, char *new_pwd)
 {
 	if (d_info->old_pwd != NULL)
-		free(d_info->old_pwd);
+		ms_free(d_info->old_pwd);
 	d_info->old_pwd = ms_strdup(d_info->pwd);
-	free(d_info->pwd);
+	ms_free(d_info->pwd);
 	if (ms_strncmp(new_pwd, "///", 3) == 0)
 		d_info->pwd = ms_strdup("/");
 	else
@@ -59,17 +59,17 @@ int	builtin_cd(int argc, char *argv[], t_dir *d_info)
 	else
 	{
 		new_pwd = rewrite_path(input_path, d_info);
-		free(input_path);
+		ms_free(input_path);
 		if (chdir(new_pwd) < 0)
 		{
 			ms_putstr_fd("minishell: cd: ", STDERR);
 			perror(argv[1]);
-			free(new_pwd);
+			ms_free(new_pwd);
 			return (EXIT_FAILURE);
 		}
 		else
 			update_pwd(d_info, new_pwd);
 	}
-	free(new_pwd);
+	ms_free(new_pwd);
 	return (EXIT_SUCCESS);
 }

@@ -8,7 +8,7 @@ static void	shlvl_increment(char *env_shlvl, char ***my_env)
 	num = ms_atoi(env_shlvl) + 1;
 	str_num = ms_itoa(num);
 	call_export("SHLVL", str_num, my_env);
-	free(str_num);
+	ms_free(str_num);
 }
 
 void	update_shlvl(char ***my_env, char *tmp)
@@ -51,7 +51,7 @@ void	init_shlvl(char ***my_env)
 		else
 			update_shlvl(my_env, tmp);
 	}
-	free(env_shlvl);
+	ms_free(env_shlvl);
 }
 
 void	init_dir_info(t_dir *d_info)
@@ -71,7 +71,7 @@ void	init_dir_info(t_dir *d_info)
 		else
 		{
 			d_info->pwd = getcwd(NULL, 0);
-			free(env_pwd);
+			ms_free(env_pwd);
 		}
 	}
 	else

@@ -15,7 +15,7 @@ void	test(char *command, t_dir *d_info)
 	parser(&cmd_info_list, token_list);
 	if (cmd_info_list == NULL)
 	{
-		ms_lstclear(&token_list, free);
+		ms_lstclear(&token_list, ms_free);
 		return ;
 	}
 	expander(cmd_info_list, d_info->my_env);
@@ -42,6 +42,6 @@ int	main(int argc, char **argv)
 	}
 	init(&info);
 	test(command, &info);
-	main_free(command, &info);
+	main_free(&info);
 	return (get_g_status());
 }
