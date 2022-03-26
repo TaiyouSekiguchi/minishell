@@ -47,7 +47,7 @@ static void	standard_expand(char **token, char **my_env, t_list *new_lst)
 		lst_last = ms_lstlast(new_lst);
 		ms_split_free(split);
 	}
-	free(value);
+	ms_free(value);
 }
 
 static void	expand_part(char **token, char **start, char **my_env, t_list *lst)

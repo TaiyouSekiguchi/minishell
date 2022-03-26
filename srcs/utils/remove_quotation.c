@@ -31,6 +31,6 @@ char	*remove_quotation(char *token)
 			ret[j++] = token[i++];
 	}
 	ret[j] = '\0';
-	free(token);
+	ms_free(token);
 	return (ret);
 }

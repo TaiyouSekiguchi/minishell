@@ -13,12 +13,11 @@ static void	exec_argv(char **argv, t_dir *info)
 		{
 			if (input[0] == '\0')
 			{
-				free(input);
+				ms_free(input);
 				break ;
 			}
-			printf("[COMMAND] : [%s]\n\n", input);
 			do_process(input, info);
-			free(input);
+			ms_free(input);
 			input = NULL;
 			ms_putstr_fd("\n", STDOUT);
 		}
@@ -43,7 +42,7 @@ int	main(int argc, char *argv[])
 			if (input == NULL)
 				break ;
 			do_process(input, &info);
-			free(input);
+			ms_free(input);
 			input = NULL;
 		}
 		ms_putendl_fd("exit", STDERR);

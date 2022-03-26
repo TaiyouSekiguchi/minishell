@@ -71,8 +71,8 @@ int	main(void)
 		if (ms_strcmp(input_line, "clear_history") == 0)
 			clear_history();
 	}
-	free(input_line);
-	free(info.pwd);
-	free(info.old_pwd);
+	ms_free(input_line);
+	ms_free(info.pwd);
+	ms_free(info.old_pwd);
 	return (get_g_status());
 }

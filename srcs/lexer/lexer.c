@@ -25,7 +25,7 @@ static void
 static void	not_close_quote(t_list **token_list)
 {
 	put_error_exit(NULL, SYNTAX_ERROR_MSG, FALSE);
-	ms_lstclear(token_list, free);
+	ms_lstclear(token_list, ms_free);
 	*token_list = NULL;
 }
 

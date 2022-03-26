@@ -34,6 +34,6 @@ char	*expand_for_heredoc(char *token, char **my_env)
 			expand_part(&token, my_env, &ret, &start);
 	}
 	ret = ms_strappend(ret, ms_strndup(start, token - start));
-	free(save);
+	ms_free(save);
 	return (ret);
 }

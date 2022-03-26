@@ -57,16 +57,16 @@ void	test(char *command, t_dir *d_info)
 	parser(&cmd_info_list, token_list);
 	expander(cmd_info_list, d_info->my_env);
 	print_cmds(cmd_info_list);
-	ms_lstclear(&token_list, free);
+	ms_lstclear(&token_list, ms_free);
 	current = cmd_info_list;
 	while (current != NULL)
 	{
 		cmd_info = current->content;
-		ms_lstclear(&(cmd_info->cmd), free);
-		ms_lstclear(&(cmd_info->redirect), free);
+		ms_lstclear(&(cmd_info->cmd), ms_free);
+		ms_lstclear(&(cmd_info->redirect), ms_free);
 		current = current->next;
 	}
-	ms_lstclear(&(cmd_info_list), free);
+	ms_lstclear(&(cmd_info_list), ms_free);
 	printf("***********test************\n\n");
 }
 

@@ -77,7 +77,7 @@ static int	register_key_value(char *key_value, char ***environ)
 		tmp = ms_strappend(tmp, ms_strdup("\'"));
 		tmp = ms_strappend(tmp, ms_strdup(": not a valid identifier"));
 		put_error_exit("export", tmp, FALSE);
-		free(tmp);
+		ms_free(tmp);
 		return (EXIT_FAILURE);
 	}
 	key = get_key(key_value, &is_append);
@@ -86,7 +86,7 @@ static int	register_key_value(char *key_value, char ***environ)
 		export_new_word(environ, key_value, is_append);
 	else
 		export_exist_word(environ, index, key_value);
-	free(key);
+	ms_free(key);
 	return (EXIT_SUCCESS);
 }
 

@@ -51,13 +51,13 @@ int	unset_key(char *key, char ***environ)
 		tmp = ms_strappend(tmp, ms_strdup("\'"));
 		tmp = ms_strappend(tmp, ms_strdup(": not a valid identifier"));
 		put_error_exit("unset", tmp, FALSE);
-		free(tmp);
+		ms_free(tmp);
 		return (EXIT_FAILURE);
 	}
 	index = get_index_of_key(key, *environ);
 	if (index != -1)
 	{
-		free((*environ)[index]);
+		ms_free((*environ)[index]);
 		i = index;
 		while ((*environ)[i] != NULL)
 		{
