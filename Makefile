@@ -1,7 +1,5 @@
-#CC						=	gcc
-CC						=	clang
+CC						=	gcc
 CFLAGS					=	-Wall -Wextra -Werror
-CFLAGS					+=	-g -fsanitize=address
 INCLUDE					=	-I includes -I ${shell brew --prefix readline}/include
 READLINE_LIB			=	-l readline -L ${shell brew --prefix readline}/lib
 LIBMS					=	./lib/libms/libms.a
