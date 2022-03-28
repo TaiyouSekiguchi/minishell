@@ -19,6 +19,14 @@ result 'export A="c"' 'export B=h' 'export C=o' 'export HOGE=HOME' "e\$A\$B\$C \
 result "cd" "cd --" "pwd" "echo \$PWD"
 result "cd .." "pwd"
 result "cd" "cd .." "cd /" "cd //" "cd .." "cd ." "pwd" "echo $PWD"
+result 'export TEST=hoge' 'export TEST=HOGE' 'export TEST=' 'export TEST=LOVE' 'echo $TEST'
+result "export TEST=hoge" "export" "unset TEST" "env"
+result "export TEST=hoge" "export" "unset TEST TEST TEST TEST" 'echo $TEST'
+result "export TEST" "unset TEST" "export"
+result "unset TEST"
+result "cd .." "pwd"
+result "cd /tmp/" "pwd"
+result "cd" "cd .." "cd /" "cd //" "cd .." "cd ."
 result "cd /../../..////../..//./..//" "pwd"
 result "cd /tmp/.."  "pwd"
 result "cd /tmp/../../../../tmp/" "pwd"

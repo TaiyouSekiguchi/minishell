@@ -13,14 +13,14 @@ function test () {
 
 	if [ "$MINI" == "$REAL" ]; then
 		echo "[ OUTPUT is EQUAL. ]"
-		echo $MINI
+		echo "$MINI"
 	else
 		echo "[ OUTPUT is DIFFERENT. ]"
 		echo "<<< minishell output >>>"
-		echo $MINI
+		echo "$MINI"
 		echo ""
 		echo "<<< bash output >>>"
-		echo $REAL
+		echo "$REAL"
 	fi
 
 	echo ""
@@ -59,11 +59,19 @@ commands=(
 	'/Users/'
 	'/no_exist_dir'
 	'/no_exist_dir/'
+	'"" | '' | . | / | //'
+	'echo < |'
+	'echo > <'
+	'echo < >'
+	'echo | <'
+	'echo << >>'
+	'echo << << << >>'
+	'echo <<'
 	'/bin/ls'
 	'/bin/ls/'
 	'/bin/ls -l'
-	'/usr/bin/file ./minishell'
-	'/usr/bin/wc -l ./minishell'
+	'/usr/bin/file ../minishell'
+	'/usr/bin/wc -l ../minishell'
 	'echo'
 	'unset HOGE HOGE'
 	'echo hello'
@@ -88,16 +96,16 @@ commands=(
 	'exit 12345abc'
 	'exit 1 2 3'
 	'exit 42 ft'
-	'/usr/bin/grep notexist Makefile'
+	'/usr/bin/grep notexist ../Makefile'
 	'/bin/ls -3'
 	'/usr/bin/grep a filenotexist'
 	'cmdnotexist'
 	'echo ||||||'
 	'echo a >>'
 	'echo "" "" "" | cat -e'
-	'"/bin/ls" srcs'
-	'"/bin/ls srcs"'
-	'"/bi"n/ls srcs'
+	'"/bin/ls" ../srcs'
+	'"/bin/ls ../srcs"'
+	'"/bi"n/ls ../srcs'
 	'""/bin/ech"o" "test"'
 	'"/bin/echo -n hello"'
 	'"/bin/ls" ">" "test"'
@@ -112,6 +120,13 @@ commands=(
 	'export aaa'
 	'export 42="42"'
 	'export _42="42"'
+	'unset'
+	'unset HOME'
+	'unset $HOME'
+	'unset NO_EXIST'
+	'unset 42tokyo'
+	'unset _42TOKYO'
+	'unset TEST TEST TEST TEST'
 	'cd .'
 	'cd /.'
 	'cd ./'
@@ -131,9 +146,9 @@ commands=(
 	'/../bin/ls/'
 	'/tmp/../bin/ls'
 	'ls -al'
-	'cat .gitignore'
+	'cat ../gitignore'
 	'<notexist'
-	'cat Makefile | grep .c | grep fclean'
+	'cat ../Makefile | grep .c | grep fclean'
 	'echo $'
 	'echo $$'
 	'echo " $"'
