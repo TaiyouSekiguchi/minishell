@@ -11,8 +11,13 @@ function result () {
 }
 
 result "ls -al"
+result 'export TEST=hoge' 'export TEST=HOGE' 'export TEST=' 'export TEST=LOVE' 'echo $TEST'
+result "export TEST=hoge" "export" "unset TEST" "env"
+result "export TEST=hoge" "export" "unset TEST TEST TEST TEST" 'echo $TEST'
+result "export TEST" "unset TEST" "export"
+result "unset TEST"
 result "cd .." "pwd"
-result "export TEST=taiyou" "export" "unset TEST" "env"
+result "cd /tmp/" "pwd"
 result "cd" "cd .." "cd /" "cd //" "cd .." "cd ."
 result "cd /../../..////../..//./..//" "pwd"
 result "cd /tmp/.."  "pwd"
