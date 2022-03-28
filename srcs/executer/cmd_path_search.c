@@ -9,8 +9,17 @@ static char	**get_split_env_path(char **my_env)
 	if (env_path == NULL)
 		return (NULL);
 	split_env_path = ms_split(env_path, ':');
-	free(env_path);
+	ms_free(env_path);
 	return (split_env_path);
+}
+
+static t_boolean	cmd_and_path_check(char *cmd, char *split_env_path)
+{
+	if (ms_strcmp(cmd, "") != 0
+		&& ms_strcmp(cmd, "..") != 0
+		&& split_env_path != NULL)
+		return (TRUE);
+	return (FALSE);
 }
 
 static char	*search_part(char *cmd, char **split_env_path)
@@ -22,7 +31,7 @@ static char	*search_part(char *cmd, char **split_env_path)
 
 	exit_status = COMMAND_NOT_FOUND;
 	i = -1;
-	while (split_env_path[++i] != NULL)
+	while (cmd_and_path_check(cmd, split_env_path[++i]))
 	{
 		tmp = ms_strjoin(split_env_path[i], "/");
 		full_path = ms_strappend(tmp, ms_strdup(cmd));
@@ -36,7 +45,7 @@ static char	*search_part(char *cmd, char **split_env_path)
 			else
 				exit_status = PERMISSION_DENIED;
 		}
-		free(full_path);
+		ms_free(full_path);
 	}
 	set_g_status(exit_status);
 	return (NULL);
@@ -52,13 +61,13 @@ char	*cmd_path_search(char *cmd_name, char **my_env)
 	{
 		set_g_status(127);
 		put_error_exit(cmd_name, "No such file or directory", FALSE);
-		free(cmd_name);
+		ms_free(cmd_name);
 		return (NULL);
 	}
 	full_path = search_part(cmd_name, split_env_path);
 	if (full_path != NULL)
 	{
-		free(cmd_name);
+		ms_free(cmd_name);
 		return (full_path);
 	}
 	if (get_g_status() == COMMAND_NOT_FOUND)
@@ -66,6 +75,6 @@ char	*cmd_path_search(char *cmd_name, char **my_env)
 	else
 		put_error_exit(cmd_name, NULL, FALSE);
 	ms_split_free(split_env_path);
-	free(cmd_name);
+	ms_free(cmd_name);
 	return (NULL);
 }

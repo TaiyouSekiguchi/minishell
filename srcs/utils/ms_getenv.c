@@ -16,12 +16,12 @@ char	*ms_getenv(char **my_env, char *key)
 			env_key = ms_strndup(my_env[i], pos - my_env[i]);
 			if (ms_strcmp(env_key, key) == 0)
 			{
-				free(env_key);
+				ms_free(env_key);
 				pos++;
 				env_value = ms_strdup(pos);
 				return (env_value);
 			}
-			free(env_key);
+			ms_free(env_key);
 		}
 		i++;
 	}

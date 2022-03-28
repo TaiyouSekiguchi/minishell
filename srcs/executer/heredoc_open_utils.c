@@ -17,7 +17,7 @@ char	*set_tmp_file_name(void)
 	tty = ms_strdup(ttyname(0));
 	tty = ms_char_replace(tty, '/', '_');
 	tmp_file_name = ms_strjoin("./tmp", tty);
-	free(tty);
+	ms_free(tty);
 	return (tmp_file_name);
 }
 
@@ -29,7 +29,7 @@ int	tmp_file_create(char *tmp_file_name)
 	if (fd < 0)
 	{
 		put_error_exit(tmp_file_name, NULL, FALSE);
-		free(tmp_file_name);
+		ms_free(tmp_file_name);
 		return (ERROR_FD);
 	}
 	return (fd);

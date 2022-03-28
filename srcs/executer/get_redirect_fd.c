@@ -74,7 +74,7 @@ static void	expand_and_get_fd(char *file_name, char **my_env, t_fd *redirect_fd)
 			prefix = "> ";
 		tmp = ms_strappend(ms_strdup(prefix), tmp);
 		redirect_file_open(tmp, redirect_fd);
-		free(tmp);
+		ms_free(tmp);
 	}
 	ms_lstclear(&tmp_list, free);
 }

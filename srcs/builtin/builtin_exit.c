@@ -18,7 +18,7 @@ int	builtin_exit(int argc, char *argv[])
 		}
 		if (argc > 2)
 		{
-			put_error_exit("exit", "exit: too many arguments", FALSE);
+			put_error_exit("exit", "too many arguments", FALSE);
 			return (EXIT_FAILURE);
 		}
 		exit(get_g_status());

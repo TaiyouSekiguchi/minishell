@@ -8,4 +8,4 @@ tags
 .vscode
 infile
 outfile
-test/test.log
+*.log

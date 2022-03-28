@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_boolean	is_last_quote(char c, t_quote quote)
+static t_boolean	is_last_quote(char c, t_quote quote)
 {
 	if ((quote == NONE)
 		|| (quote == SINGLE && c == '\'')
@@ -31,6 +31,6 @@ char	*remove_quotation(char *token)
 			ret[j++] = token[i++];
 	}
 	ret[j] = '\0';
-	free(token);
+	ms_free(token);
 	return (ret);
 }
