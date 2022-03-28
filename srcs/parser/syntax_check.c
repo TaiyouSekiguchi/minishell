@@ -6,21 +6,21 @@ static char	*add_choice(t_kind kind, t_kind next_kind, t_list *current)
 
 	add = NULL;
 	if (kind != CMD && current->next == NULL)
-		add = "`newline'";
+		add = ms_strdup("`newline'");
 	else if (kind == PIPE && next_kind == PIPE)
-		add = "`|'";
+		add = ms_strdup("`|'");
 	else if (kind != CMD && kind != PIPE)
 	{
 		if (next_kind == INFILE)
-			add = "`<'";
+			add = ms_strdup("`<'");
 		else if (next_kind == HEREDOC)
-			add = "`<<'";
+			add = ms_strdup("`<<'");
 		else if (next_kind == OUTFILE)
-			add = "`>'";
+			add = ms_strdup("`>'");
 		else if (next_kind == APPEND)
-			add = "`>>'";
+			add = ms_strdup("`>>'");
 		else if (next_kind == PIPE)
-			add = "`|'";
+			add = ms_strdup("`|'");
 	}
 	return (add);
 }
@@ -32,7 +32,8 @@ static int	error_put(char *add)
 	set_g_status_exception(258);
 	msg = ms_strjoin("syntax error near unexpected token ", add);
 	put_error_exit(NULL, msg, FALSE);
-	free(msg);
+	ms_free(msg);
+	ms_free(add);
 	return (0);
 }
 
