@@ -19,7 +19,7 @@ char	*expand_from_env(char **token, char **my_env)
 
 	val_name = get_val_name(*token);
 	value = ms_getenv(my_env, val_name);
-	free(val_name);
+	ms_free(val_name);
 	if (value == NULL)
 		value = ms_strdup("");
 	while (**token != '\0' && is_name(**token))

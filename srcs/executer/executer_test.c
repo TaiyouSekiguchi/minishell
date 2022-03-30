@@ -86,7 +86,7 @@ int	main(void)
 	test(&info, "cat < Makefile | wc -l >> outfile1");
 	test(&info, "cat < Makefile | grep a | wc -l >> outfile2");
 	test(&info, "cat < Makefile < .gitignore | grep a | wc -l >> outfile2");
-	free(info.pwd);
-	free(info.old_pwd);
+	ms_free(info.pwd);
+	ms_free(info.old_pwd);
 	return (0);
 }

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   libms.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/21 15:17:56 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/03/11 15:19:10 by tsekiguc         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef LIBMS_H
 # define LIBMS_H
 
@@ -81,5 +69,6 @@ char	*ms_strappend(char *body, char *add);
 void	ms_split_free(char **split);
 int		ms_isnum_string(char *str);
 char	*ms_char_replace(char *str, char old, char new);
+void	ms_free(void *ptr);
 
 #endif

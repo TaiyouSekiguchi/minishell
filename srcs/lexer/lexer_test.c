@@ -18,7 +18,7 @@ void	test(char *str)
 		i++;
 		current = current->next;
 	}
-	ms_lstclear(&tokens, free);
+	ms_lstclear(&tokens, ms_free);
 	printf("***********test finish***********\n");
 }
 

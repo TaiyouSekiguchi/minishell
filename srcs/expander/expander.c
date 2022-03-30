@@ -21,7 +21,7 @@ t_list	*expand_cmd_info_element(t_list *list, char **my_env)
 		}
 		current = current->next;
 	}
-	ms_lstclear(&list, free);
+	ms_lstclear(&list, ms_free);
 	return (new_lst);
 }
 

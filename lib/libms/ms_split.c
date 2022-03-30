@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsekiguc <tsekiguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: yjimpei <yjimpei@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 15:16:59 by tsekiguc          #+#    #+#             */
-/*   Updated: 2022/01/21 15:27:27 by tsekiguc         ###   ########.fr       */
+/*   Updated: 2022/03/25 23:43:05 by yjimpei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ static char	**my_free(char **ret)
 	i = 0;
 	while (ret[i] != NULL)
 	{
-		free(ret[i]);
+		ms_free(ret[i]);
 		i++;
 	}
-	free(ret);
+	ms_free(ret);
 	return (NULL);
 }
 

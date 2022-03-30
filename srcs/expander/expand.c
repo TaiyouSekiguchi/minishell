@@ -1,80 +1,102 @@
 #include "minishell.h"
 
-static void	expand_to_lst(t_list **new_lst, char *value, char **ret)
+static t_quote	quote_part(char **token, t_quote quote)
 {
-	t_list	*token_lst;
-	t_list	*current;
+	t_quote	ret;
 
-	token_lst = split_lst(value, ' ');
-	free(value);
-	current = token_lst;
-	while (current != NULL)
-	{
-		*ret = ms_strappend(*ret, ms_strdup(current->content));
-		ms_lstadd_back(new_lst, ms_lstnew(*ret));
-		*ret = ms_strdup("");
-		current = current->next;
-	}
-	ms_lstclear(&token_lst, free);
+	ret = quote_set(**token, quote);
+	*token += 1;
+	return (ret);
 }
 
-static t_list	*expand_part(char **token, char **ret, char **start, char **env)
+static t_list	*split_to_lst(char **split)
 {
 	t_list	*new_lst;
-	char	*value;
+	char	*tmp;
+	int		i;
 
 	new_lst = NULL;
-	*ret = ms_strappend(*ret, ms_strndup(*start, *token - *start));
-	*token += 1;
-	if (**token == '?')
-		*ret = ms_strappend(*ret, expand_g_status(token));
-	else if (ms_isdigit(**token))
-		*ret = ms_strappend(*ret, expand_num(token));
-	else
+	i = 0;
+	while (split[i] != NULL)
 	{
-		value = expand_from_env(token, env);
-		expand_to_lst(&new_lst, value, ret);
+		tmp = ms_strdup(split[i]);
+		ms_lstadd_back(&new_lst, ms_lstnew(tmp));
+		i++;
 	}
-	*start = *token;
 	return (new_lst);
 }
 
-static void	expand_init(t_list **new_lst, t_quote *quote, char **ret)
+static void	standard_expand(char **token, char **my_env, t_list *new_lst)
 {
-	*new_lst = NULL;
-	*quote = NONE;
-	*ret = ms_strdup("");
+	t_list	*lst_last;
+	t_list	*split_lst;
+	char	*value;
+	char	**split;
+	char	*tmp;
+
+	lst_last = ms_lstlast(new_lst);
+	value = expand_from_env(token, my_env);
+	if (value != NULL && value[0] != '\0')
+	{
+		split = ms_split(value, ' ');
+		tmp = ms_strdup(split[0]);
+		lst_last->content = ms_strappend(lst_last->content, tmp);
+		split_lst = split_to_lst(split);
+		ms_lstadd_back(&new_lst, split_lst->next);
+		ms_lstdelone(split_lst, free);
+		lst_last = ms_lstlast(new_lst);
+		ms_split_free(split);
+	}
+	ms_free(value);
 }
 
-static void	quote_part(char **token, t_quote *quote)
+static void	expand_part(char **token, char **start, char **my_env, t_list *lst)
 {
-	*quote = quote_set(**token, *quote);
+	t_list	*lst_last;
+	char	*tmp;
+
+	lst_last = ms_lstlast(lst);
+	tmp = ms_strndup(*start, *token - *start);
+	lst_last->content = ms_strappend(lst_last->content, tmp);
 	*token += 1;
+	if (**token == '?')
+	{
+		tmp = expand_g_status(token);
+		lst_last->content = ms_strappend(lst_last->content, tmp);
+	}
+	else if (ms_isdigit(**token))
+	{
+		tmp = expand_num(token);
+		lst_last->content = ms_strappend(lst_last->content, tmp);
+	}
+	else
+		standard_expand(token, my_env, lst);
+	*start = *token;
 }
 
 t_list	*expand(char *token, char **my_env)
 {
 	t_list	*new_lst;
+	t_list	*lst_last;
 	t_quote	quote;
-	char	*ret;
 	char	*start;
+	char	*tmp;
 
-	expand_init(&new_lst, &quote, &ret);
+	new_lst = ms_lstnew(ms_strdup(""));
+	lst_last = new_lst;
 	start = token;
+	quote = NONE;
 	while (*token != '\0')
 	{
 		if (is_quote(*token))
-			quote_part(&token, &quote);
+			quote = quote_part(&token, quote);
 		else if ((quote == SINGLE || *token != '$')
 			|| (*(token + 1) != '?' && !is_name(*(token + 1))))
 			token++;
 		else
-			ms_lstadd_back(&new_lst, expand_part(&token, &ret, &start, my_env));
+			expand_part(&token, &start, my_env, new_lst);
 	}
-	ret = ms_strappend(ret, ms_strndup(start, token - start));
-	if (ms_strlen(ret) != 0)
-		ms_lstadd_back(&new_lst, ms_lstnew(ret));
-	else
-		free(ret);
+	tmp = ms_strndup(start, token - start);
+	lst_last->content = ms_strappend(lst_last->content, tmp);
 	return (new_lst);
 }

@@ -24,7 +24,7 @@ function test () {
 }
 
 commands=(
-	"echo \$HOME"
+	'echo $HOME'
 	"pwd"
 	"ls"
 	"cat \-e \<.gitignore"
